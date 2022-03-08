@@ -1,19 +1,29 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    ten_danh_sach: {
+    name: {
         type: String,
         // required: true
     },
-    ngay_tao: {
-        type: Date,
+    image: {
+        type: String,
         // required: true
     },
-    bai_hat: [{
+    created_day: {
+        type: Date,
+        default: Date.now,
+        // required: true
+    },
+    songs: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Song'
     }],
-    nguoi_dung: {
+    number_of_songs: {
+        type: Number,
+        default: 0,
+        // required: true
+    },
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         // required: true
@@ -26,4 +36,4 @@ const schema = new mongoose.Schema({
     versionKey: false
 });
 
-export const FavoriteModel = mongoose.model('Favorite', schema);
+export const LikelistModel = mongoose.model('Likelist', schema);

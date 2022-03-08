@@ -3,7 +3,6 @@ import { UserModel } from "../models/UserModel.js";
 export const getUsers = async (req, res) => {
     try {
         const users = await UserModel.find();
-        // console.log('users', users);
         res.status(200).json(users);        
     } catch (err) {
         res.status(500).json({ error: err});
@@ -14,7 +13,6 @@ export const postUser = async (req, res) => {
     try {
         const newUser = req.body;
         const user = new UserModel(newUser);
-
         await user.save();
         res.status(200).json(user);
     }catch (err) {

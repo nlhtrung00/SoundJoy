@@ -1,21 +1,21 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    ten_nhac_si: {
+    name: {
         type: String,
-        required: true
+        // required: true
     },
-    and_nhac_si: {
+    image: {
         type: String,
-        required: true
+        // required: true
     },
-    thong_tin_nhac_si: {
+    information: {
         type: String,
-        required: true
+        // required: true
     },
-    luot_quan_tam: {
+    followers: {
         type: Number,
-        required: true,
+        // required: true,
         default: 0
     },
 }, {

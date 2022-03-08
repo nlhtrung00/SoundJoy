@@ -1,16 +1,16 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    ten_the_loai: {
+    name: {
         type: String,
-        required: true
+        // required: true
     },
-    anh_the_loai: {
+    image: {
         type: String,
-        required: true
+        // required: true
     }
 },{
     versionKey: false
 });
 
-export const CategoryModel = mongoose.model('Category', schema);
+export const GenreModel = mongoose.model('Genre', schema);

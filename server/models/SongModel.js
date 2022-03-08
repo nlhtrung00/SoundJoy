@@ -1,39 +1,40 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    ten_bai_hat: {
+    name: {
         type: String,
         // required: true
     },
-    anh_bai_hat: {
+    image: {
         type: String,
         // required: true
     },
-    luot_nghe: {
+    listens: {
         type: Number,
         default: 0,
         // required: true
     },
-    ngay_chinh_thuc: {
+    debuted_date: {
         type: Date,
+        default: Date.now,
         // required: true
     },
-    the_loai: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        // required: true
-    },
-    nhac_si: [{
+    musician: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Musician'
     }],
-    ca_si: [{
+    singer: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Singer'
     }],
     album: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album'
+    },
+    genre: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Genre',
+        // required: true
     },
     link_mp3: {
         type: String,

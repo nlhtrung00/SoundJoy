@@ -1,32 +1,33 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    ten_album: {
+    name: {
         type: String,
         // required: true
     },
-    anh_album: {
+    image: {
         type: String,
         // required: true
     },
-    tong_so_bai_hat: {
+    number_os_songs: {
         type: Number,
         // required: true,
         default: 0
     },
-    luot_thich: {
+    reactions: {
         type: Number,
         // required: true,
         default: 0
     },
-    ngay_chinh_thuc: {
+    debuted_date: {
         type: Date,
+        default: Date.now,
         // required: true
     },
-    the_loai: {
+    genre: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true,
+        ref: 'Genre',
+        // required: true,
     },
 }, {
     versionKey: false

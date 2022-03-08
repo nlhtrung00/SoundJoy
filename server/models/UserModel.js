@@ -1,36 +1,23 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    tai_khoan: {
+    name: {
         type: String,
         // required: true
     },
-    mat_khau: {
-        type: String,
-        // required: true
-    },
-    ho_ten: {
-        type: String,
-        // required: true
-    },
-    ngay_sinh: {
+    birthday: {
         type: Date,
         // required: true
     },
-    dia_chi: {
+    address: {
         type: String,
         // required: true
     },
-    so_dien_thoai: {
+    phone_number: {
         type: String,
         // required: true
     },
-    la_quan_tri: {
-        type: Boolean,
-        // required: true,
-        default: false
-    },
-    ngay_dang_ky: {
+    registration_date: {
         type: Date,
         // required: true,
         default: Date.now

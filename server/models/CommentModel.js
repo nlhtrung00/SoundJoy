@@ -1,20 +1,21 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    noi_dung: {
+    content: {
         type: String,
         // required: true
     },
-    ngay_binh_luan: {
+    commented_date: {
         type: Date,
+        default: Date.now,
         // required: true
     },
-    bai_hat: {
+    song: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Song'
         // required: true
     },
-    nguoi_dung: {
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
         // required: true
