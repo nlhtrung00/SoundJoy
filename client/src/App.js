@@ -1,5 +1,9 @@
+import LandingPage from "./ClientSite/Components/LandingPage";
 function App() {
-  return <p>Write code here.</p>;
+  return(
+    <LandingPage />
+  )
+ 
 }
 
 export default App;
