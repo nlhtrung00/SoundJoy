@@ -9,6 +9,15 @@ export const getSongs = async (req, res) => {
     }    
 };
 
+export const getSong = async (req, res) => {
+    try {
+        const song = await SongModel.find({ _id: req.params._id });
+        res.status(200).json(song);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const postSong = async (req, res) => {
     try {
         const newSong = req.body;

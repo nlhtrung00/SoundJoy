@@ -9,6 +9,15 @@ export const getMusicians = async (req, res) => {
     }
 };
 
+export const getMusician = async (req, res) => {
+    try {
+        const musician = await MusicianModel.find({ _id: req.params._id });
+        res.status(200).json(musician);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
 export const postMusician = async (req, res) => {
     try {
         const newMusician = req.body;
