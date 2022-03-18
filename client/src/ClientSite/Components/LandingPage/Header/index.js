@@ -1,9 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {AppBar, Button, Container, MenuItem, Toolbar, Typography} from '@mui/material'
 
 const options = ['Login','Signup'];
-const Header=()=>{
-   
+const Header=({setOption})=>{
     return(
         <AppBar 
             position="static"
@@ -25,6 +24,8 @@ const Header=()=>{
                             color="inherit"
                             key={option}
                             size="large"
+                            value={option}
+                            onClick={(e)=>setOption(e.target.value)}
                             >
                                 {option}
                             </Button>
