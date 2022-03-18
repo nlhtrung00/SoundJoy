@@ -21,6 +21,11 @@ const schema = new mongoose.Schema({
         type: Date,
         // required: true,
         default: Date.now
+    },
+    account: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Account',
+        // required: true
     }    
 }, {
     versionKey: false,

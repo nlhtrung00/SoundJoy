@@ -9,6 +9,15 @@ export const getGenres = async (req, res) => {
     }
 };
 
+export const getGenre = async (req, res) => {
+    try {
+        const genre = await GenreModel.find({ _id: req.params._id });
+        res.status(200).json(genre);
+    } catch (err) {
+        res.status(500).json({ error: err});
+    }
+};
+
 export const postGenre = async (req, res) => {
     try {
         const newGenre = req.body;

@@ -9,6 +9,15 @@ export const getLikelists = async (req, res) => {
     }
 };
 
+export const getLikelist = async (req, res) => {
+    try {
+        const likelist = await LikelistModel.find({ _id: req.params._id });
+        res.status(200).json(likelist);
+    } catch (err) {
+        res.status(500).json({ error : err });
+    }
+};
+
 export const postLikelist = async (req, res) => {
     try {
         const newLikelist = req.body;

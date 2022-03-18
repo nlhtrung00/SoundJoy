@@ -9,6 +9,15 @@ export const getAlbums = async (req, res) => {
     }
 };
 
+export const getAlbum = async (req, res) => {
+    try {
+        const album = await AlbumModel.find({ _id: req.params.id });
+        res.status(200).json(album);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
 export const postAlbum = async (req, res) => {
     try {
         const newAlbum = req.body;

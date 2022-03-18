@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 
-
+import accounts from './routers/accounts.js';
 import users from './routers/users.js';
 import genres from './routers/genres.js';
 import musicians from './routers/musicians.js';
@@ -31,6 +31,7 @@ mongoose.connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
         console.log('error', error);
     })
 
+app.use('/accounts', accounts);    
 app.use('/users', users);
 app.use('/genres', genres);
 app.use('/musicians', musicians);
