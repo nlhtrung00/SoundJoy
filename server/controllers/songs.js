@@ -18,6 +18,42 @@ export const getSong = async (req, res) => {
     }    
 };
 
+export const getSongByGenre = async (req, res) => {
+    try {
+        const songs = await SongModel.find({ genre: req.params._id });
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
+export const getSongByAlbum = async (req, res) => {
+    try {
+        const songs = await SongModel.find({ album: req.params._id });
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
+export const getSongByMusician = async (req, res) => {
+    try {
+        const songs = await SongModel.find({ musician: req.params._id });
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
+export const getSongBySinger = async (req, res) => {
+    try {
+        const songs = await SongModel.find({ singer: req.params._id });
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
 export const postSong = async (req, res) => {
     try {
         const newSong = req.body;
