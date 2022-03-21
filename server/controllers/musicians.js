@@ -1,3 +1,4 @@
+import cloudinary from "../cloudinary.js";
 import { MusicianModel } from "../models/MusicianModel.js";
 
 export const getMusicians = async (req, res) => {
@@ -20,7 +21,9 @@ export const getMusician = async (req, res) => {
 
 export const postMusician = async (req, res) => {
     try {
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Musicians', resource_type: 'auto' });
         const newMusician = req.body;
+        newMusician.image = result.secure_url;
         const musician = new MusicianModel(newMusician);
         await musician.save();
         res.status(200).json(musician);

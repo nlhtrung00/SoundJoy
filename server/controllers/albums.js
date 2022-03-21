@@ -1,3 +1,4 @@
+import cloudinary from "../cloudinary.js";
 import { AlbumModel } from "../models/AlbumModel.js";
 
 export const getAlbums = async (req, res) => {
@@ -20,7 +21,9 @@ export const getAlbum = async (req, res) => {
 
 export const postAlbum = async (req, res) => {
     try {
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Albums', resource_type: 'auto' });
         const newAlbum = req.body;
+        newAlbum.image = result.secure_url;
         const album = new AlbumModel(newAlbum);
         await album.save();
         res.status(200).json(album);
