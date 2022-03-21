@@ -1,3 +1,4 @@
+import  cloudinary  from "../cloudinary.js";
 import { SongModel } from "../models/SongModel.js";
 
 export const getSongs = async (req, res) => {
@@ -56,12 +57,24 @@ export const getSongBySinger = async (req, res) => {
 
 export const postSong = async (req, res) => {
     try {
+        // cloudinary.v2.uploader.upload(file, options, callback);
+        const resultImage = await cloudinary.uploader.upload(req.files.image[0].path, { folder : 'SoundJoy/Images', resource_type: 'auto' });
+        const resultAudio = await cloudinary.uploader.upload(req.files.mp3[0].path, { folder : 'SoundJoy/Audios', resource_type: 'auto' });
+
+       
+        // console.log(resultImage);
+        // console.log(resultAudio);
         const newSong = req.body;
+        newSong.image = resultImage.secure_url;
+        newSong.link_mp3 = resultAudio.secure_url;
+
         const song = new SongModel(newSong);
+        // console.log(song);
         await song.save();
         res.status(200).json(song);
     } catch (err) {
         res.status(500).json({ error: err });
+        console.log(err);
     }    
 };
 
