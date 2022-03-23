@@ -1,12 +1,28 @@
 import express from 'express';
-import { getSongs, postSong, updateSong, deleteSong, getSong } from '../controllers/songs.js';
+import multer from 'multer';
+import { getSongs, postSong, updateSong, deleteSong, getSong, getSongByGenre, getSongByAlbum, getSongByMusician, getSongBySinger } from '../controllers/songs.js';
+
+const storage = multer.diskStorage({
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + file.originalname)
+    }
+});
+
+const upload = multer({ storage: storage});
+
+const multipleUpload = upload.fields([{'name': 'image'}, {'name': 'mp3'}]);
 
 const router = express.Router();
 
 router.get('/', getSongs);
 router.get('/:id', getSong);
-router.post('/', postSong);
+router.post('/', multipleUpload, postSong);
 router.put('/:id', updateSong);
 router.delete('/:id', deleteSong);
+router.get('/genre/:id', getSongByGenre);
+router.get('/album/:id', getSongByAlbum);
+router.get('/musician/:id', getSongByMusician);
+router.get('/singer/:id', getSongBySinger);
+
 
 export default router;

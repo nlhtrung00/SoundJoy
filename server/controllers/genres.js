@@ -1,3 +1,4 @@
+import cloudinary from '../cloudinary.js';
 import { GenreModel } from '../models/GenreModel.js';
 
 export const getGenres = async (req, res) => {
@@ -20,7 +21,9 @@ export const getGenre = async (req, res) => {
 
 export const postGenre = async (req, res) => {
     try {
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Genres', resource_type: 'auto' });
         const newGenre = req.body;
+        newGenre.image = result.secure_url;
         const genre = new GenreModel(newGenre);
         await genre.save();
         res.status(200).json(genre);

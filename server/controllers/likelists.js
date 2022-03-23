@@ -1,3 +1,4 @@
+import cloudinary from '../cloudinary.js';
 import { LikelistModel } from "../models/LikelistModel.js";
 
 export const getLikelists = async (req, res) => {
@@ -20,7 +21,9 @@ export const getLikelist = async (req, res) => {
 
 export const postLikelist = async (req, res) => {
     try {
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Likelists', resource_type: 'auto' });
         const newLikelist = req.body;
+        newLikelist.image = result.secure_url;
         const likelist = new LikelistModel(newLikelist);
         await likelist.save();
         res.status(200).json(likelist);
