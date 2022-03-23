@@ -7,7 +7,7 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import LogoutIcon from '@mui/icons-material/Logout';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import avatar from "../../../Images/avatardemo.jpg";
 const useStyle = makeStyles((theme) => ({
@@ -34,11 +34,7 @@ const useStyle = makeStyles((theme) => ({
         fontSize: '19px',
         fontWeight: 500,
     },
-    user_section: {
-        alignItems: 'center',
-        margin: '0 auto 10px',
-
-    },
+    
     avt_user: {
         alignContent: 'center'
     },
@@ -50,7 +46,9 @@ const useStyle = makeStyles((theme) => ({
     }
 }))
 const LeftBar = () => {
+    const [active, setActive] = useState(false)
     const classes = useStyle();
+
     return (
         <Container disableGutters className={classes.container}>
             <div className={classes.user_section}>

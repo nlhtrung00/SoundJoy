@@ -9,7 +9,7 @@ import LeftBar from '../LeftBar/LeftBar';
 const useStyle = makeStyles((theme) => ({
     home_container: {
         backgroundColor: 'white',
-        minheight: '100%',
+        minHeight: '100%',
         borderRadius: '20px',
         padding: '15px 20px',
     },
