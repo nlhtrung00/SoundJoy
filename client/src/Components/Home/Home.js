@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import heroImg from "../../../Images/heroimg.jpg";
+import heroImg from "../../Images/heroimg.jpg";
 import Genres from './genres/genres';
 import Singers from './Singer/Singer';
 import Musicians from './Musician/Musician';
@@ -42,11 +42,6 @@ const useStyle = makeStyles((theme) => ({
 const Home = () => {
     const classes = useStyle();
     return (
-        <Grid container>
-            <Grid item xl={2.5}>
-                <LeftBar/>
-            </Grid>
-            <Grid item xl={9.5} sm={12}>
                 <Container disableGutters maxWidth="xl" className={classes.home_container}>
                     <div className={classes.titlepage}>
                         <Typography className={classes.title_text}>
@@ -69,8 +64,7 @@ const Home = () => {
                     </Typography>
                     <Musicians />
                 </Container>
-            </Grid>
-        </Grid>
+
     );
 };
 

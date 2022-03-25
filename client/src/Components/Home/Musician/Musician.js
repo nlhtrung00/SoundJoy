@@ -3,8 +3,8 @@ import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '
 import { makeStyles } from '@mui/styles';
 
 
-import singerImg from "../../../../Images/binz.jpeg";
-import singerImg2 from "../../../../Images/denvau.jpg"
+import singerImg from "../../../Images/binz.jpeg";
+import singerImg2 from "../../../Images/denvau.jpg"
 const useStyle= makeStyles((theme)=>({
     card:{
         backgroundColor:"#522522",

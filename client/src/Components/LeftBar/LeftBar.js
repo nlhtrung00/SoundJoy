@@ -9,7 +9,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import avatar from "../../../Images/avatardemo.jpg";
+import avatar from "../../Images/avatardemo.jpg";
 const useStyle = makeStyles((theme) => ({
     container: {
         position: 'sticky',
@@ -82,21 +82,21 @@ const LeftBar = () => {
                     </div>
                 </Link>
 
-                <Link to="">
+                <Link to="/genres">
                     <div className={classes.item}>
                         <CategoryIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Genres</Typography>
                     </div>
                 </Link>
 
-                <Link to="">
+                <Link to="/singers">
                     <div className={classes.item}>
                         <PeopleIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Singers</Typography>
                     </div>
                 </Link>
 
-                <Link to="">
+                <Link to="/musicians">
                     <div className={classes.item}>
                         <PeopleIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Musician</Typography>

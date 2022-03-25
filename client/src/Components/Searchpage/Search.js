@@ -32,11 +32,6 @@ const useStyle = makeStyles((theme) => ({
 const Search = () => {
     const classes = useStyle();
     return (
-        <Grid container>
-            <Grid item xl={2.5}>
-                <LeftBar/>
-            </Grid>
-            <Grid item xl={9.5} sm={12}>
                 <Container disableGutters maxWidth="xl" className={classes.home_container}>
                     <div className={classes.searchbar}>
                         <Typography sx={{my:1}} variant="h6">
@@ -83,8 +78,6 @@ const Search = () => {
                         </Box>
                     </div>
                 </Container>
-            </Grid>
-        </Grid>
     );
 };
 

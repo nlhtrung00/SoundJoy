@@ -1,9 +1,7 @@
 import React from 'react';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-
-
-import genreImg from "../../../../Images/genre.jfif";
+import genreImg from "../../../Images/genre.jfif";
 
 const useStyle= makeStyles((theme)=>({
     cardcontent:{

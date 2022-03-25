@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header'
 import Login from './Login';
-import bglandingpage from '../../../Images/bglandingpage.jpg'
+import bglandingpage from '../../Images/bglandingpage.jpg'
 import { Box } from '@mui/material';
 import Signup from './Signup';
 import { makeStyles } from '@mui/styles';
