@@ -1,13 +1,13 @@
 import { InfoOutlined, PersonAdd, Publish } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-import "./singer.css";
+import "./musican.css";
 
 export default function User() {
   return (
     <div className="user">
       <div className="userTitleContainer">
-        <h1 className="userTitle">Edit Singer</h1>
-        <Link to="/newSinger">
+        <h1 className="userTitle">Edit Musician</h1>
+        <Link to="/newMusican">
           <button className="userAddButton">Create</button>
         </Link>
       </div>
@@ -15,7 +15,7 @@ export default function User() {
         <div className="userShow">
           <div className="userShowTop">
             <img
-              src="https://th.bing.com/th/id/R.b57b987700f339771b30d533ada205d7?rik=XPf5Qbzq2JI3eQ&pid=ImgRaw&r=0"
+              src="https://th.bing.com/th/id/R.b57b987700f339771b30d533ada205d7?rik=XPf5Qbzq2JI3eQ&pid=ImgRaw&r=0  "
               alt=""
               className="userShowImg"
             />
@@ -24,7 +24,7 @@ export default function User() {
             </div>
           </div>
           <div className="userShowBottom">
-            <span className="userShowTitle">Singer Details</span>
+            <span className="userShowTitle">Musician Details</span>
             <div className="userShowInfo">
               <InfoOutlined className="userShowIcon" />
               <href className="userShowInfoTitle">

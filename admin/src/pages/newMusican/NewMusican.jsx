@@ -1,9 +1,9 @@
-import "./newSinger.css";
+import "./newMusican.css";
 
 export default function NewUser() {
   return (
     <div className="newUser">
-      <h1 className="newUserTitle">New Singer</h1>
+      <h1 className="newUserTitle">New Musician</h1>
       <form className="newUserForm">
         <div className="newUserItem">
           <label>Full Name</label>

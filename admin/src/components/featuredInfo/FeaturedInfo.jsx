@@ -25,7 +25,7 @@ export default function FeaturedInfo() {
         <span className="featuredSub">Compared to last month</span>
       </div>
       <div className="featuredItem">
-        <span className="featuredTitle">Like list music</span>
+        <span className="featuredTitle">Music</span>
         <div className="featuredMoneyContainer">
           <span className="featuredMoney">20</span>
           <span className="featuredMoneyRate">

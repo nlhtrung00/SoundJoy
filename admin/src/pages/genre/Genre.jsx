@@ -1,47 +1,39 @@
 import { Link } from "react-router-dom";
 import "./genre.css";
 import Chart from "../../components/chart/Chart";
-import { productData } from "../../dummyData";
+import { productData1 } from "../../dummyData";
 import { Publish } from "@material-ui/icons";
 
 export default function Product() {
   return (
     <div className="product">
       <div className="productTitleContainer">
-        <h1 className="productTitle">Product</h1>
-        <Link to="/newproduct">
+        <h1 className="productTitle">Genre</h1>
+        <Link to="/newgenre">
           <button className="productAddButton">Create</button>
         </Link>
       </div>
       <div className="productTop">
         <div className="productTopLeft">
-          <Chart data={productData} dataKey="Songs" title="Musics Performance" />
+          <Chart
+            data={productData1}
+            dataKey="Genres"
+            title="Genres Performance"
+          />
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">
             <img
-              src="https://i.etsystatic.com/19762436/r/il/442704/3270587393/il_1140xN.3270587393_msfq.jpg"
+              src="https://th.bing.com/th/id/R.cae08dd75af3169afec8452da8a43b89?rik=4A%2bS7q3nzYCWsA&pid=ImgRaw&r=0"
               alt=""
               className="productInfoImg"
             />
-            <span className="productName">Bad Habits-Ed Sheeran</span>
+            <span className="productName">Rock music</span>
           </div>
           <div className="productInfoBottom">
             <div className="productInfoItem">
               <span className="productInfoKey">id:</span>
-              <span className="productInfoValue">123</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">sales:</span>
-              <span className="productInfoValue">5123</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">active:</span>
-              <span className="productInfoValue">yes</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">in stock:</span>
-              <span className="productInfoValue">no</span>
+              <span className="productInfoValue">1</span>
             </div>
           </div>
         </div>
@@ -49,13 +41,8 @@ export default function Product() {
       <div className="productBottom">
         <form className="productForm">
           <div className="productFormLeft">
-            <label>Product Name</label>
-            <input type="text" placeholder="Bad Habits" />
-            <label>In Stock</label>
-            <select name="inStock" id="idStock">
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
+            <label>Genre Name</label>
+            <input type="text" placeholder="Rock music" />
             <label>Active</label>
             <select name="active" id="active">
               <option value="yes">Yes</option>
@@ -65,7 +52,7 @@ export default function Product() {
           <div className="productFormRight">
             <div className="productUpload">
               <img
-                src="https://i.etsystatic.com/19762436/r/il/442704/3270587393/il_1140xN.3270587393_msfq.jpg"
+                src="https://th.bing.com/th/id/R.cae08dd75af3169afec8452da8a43b89?rik=4A%2bS7q3nzYCWsA&pid=ImgRaw&r=0"
                 alt=""
                 className="productUploadImg"
               />

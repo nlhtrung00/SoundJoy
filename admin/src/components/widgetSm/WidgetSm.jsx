@@ -8,12 +8,12 @@ export default function WidgetSm() {
       <ul className="widgetSmList">
         <li className="widgetSmListItem">
           <img
-            src="https://th.bing.com/th/id/R.05fa2d81b9cd840a409b0afec850cd44?rik=2go8%2fq4y4Vdk6g&riu=http%3a%2f%2fcdn.artwallpaperhi.com%2f3840x2160%2f20180610%2f5b1d91638f992.jpg&ehk=xr5pG%2f7Nt1pu5Gl25QP8CdcrjDBKrxE%2fMQerlbm%2fTfc%3d&risl=&pid=ImgRaw&r=0"
+            src="https://th.bing.com/th/id/R.146c57bc85e9bece71e005318f86fcc4?rik=38bJArAx3B%2fvLg&pid=ImgRaw&r=0"
             alt=""
             className="widgetSmImg"
           />
           <div className="widgetSmUser">
-            <span className="widgetSmUsername">Rock</span>
+            <span className="widgetSmUsername">Anime</span>
             <span className="widgetSmUserTitle">Genre</span>
           </div>
           <button className="widgetSmButton">
@@ -23,7 +23,7 @@ export default function WidgetSm() {
         </li>
         <li className="widgetSmListItem">
           <img
-            src="https://yt3.ggpht.com/a-/AAuE7mALviOpQYyVwBtJVwZwlVZ_iZd7zgCCXfptCA=s900-mo-c-c0xffffffff-rj-k-no"
+            src="https://ncstore.net/wp-content/uploads/2020/06/pop-la-the-loai-nhac-duong-dai-co-mat-tu-rat-lau-doi.jpg"
             alt=""
             className="widgetSmImg"
           />
@@ -38,13 +38,13 @@ export default function WidgetSm() {
         </li>
         <li className="widgetSmListItem">
           <img
-            src="https://th.bing.com/th/id/R.b3fd9dc7024233a0c670faa4702190d2?rik=OJf8Noo%2fFKzrvw&riu=http%3a%2f%2fwww.lovethispic.com%2fuploaded_images%2f350938-Ed-Sheeran-Holding-Guitar.jpg&ehk=qkB%2fOIuNFboCPmXFWBKg0ju1rAWLVVBAT2HIEBVAp1k%3d&risl=&pid=ImgRaw&r=0"
+            src="https://i.scdn.co/image/ab67616d0000b273e9beab61827fb8dca6384159"
             alt=""
             className="widgetSmImg"
           />
           <div className="widgetSmUser">
-            <span className="widgetSmUsername">Ed Sheeran</span>
-            <span className="widgetSmUserTitle">Deluxe</span>
+            <span className="widgetSmUsername">Moon and you</span>
+            <span className="widgetSmUserTitle">Song</span>
           </div>
           <button className="widgetSmButton">
             <Visibility className="widgetSmIcon" />
@@ -53,13 +53,13 @@ export default function WidgetSm() {
         </li>
         <li className="widgetSmListItem">
           <img
-            src="https://th.bing.com/th/id/R.33677309a7ebadab4824edc6b27a1744?rik=hJ7%2bxYtt%2fzqWeA&riu=http%3a%2f%2fwww.baltana.com%2ffiles%2fwallpapers-23%2fTaylor-Swift-Wallpaper-1920x1080-60539.jpg&ehk=dNNjfuruGsQ%2fgW2wSDGgEdPmDVr0absJ9jUifFSA6rw%3d&risl=&pid=ImgRaw&r=0"
+            src="https://vietnamjazz.files.wordpress.com/2013/08/cover.jpg?w=300&h=300"
             alt=""
             className="widgetSmImg"
           />
           <div className="widgetSmUser">
-            <span className="widgetSmUsername">Tailor Swift</span>
-            <span className="widgetSmUserTitle">Tailor's Version</span>
+            <span className="widgetSmUsername">Jazzy Dạ Lam</span>
+            <span className="widgetSmUserTitle">Album</span>
           </div>
           <button className="widgetSmButton">
             <Visibility className="widgetSmIcon" />
@@ -68,13 +68,13 @@ export default function WidgetSm() {
         </li>
         <li className="widgetSmListItem">
           <img
-            src="https://i.etsystatic.com/19762436/r/il/442704/3270587393/il_1140xN.3270587393_msfq.jpg"
+            src="https://th.bing.com/th/id/R.d1690e749ad745330cccc4d5cc0fc8cc?rik=Qwh5lfFqxdKOSA&pid=ImgRaw&r=0 "
             alt=""
             className="widgetSmImg"
           />
           <div className="widgetSmUser">
-            <span className="widgetSmUsername">Bad Habit</span>
-            <span className="widgetSmUserTitle">Ed Sheeran</span>
+            <span className="widgetSmUsername">U</span>
+            <span className="widgetSmUserTitle">Song</span>
           </div>
           <button className="widgetSmButton">
             <Visibility className="widgetSmIcon" />
