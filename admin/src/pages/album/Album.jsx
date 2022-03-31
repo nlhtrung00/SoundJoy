@@ -1,47 +1,59 @@
 import { Link } from "react-router-dom";
 import "./album.css";
 import Chart from "../../components/chart/Chart";
-import { productData } from "../../dummyData";
+import { productData2 } from "../../dummyData";
 import { Publish } from "@material-ui/icons";
 
 export default function Product() {
   return (
     <div className="product">
       <div className="productTitleContainer">
-        <h1 className="productTitle">Product</h1>
-        <Link to="/newproduct">
+        <h1 className="productTitle">Album</h1>
+        <Link to="/newalbum">
           <button className="productAddButton">Create</button>
         </Link>
       </div>
       <div className="productTop">
         <div className="productTopLeft">
-          <Chart data={productData} dataKey="Songs" title="Musics Performance" />
+          <Chart
+            data={productData2}
+            dataKey="Albums"
+            title="Albums Performance"
+          />
         </div>
         <div className="productTopRight">
           <div className="productInfoTop">
             <img
-              src="https://i.etsystatic.com/19762436/r/il/442704/3270587393/il_1140xN.3270587393_msfq.jpg"
+              src="https://th.bing.com/th/id/R.6672968bef6fa180e3cad0b545a978a3?rik=41UYwN8b6ZM%2faA&pid=ImgRaw&r=0"
               alt=""
               className="productInfoImg"
             />
-            <span className="productName">Bad Habits-Ed Sheeran</span>
+            <span className="productName">Red (Tailor's version)</span>
           </div>
           <div className="productInfoBottom">
             <div className="productInfoItem">
               <span className="productInfoKey">id:</span>
-              <span className="productInfoValue">123</span>
+              <span className="productInfoValue">1</span>
             </div>
             <div className="productInfoItem">
-              <span className="productInfoKey">sales:</span>
-              <span className="productInfoValue">5123</span>
+              <span className="productInfoKey">Amount songa:</span>
+              <span className="productInfoValue">3</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">Like:</span>
+              <span className="productInfoValue">20</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">Official date:</span>
+              <span className="productInfoValue">12/11/2021</span>
+            </div>
+            <div className="productInfoItem">
+              <span className="productInfoKey">Genre:</span>
+              <span className="productInfoValue">Pop, rock</span>
             </div>
             <div className="productInfoItem">
               <span className="productInfoKey">active:</span>
               <span className="productInfoValue">yes</span>
-            </div>
-            <div className="productInfoItem">
-              <span className="productInfoKey">in stock:</span>
-              <span className="productInfoValue">no</span>
             </div>
           </div>
         </div>
@@ -49,13 +61,16 @@ export default function Product() {
       <div className="productBottom">
         <form className="productForm">
           <div className="productFormLeft">
-            <label>Product Name</label>
-            <input type="text" placeholder="Bad Habits" />
-            <label>In Stock</label>
-            <select name="inStock" id="idStock">
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
+            <label>Album name</label>
+            <input type="text" placeholder="Red (Tailor's version)" />
+            <label>Amount songs</label>
+            <input type="text" placeholder="3" />
+            <label>Like</label>
+            <input type="text" placeholder="20" />
+            <label>Official date</label>
+            <input type="text" placeholder="12/11/2011" />
+            <label>Genre</label>
+            <input type="text" placeholder="pop, rock" />
             <label>Active</label>
             <select name="active" id="active">
               <option value="yes">Yes</option>
@@ -65,7 +80,7 @@ export default function Product() {
           <div className="productFormRight">
             <div className="productUpload">
               <img
-                src="https://i.etsystatic.com/19762436/r/il/442704/3270587393/il_1140xN.3270587393_msfq.jpg"
+                src="https://th.bing.com/th/id/R.6672968bef6fa180e3cad0b545a978a3?rik=41UYwN8b6ZM%2faA&pid=ImgRaw&r=0"
                 alt=""
                 className="productUploadImg"
               />
