@@ -35,7 +35,7 @@ const Singers = () => {
     const classes = useStyle();
     return (
         <Grid container spacing={3}>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card className={classes.card}>
                     <CardActionArea>
                         <CardMedia
@@ -56,7 +56,7 @@ const Singers = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card className={classes.card}>
                     <CardActionArea>
                         <CardMedia
@@ -77,7 +77,7 @@ const Singers = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card className={classes.card}>
                     <CardActionArea>
                         <CardMedia
@@ -98,7 +98,7 @@ const Singers = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card className={classes.card}>
                     <CardActionArea>
                         <CardMedia
@@ -119,7 +119,7 @@ const Singers = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card className={classes.card}>
                     <CardActionArea>
                         <CardMedia
@@ -140,7 +140,7 @@ const Singers = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card className={classes.card}>
                     <CardActionArea>
                         <CardMedia

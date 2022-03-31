@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {AppBar, Button, Container, MenuItem, Toolbar, Typography} from '@mui/material'
 
 const options = ['Login','Signup'];
-const Header=({setOption})=>{
+const Header=()=>{
     return(
         <AppBar 
             position="static"
@@ -25,7 +25,7 @@ const Header=({setOption})=>{
                             key={option}
                             size="large"
                             value={option}
-                            onClick={(e)=>setOption(e.target.value)}
+                            
                             >
                                 {option}
                             </Button>

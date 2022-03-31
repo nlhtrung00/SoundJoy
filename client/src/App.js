@@ -9,20 +9,32 @@ import LeftBar from "./Components/LeftBar/LeftBar";
 import Genres from "./Components/Genres/Genres";
 import Singer from "./Components/Singers/Singer";
 import Musicians from "./Components/Musician/Musician";
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { getIsLogedin } from './Redux/Slices/AccountSlice';
+import { fetchAsyncUserByAccount, getUser } from "./Redux/Slices/UserSlice";
+
+
 function App() {
+   const {isloged,accountId} = useSelector(getIsLogedin);
+   const dispatch = useDispatch();
+   console.log(accountId);
+   useEffect(()=>{
+      if(accountId)
+      dispatch(fetchAsyncUserByAccount(accountId));
+   },[accountId]);
+      
    return (
       <BrowserRouter>
          <ScrollToTop />
-         <Container disableGutters maxWidth="xl" sx={{
-            bgcolor: "#171334",
-            padding: 2,
-
-            minHeight: '100vh',
-         }}>
             <Grid container>
+               {isloged && 
                <Grid item lg={2.5}>
                   <LeftBar />
                </Grid>
+               }
+               {isloged &&
                <Grid item lg={9.5}>
                   <Routes>
                      <Route exact path="/" element={<Home />} />
@@ -33,14 +45,17 @@ function App() {
                      <Route path="/welcome" element={<LandingPage />} />
                   </Routes>
                </Grid>
-
+               }
+               {!isloged&&
+               <Grid item xs={12}>
+                  <Routes>
+                     <Route path="/" element={<LandingPage />} />
+                  </Routes>
+               </Grid>
+               }
 
 
             </Grid>
-
-         </Container>
-
-
       </BrowserRouter>
 
    )
