@@ -11,12 +11,22 @@ export const getUsers = async (req, res) => {
 
 export const getUser = async (req, res) => {
     try {
-        const user = await UserModel.find({ _id: req.params._id });
+        const user = await UserModel.findOne({ _id: req.params.id });
+        
         res.status(200).json(user);        
     } catch (err) {
         res.status(500).json({ error: err});
     }
 };
+export const getUserByAccount = async (req, res) => {
+    try {
+        const user = await UserModel.findOne({account: req.params.account });
+        res.status(200).json(user);        
+    } catch (err) {
+        res.status(500).json({ error: err});
+    }
+};
+
 
 export const postUser = async (req, res) => {
     try {
@@ -25,7 +35,6 @@ export const postUser = async (req, res) => {
         await user.save();
         res.status(200).json(user);
     }catch (err) {
-        console.log(err);
         res.status(500).json({ error: err });
     }
 }; 
