@@ -1,7 +1,9 @@
 import {
   CalendarToday,
   LocationSearching,
+  LockOpenRounded,
   MailOutline,
+  PermContactCalendar,
   PermIdentity,
   PhoneAndroid,
   Publish,
@@ -28,7 +30,8 @@ export default function User() {
             />
             <div className="userShowTopTitle">
               <span className="userShowUsername">Anna Becker</span>
-              <span className="userShowUserTitle">Software Engineer</span>
+              <span className="userShowUserTitle">Is active</span>
+              <span className="userShowUserTitle">Is admin</span>
             </div>
           </div>
           <div className="userShowBottom">
@@ -38,8 +41,16 @@ export default function User() {
               <span className="userShowInfoTitle">annabeck99</span>
             </div>
             <div className="userShowInfo">
-              <CalendarToday className="userShowIcon" />
+              <LockOpenRounded className="userShowIcon" />
+              <span className="userShowInfoTitle">annabeck999999</span>
+            </div>
+            <div className="userShowInfo">
+              <PermContactCalendar className="userShowIcon" />
               <span className="userShowInfoTitle">10.12.1999</span>
+            </div>
+            <div className="userShowInfo">
+              <CalendarToday className="userShowIcon" />
+              <span className="userShowInfoTitle">03.03.2022</span>
             </div>
             <span className="userShowTitle">Contact Details</span>
             <div className="userShowInfo">
@@ -69,10 +80,37 @@ export default function User() {
                 />
               </div>
               <div className="userUpdateItem">
+                <label>Password</label>
+                <input
+                  type="text"
+                  placeholder="annabeck999999"
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
                 <label>Full Name</label>
                 <input
                   type="text"
                   placeholder="Anna Becker"
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
+              <label>Gender</label>
+              <div className="newUserGender">
+                <input type="radio" name="gender" id="male" value="male" />
+                <label>Male</label>
+                <input type="radio" name="gender" id="female" value="female" />
+                <label>Female</label>
+                <input type="radio" name="gender" id="other" value="other" />
+                <label>Other</label>
+              </div>
+            </div>
+              <div className="userUpdateItem">
+                <label>Birthday</label>
+                <input
+                  type="text"
+                  placeholder="10.12.1999"
                   className="userUpdateInput"
                 />
               </div>
@@ -99,6 +137,29 @@ export default function User() {
                   placeholder="New York | USA"
                   className="userUpdateInput"
                 />
+              </div>
+              <div className="userUpdateItem">
+                <label>Register date</label>
+                <input
+                  type="text"
+                  placeholder="03.03.2022"
+                  className="userUpdateInput"
+                />
+              </div>
+              <div className="userUpdateItem">
+                <label>Is active</label>
+                <select className="newUserSelect" name="active" id="active">
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+              <div className="userUpdateItem">
+                <label>Is admin</label>
+                <select className="newUserSelect" name="active" id="active">
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                  <option value="no">None</option>
+                </select>
               </div>
             </div>
             <div className="userUpdateRight">

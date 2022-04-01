@@ -23,45 +23,31 @@ const Musicians = () => {
                 All Musicians
             </Typography>
             <Grid container spacing={2}>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
+                <Grid item lg={2} md={3}>
                     <CardMusician />
                 </Grid>
-                <Grid item xl={2}>
-                    <CardMusician />
-                </Grid>
-                <Grid item xl={2}>
-                    <CardMusician />
-                </Grid>
-                <Grid item xl={2}>
-                    <CardMusician />
-                </Grid>
-                <Grid item xl={2}>
-                    <CardMusician />
-                </Grid>
-                <Grid item xl={2}>
-                    <CardMusician />
-                </Grid>
+                
             </Grid>
         </Container>
     );

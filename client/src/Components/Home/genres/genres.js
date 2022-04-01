@@ -29,7 +29,7 @@ const Genres = () => {
     const classes = useStyle();
     return (
         <Grid container spacing={3}>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card>
                     <CardActionArea>
                         <CardMedia
@@ -48,7 +48,7 @@ const Genres = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card>
                     <CardActionArea>
                         <CardMedia
@@ -67,7 +67,7 @@ const Genres = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card>
                     <CardActionArea>
                         <CardMedia
@@ -86,7 +86,7 @@ const Genres = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card>
                     <CardActionArea>
                         <CardMedia
@@ -105,7 +105,7 @@ const Genres = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card>
                     <CardActionArea>
                         <CardMedia
@@ -124,7 +124,7 @@ const Genres = () => {
                 </Card>
                 
             </Grid>
-            <Grid item xl={2} xs={6}>
+            <Grid item lg={2} md={3} xs={6}>
                 <Card>
                     <CardActionArea>
                         <CardMedia

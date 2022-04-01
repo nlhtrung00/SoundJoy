@@ -15,8 +15,8 @@ export default function ProductList() {
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "product",
-      headerName: "Product",
+      field: "album",
+      headerName: "Album",
       width: 200,
       renderCell: (params) => {
         return (
@@ -27,15 +27,21 @@ export default function ProductList() {
         );
       },
     },
-    { field: "stock", headerName: "Stock", width: 200 },
+    { field: "Amount songs", headerName: "Amount songs", width: 200 },
+
     {
       field: "status",
       headerName: "Status",
       width: 120,
     },
     {
-      field: "price",
-      headerName: "Price",
+      field: "Like",
+      headerName: "Like",
+      width: 160,
+    },
+    {
+      field: "Official date",
+      headerName: "Official date",
       width: 160,
     },
     {
@@ -45,7 +51,7 @@ export default function ProductList() {
       renderCell: (params) => {
         return (
           <>
-            <Link to={"/product/" + params.row.id}>
+            <Link to={"/album/" + params.row.id}>
               <button className="productListEdit">Edit</button>
             </Link>
             <DeleteOutline

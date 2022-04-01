@@ -34,8 +34,8 @@ export default function UserList() {
       width: 120,
     },
     {
-      field: "transaction",
-      headerName: "Transaction Volume",
+      field: "admin",
+      headerName: "admin",
       width: 160,
     },
     {

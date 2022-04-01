@@ -11,11 +11,38 @@ export default function NewProduct() {
         </div>
         <div className="addProductItem">
           <label>Name</label>
-          <input type="text" placeholder="Apple Airpods" />
+          <input type="text" placeholder="Moon and you" />
         </div>
         <div className="addProductItem">
-          <label>Stock</label>
-          <input type="text" placeholder="123" />
+          <label>Listens</label>
+          <input type="text" placeholder="300" />
+        </div>
+        <div className="addProductItem">
+          <label>Debut date</label>
+          <input type="text" placeholder="2018" />
+        </div>
+        <div className="addProductItem">
+          <label>Singers</label>
+          <input type="text" placeholder="Jazzy Dạ Lam" />
+        </div>
+        <div className="addProductItem">
+          <label>Musicans</label>
+          <input type="text" placeholder="Classical music" />
+        </div>
+        <div className="addProductItem">
+          <label>Album</label>
+          <input type="text" placeholder="Jazzy Dạ Lam" />
+        </div>
+        <div className="addProductItem">
+          <label>Genre</label>
+          <input type="text" placeholder="Classical music" />
+        </div>
+        <div className="addProductItem">
+          <label>Link</label>
+          <input
+            type="text"
+            placeholder="https://zingmp3.vn/bai-hat/Moon-And-You-Jazzy-Da-Lam/ZW78ZEBZ.html"
+          />
         </div>
         <div className="addProductItem">
           <label>Active</label>

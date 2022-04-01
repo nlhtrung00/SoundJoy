@@ -1,4 +1,4 @@
-import { Avatar, Container, Typography } from '@mui/material';
+import { Avatar, Container, Typography, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -10,11 +10,17 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import avatar from "../../Images/avatardemo.jpg";
+import { useDispatch,useSelector } from 'react-redux';
+import { Logout } from '../../Redux/Slices/AccountSlice';
+import { getUser } from '../../Redux/Slices/UserSlice';
+import { useNavigate } from "react-router-dom";
 const useStyle = makeStyles((theme) => ({
     container: {
         position: 'sticky',
         top: 0,
         backgroundColor: '#171334',
+        height:'100vh',
+        padding:'20px 10px'
     },
     titlelist: {
         fontSize: '20px',
@@ -25,7 +31,8 @@ const useStyle = makeStyles((theme) => ({
         display: 'flex',
         alignItems: "center",
         color: 'white',
-        margin: '20px 0px 20px 15px'
+        margin: '20px 0px 20px 15px',
+        cursor:'pointer',
     },
     icon: {
         marginRight: '10px'
@@ -45,13 +52,23 @@ const useStyle = makeStyles((theme) => ({
         textAlign: 'center',
     }
 }))
+
+
 const LeftBar = () => {
+    let navigate = useNavigate();
     const [active, setActive] = useState(false)
     const classes = useStyle();
-
+    const dispatch = useDispatch();
+    const user = useSelector(getUser);
+    const logoutHandle=(e)=>{
+        console.log('log out');
+        dispatch(Logout());    
+        return navigate("/");
+    }
+    console.log(user);
     return (
         <Container disableGutters className={classes.container}>
-            <div className={classes.user_section}>
+            {user&&<div className={classes.user_section}>
                 <Avatar
                     className={classes.avt_user}
                     alt="avatar user"
@@ -60,10 +77,10 @@ const LeftBar = () => {
 
                 />
                 <Typography className={classes.name_user}>
-                    Nguyen Hoai Tan
+                    {user.name}
                 </Typography>
 
-            </div>
+            </div>}
             <div className='menu'>
                 <Typography className={classes.titlelist}>
                     Menu
@@ -121,12 +138,10 @@ const LeftBar = () => {
                 <Typography className={classes.titlelist}>
                     Redirect
                 </Typography>
-                <Link to="">
-                    <div className={classes.item}>
+                    <div className={classes.item} onClick={logoutHandle}>
                         <LogoutIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Logout</Typography>
                     </div>
-                </Link>
                 <Link to="">
                     <div className={classes.item}>
                         <AccountCircleIcon className={classes.icon} />

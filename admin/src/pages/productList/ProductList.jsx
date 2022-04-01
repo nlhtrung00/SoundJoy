@@ -15,8 +15,8 @@ export default function ProductList() {
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "product",
-      headerName: "Product",
+      field: "songs",
+      headerName: "Songs",
       width: 200,
       renderCell: (params) => {
         return (
@@ -27,15 +27,15 @@ export default function ProductList() {
         );
       },
     },
-    { field: "stock", headerName: "Stock", width: 200 },
+    { field: "listens", headerName: "Listens", width: 200 },
     {
       field: "status",
       headerName: "Status",
       width: 120,
     },
     {
-      field: "price",
-      headerName: "Price",
+      field: "Debut date",
+      headerName: "Debut date",
       width: 160,
     },
     {
