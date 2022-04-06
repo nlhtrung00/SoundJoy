@@ -9,6 +9,10 @@ const schema = new mongoose.Schema({
         type: String,
         // required: true
     },
+    listens: {
+        type: Number,
+        // required: true
+    },
     debuted_date: {
         type: Date,
         default: Date.now,
