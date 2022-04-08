@@ -13,11 +13,11 @@ export default function ProductList() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 110 },
     {
       field: "genre",
       headerName: "Genre",
-      width: 200,
+      width: 250,
       renderCell: (params) => {
         return (
           <div className="productListItem">
@@ -29,20 +29,17 @@ export default function ProductList() {
     },
 
     {
-      field: "status",
-      headerName: "Status",
-      width: 120,
-    },
-
-    {
       field: "action",
       headerName: "Action",
-      width: 150,
+      width: 220,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/genre/" + params.row.id}>
               <button className="productListEdit">Edit</button>
+            </Link>
+            <Link to={"/newGenre/" + params.row.id}>
+              <button className="productListCreate">Create</button>
             </Link>
             <DeleteOutline
               className="productListDelete"
