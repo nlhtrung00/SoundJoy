@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 
 const schema = new mongoose.Schema({
-    song: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Song'
+    weight: {
+        type: Number,
         // required: true
     },
     user: {
@@ -11,10 +10,11 @@ const schema = new mongoose.Schema({
         ref: 'User'
         // required: true
     },
-    weight: {
-        type: Number,
+    song: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Song'
         // required: true
-    }
+    }   
 }, {
     versionKey: false
 });

@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
         type: String,
         // required: true
     },
-    created_day: {
+    created_date: {
         type: Date,
         default: Date.now,
         // required: true
@@ -18,11 +18,6 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Song'
     }],
-    number_of_songs: {
-        type: Number,
-        default: 0,
-        // required: true
-    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

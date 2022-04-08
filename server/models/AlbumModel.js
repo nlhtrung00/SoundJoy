@@ -9,11 +9,6 @@ const schema = new mongoose.Schema({
         type: String,
         // required: true
     },
-    number_os_songs: {
-        type: Number,
-        // required: true,
-        default: 0
-    },
     reactions: {
         type: Number,
         // required: true,
