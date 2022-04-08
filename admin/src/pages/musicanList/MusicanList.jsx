@@ -17,7 +17,7 @@ export default function UserList() {
     {
       field: "musician",
       headerName: "Musician",
-      width: 200,
+      width: 280,
       renderCell: (params) => {
         return (
           <div className="userListUser">
@@ -27,11 +27,13 @@ export default function UserList() {
         );
       },
     },
-    { field: "Information", headerName: "Information", width: 200 },
+    { field: "Information", headerName: "Information", width: 250 },
+    { field: "Songs", headerName: "Songs", width: 150 },
+    { field: "Followers", headerName: "Followers", width: 200 },
     {
-      field: "Followers",
-      headerName: "Followers",
-      width: 120,
+      field: "Options",
+      headerName: "Options",
+      width: 180,
       renderCell: (params) => {
         return (
           <>
