@@ -26,8 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 
     },
-    paper: {
-        
+    paper: {    
         minHeight: '78%',
 
     }

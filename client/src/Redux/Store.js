@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import AccountReducer from './Slices/AccountSlice';
+import SingerReducer from './Slices/SingerSlice';
+import MusicianReducer from './Slices/MusicianSlice';
 import UserReducer from './Slices/UserSlice';
+import GenreReducer from './Slices/GenreSlice';
 import { combineReducers } from 'redux';
 import {
-    persistStore,
     persistReducer,
     FLUSH,
     REHYDRATE,
@@ -21,6 +23,9 @@ const persistConfig = {
 const rootReducer = combineReducers({
     account: AccountReducer,
     user: UserReducer,
+    singer: SingerReducer,
+    musician: MusicianReducer,
+    genre:GenreReducer,
 })
 // const persistedAccount = persistReducer(persistConfig, AccountReducer);
 // const persistedUser = persistReducer(persistConfig, UserReducer);

@@ -30,7 +30,7 @@ const useStyle= makeStyles((theme)=>({
         
     },
 }));
-const CardSinger = () => {
+const CardSinger = (props) => {
     const classes = useStyle();
     return (
         <Card className={classes.card}>
@@ -38,7 +38,7 @@ const CardSinger = () => {
                         <CardMedia
                             component="img"
                             className={classes.cardimg}
-                            image={singerImg}
+                            image={props.singer.image}
                             alt="genre image"
                             sx={{
                                 mx:"auto"
@@ -46,7 +46,7 @@ const CardSinger = () => {
                         />
                         <CardContent className={classes.cardcontent}>
                             <Typography className={classes.namegenre}>
-                                Binz
+                                {props.singer.name}
                             </Typography>
                         </CardContent>
                     </CardActionArea>
