@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import heroImg from "../../Images/heroimg.jpg";
@@ -6,6 +6,10 @@ import Genres from './genres/genres';
 import Singers from './Singer/Singer';
 import Musicians from './Musician/Musician';
 import LeftBar from '../LeftBar/LeftBar';
+import { fetchAsyncMusicians } from '../../Redux/Slices/MusicianSlice';
+import { fetchAsyncSingers } from '../../Redux/Slices/SingerSlice';
+import { fetchAsyncGenres } from '../../Redux/Slices/GenreSlice';
+import { useDispatch } from 'react-redux';
 const useStyle = makeStyles((theme) => ({
     home_container: {
         backgroundColor: 'white',
@@ -41,6 +45,12 @@ const useStyle = makeStyles((theme) => ({
 }));
 const Home = () => {
     const classes = useStyle();
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        dispatch(fetchAsyncMusicians());
+        dispatch(fetchAsyncSingers());
+        dispatch(fetchAsyncGenres());
+    },[])
     return (
                 <Container disableGutters maxWidth="xl" className={classes.home_container}>
                     <div className={classes.titlepage}>

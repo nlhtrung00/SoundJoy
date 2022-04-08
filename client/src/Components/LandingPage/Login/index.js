@@ -47,8 +47,6 @@ const Login = () => {
             password:value.password
         }
         dispatch(fetchAsyncAccount(data));
-            
-
     }
     return (
         <Grid>

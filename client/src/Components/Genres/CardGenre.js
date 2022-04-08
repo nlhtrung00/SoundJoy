@@ -25,7 +25,7 @@ const useStyle= makeStyles((theme)=>({
     },
 }));
 
-const CardGenre = () => {
+const CardGenre = (props) => {
     const classes = useStyle();
     return (
         <Card>
@@ -33,13 +33,13 @@ const CardGenre = () => {
             <CardMedia
                 component="img"
                 className={classes.cardimg}
-                image={genreImg}
+                image={props.genre.image}
                 alt="genre image"
                 
             />
             <CardContent className={classes.cardcontent}>
                 <Typography className={classes.namegenre}>
-                    Love Genres
+                    {props.genre.name}
                 </Typography>
             </CardContent>
         </CardActionArea>

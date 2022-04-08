@@ -11,9 +11,7 @@ const useStyle= makeStyles((theme)=>({
     cardimg:{
         objectFit:'cover',
         objectPosition:'center',
-        height:'150px',
-        
-        
+        height:'150px',    
     },
     cardcontent:{
         backgroundColor: '#522522',
@@ -29,15 +27,16 @@ const useStyle= makeStyles((theme)=>({
         
     },
 }));
-const CardMusician = () => {
+const CardMusician = (props) => {
     const classes = useStyle();
+    console.log(props.musician.name)
     return (
         <Card className={classes.card}>
                     <CardActionArea>
                         <CardMedia
                             component="img"
                             className={classes.cardimg}
-                            image={singerImg}
+                            image={props.musician.image}
                             alt="genre image"
                             sx={{
                                 mx:"auto"
@@ -45,7 +44,7 @@ const CardMusician = () => {
                         />
                         <CardContent className={classes.cardcontent}>
                             <Typography className={classes.namegenre}>
-                                Binz
+                                {props.musician.name}
                             </Typography>
                         </CardContent>
                     </CardActionArea>

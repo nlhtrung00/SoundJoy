@@ -2,8 +2,8 @@ import React from 'react';
 import { Container, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import CardMusician from './CardMusician';
-
-
+import { getMusicians } from '../../Redux/Slices/MusicianSlice';
+import { useSelector } from 'react-redux';
 const useStyle = makeStyles((theme) => ({
     home_container: {
         backgroundColor: 'white',
@@ -15,39 +15,25 @@ const useStyle = makeStyles((theme) => ({
 
 const Musicians = () => {
     const classes = useStyle();
+    const musicians = useSelector(getMusicians);
+    console.log(musicians)
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
             <Typography variant="h6" sx={{
-                mb:1
+                mb: 1
             }}>
                 All Musicians
             </Typography>
             <Grid container spacing={2}>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                <Grid item lg={2} md={3}>
-                    <CardMusician />
-                </Grid>
-                
+                {musicians && musicians.map((musician) => {
+                    return (
+                        <Grid item lg={2} md={3} xs={6} key={musician._id}>
+                            <CardMusician musician={musician}/>
+                        </Grid>
+                    )
+                })}
+
+
             </Grid>
         </Container>
     );
