@@ -13,11 +13,11 @@ export default function ProductList() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 110 },
     {
-      field: "songs",
-      headerName: "Songs",
-      width: 200,
+      field: "song",
+      headerName: "Song",
+      width: 240,
       renderCell: (params) => {
         return (
           <div className="productListItem">
@@ -27,26 +27,25 @@ export default function ProductList() {
         );
       },
     },
-    { field: "listens", headerName: "Listens", width: 200 },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 120,
-    },
+    { field: "listens", headerName: "Listens", width: 150 },
+
     {
       field: "Debut date",
       headerName: "Debut date",
-      width: 160,
+      width: 180,
     },
     {
       field: "action",
       headerName: "Action",
-      width: 150,
+      width: 200,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/product/" + params.row.id}>
               <button className="productListEdit">Edit</button>
+            </Link>
+            <Link to={"/newProduct/" + params.row.id}>
+              <button className="productListCreate">Create</button>
             </Link>
             <DeleteOutline
               className="productListDelete"

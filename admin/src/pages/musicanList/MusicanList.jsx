@@ -13,7 +13,7 @@ export default function UserList() {
   };
 
   const columns = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "id", headerName: "ID", width: 110 },
     {
       field: "musician",
       headerName: "Musician",
@@ -31,14 +31,22 @@ export default function UserList() {
     { field: "Songs", headerName: "Songs", width: 150 },
     { field: "Followers", headerName: "Followers", width: 200 },
     {
-      field: "Options",
-      headerName: "Options",
-      width: 180,
+      field: "Followers",
+      headerName: "Followers",
+      width: 160,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
       renderCell: (params) => {
         return (
           <>
             <Link to={"/musican/" + params.row.id}>
               <button className="userListEdit">Edit</button>
+            </Link>
+            <Link to={"/newMusican/" + params.row.id}>
+              <button className="userListCreate">Create</button>
             </Link>
             <DeleteOutline
               className="userListDelete"
