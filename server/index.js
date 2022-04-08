@@ -40,4 +40,4 @@ app.use('/singers', singers);
 app.use('/albums', albums);
 app.use('/songs', songs);
 app.use('/comments', comments);
-app.app.use('/listens', listens);
+app.use('/listens', listens);

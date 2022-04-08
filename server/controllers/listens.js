@@ -1,4 +1,4 @@
-import { ListenModel } from "../models/ListenModel";
+import { ListenModel } from "../models/ListenModel.js";
 
 
 export const getListens = async (req, res) => {

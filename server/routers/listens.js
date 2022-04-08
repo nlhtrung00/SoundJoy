@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteListen, getListens, postListen, updateListen } from '../controllers/listens';
+import { deleteListen, getListens, postListen, updateListen } from '../controllers/listens.js';
 
 const router = express.Router();
 
