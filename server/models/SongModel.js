@@ -11,7 +11,6 @@ const schema = new mongoose.Schema({
     },
     listens: {
         type: Number,
-        default: 0,
         // required: true
     },
     debuted_date: {

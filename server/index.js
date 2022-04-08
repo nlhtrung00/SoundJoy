@@ -12,6 +12,7 @@ import albums from './routers/albums.js';
 import songs from './routers/songs.js';
 import comments from './routers/comments.js';
 import likelists from './routers/likelists.js';
+import listens from './routers/listens.js';
 
 const app = express();
 const PORT = 5000;
@@ -39,4 +40,4 @@ app.use('/singers', singers);
 app.use('/albums', albums);
 app.use('/songs', songs);
 app.use('/comments', comments);
-app.use('/likelists', likelists);
+app.app.use('/listens', listens);
