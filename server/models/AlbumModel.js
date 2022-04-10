@@ -24,6 +24,9 @@ const schema = new mongoose.Schema({
         ref: 'Genre',
         // required: true,
     },
+    cloudinary_id: {
+        type: String
+    }
 }, {
     versionKey: false
 });

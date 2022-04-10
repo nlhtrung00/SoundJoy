@@ -26,7 +26,10 @@ const schema = new mongoose.Schema({
     album: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album'
-    }]
+    }],
+    cloudinary_id: {
+        type: String
+    }
 }, {
     versionKey: false
 });
