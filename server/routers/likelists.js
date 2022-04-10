@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/', getLikelists);
 router.get('/:id', getLikelist);
 router.post('/', upload.single('image'), postLikelist);
-router.put('/:id', updateLikelist);
+router.put('/:id', upload.single('image'), updateLikelist);
 router.delete('/:id', deleteLikelist);
 
 export default router;
