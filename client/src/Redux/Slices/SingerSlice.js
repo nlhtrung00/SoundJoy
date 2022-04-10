@@ -20,6 +20,7 @@ const SingerSlice = createSlice({
         },
         [fetchAsyncSingers.fulfilled]:(state, { payload })=>{
             console.log("Fetch Singers Successfully");
+            
             return{
                 ...state,
                 singers:payload

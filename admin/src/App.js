@@ -3,26 +3,37 @@ import Topbar from "./components/topbar/Topbar";
 import "./App.css";
 import Home from "./pages/home/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import UserList from "./pages/userList/UserList";
-import User from "./pages/user/User";
-import NewUser from "./pages/newUser/NewUser";
-import ProductList from "./pages/productList/ProductList";
-import Product from "./pages/product/Product";
-import NewProduct from "./pages/newProduct/NewProduct";
-import SingerList from "./pages/singerList/SingerList";
-import Singer from "./pages/singer/Singer";
-import NewSinger from "./pages/newSinger/NewSinger";
-import MusicanList from "./pages/musicanList/MusicanList";
-import Musican from "./pages/musican/Musican";
-import NewMusican from "./pages/newMusican/NewMusican";
-import GenreList from "./pages/genreList/GenreList";
-import Genre from "./pages/genre/Genre";
-import NewGenre from "./pages/newGenre/NewGenre";
-import AlbumList from "./pages/albumList/AlbumList";
-import Album from "./pages/album/Album";
-import NewAlbum from "./pages/newAlbum/NewAlbum";
-
+import UserList from "./pages/UserPage/userList/UserList";
+import UserDetail from "./pages/UserPage/user/User";
+import NewUser from "./pages/UserPage/newUser/NewUser";
+import listSong from "./pages/SongPage/ListSongs/listSongs";
+import SongDetail from "./pages/SongPage/SongDetail/SongDetail";
+import newSong from "./pages/SongPage/NewSong/newSong";
+import SingerList from "./pages/SingerPage/singerList/SingerList";
+import SingerDetail from "./pages/SingerPage/singer/Singer";
+import UpdateSinger from "./pages/SingerPage/updateSinger/updateSinger";
+import NewSinger from "./pages/SingerPage/newSinger/NewSinger";
+import MusicianDetail from "./pages/MusicianPage/musican/Musican";
+import MusicianList from "./pages/MusicianPage/musicanList/MusicanList";
+import NewMusician from "./pages/MusicianPage/newMusican/NewMusican";
+import GenreDetail from "./pages/GenrePage/genre/Genre";
+import GenreList from "./pages/GenrePage/genreList/GenreList";
+import NewGenre from "./pages/GenrePage/newGenre/NewGenre";
+import Album from "./pages/AlbumPage/album/Album";
+import AlbumList from "./pages/AlbumPage/albumList/AlbumList";
+import NewAlbum from "./pages/AlbumPage/newAlbum/NewAlbum";
+import { useEffect } from "react";
+import { useDispatch } from 'react-redux';
+import { fetchAsyncUsers } from "./Redux/Slice/UserSlice";
+import { fetchAsyncSingers } from "./Redux/Slice/SingerSlice";
+import { fetchAsyncMusicians } from "./Redux/Slice/MusicianSlice";
 function App() {
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(fetchAsyncUsers());
+    dispatch(fetchAsyncSingers());
+    dispatch(fetchAsyncMusicians());
+  },[])
   return (
     <Router>
       <Topbar />
@@ -32,60 +43,53 @@ function App() {
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/users">
-            <UserList />
+          <Route exact path='/users'>
+            <UserList />    
           </Route>
-          <Route path="/user/:userId">
-            <User />
-          </Route>
-          <Route path="/newUser">
+          <Route exact path='/users/add'>
             <NewUser />
           </Route>
-          <Route path="/products">
-            <ProductList />
+          <Route path='/users/:userId'>
+            <UserDetail />
           </Route>
-          <Route path="/product/:productId">
-            <Product />
+
+          {/* route for singer */}
+          <Route exact path='/singers'>
+            <SingerList />   
           </Route>
-          <Route path="/newProduct">
-            <NewProduct />
-          </Route>
-          <Route path="/genres">
-            <GenreList />
-          </Route>
-          <Route path="/genre/:genreId">
-            <Genre />
-          </Route>
-          <Route path="/newGenre">
-            <NewGenre />
-          </Route>
-          <Route path="/albums">
-            <AlbumList />
-          </Route>
-          <Route path="/album/:albumId">
-            <Album />
-          </Route>
-          <Route path="/newAlbum">
-            <NewAlbum />
-          </Route>
-          <Route path="/singers">
-            <SingerList />
-          </Route>
-          <Route path="/singer/:singerId">
-            <Singer />
-          </Route>
-          <Route path="/newSinger">
+          <Route exact path='/singers/add'>
             <NewSinger />
           </Route>
-          <Route path="/musicans">
-            <MusicanList />
+          <Route path='/singers/edit/:singerId'>
+            <UpdateSinger />
           </Route>
-          <Route path="/musican/:musicanId">
-            <Musican />
+          <Route path='/singers/:singerId'>
+            <SingerDetail />
           </Route>
-          <Route path="/newMusican">
-            <NewMusican />
+          
+
+          {/* route for musician */}
+          <Route exact path='/musicians'>
+            <MusicianList />   
           </Route>
+          <Route exact path='/musicians/add'>
+            <NewMusician />
+          </Route>
+          <Route path='/musicians/:musicianId'>
+            <MusicianDetail />
+          </Route>
+
+          {/* route for song */}
+          <Route exact path='/songs'>
+            <listSong />   
+          </Route>
+          <Route exact path='/songs/add'>
+            <newSong />
+          </Route>
+          <Route path='/songs/:songId'>
+            <SongDetail />
+          </Route>
+          
         </Switch>
       </div>
     </Router>
