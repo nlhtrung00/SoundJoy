@@ -44,13 +44,13 @@ export default function Sidebar() {
                 Singers
               </li>
             </Link>
-            <Link to="/musicans" className="link">
+            <Link to="/musicians" className="link">
               <li className="sidebarListItem">
                 <BarChart className="sidebarIcon" />
                 Musican
               </li>
             </Link>
-            <Link to="/products" className="link">
+            <Link to="/songs" className="link">
               <li className="sidebarListItem">
                 <Storefront className="sidebarIcon" />
                 Songs

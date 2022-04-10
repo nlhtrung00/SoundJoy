@@ -1,28 +1,28 @@
 import Chart from "../../components/chart/Chart";
 import FeaturedInfo from "../../components/featuredInfo/FeaturedInfo";
 import "./home.css";
-import { userData, userData1, userData2 } from "../../dummyData";
 import WidgetSm from "../../components/widgetSm/WidgetSm";
 import WidgetLg from "../../components/widgetLg/WidgetLg";
 
 export default function Home() {
+  
   return (
     <div className="home">
       <FeaturedInfo />
       <Chart
-        data={userData}
+        // data={userData}
         title="Music analytics"
         grid
         dataKey="Active Music"
       />
       <Chart
-        data={userData1}
+        // data={userData1}
         title="Genre analytics"
         grid
         dataKey="Active Genre"
       />
       <Chart
-        data={userData2}
+        // data={userData2}
         title="Album analytics"
         grid
         dataKey="Active Album"

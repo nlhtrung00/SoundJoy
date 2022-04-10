@@ -12,7 +12,7 @@ export const getSingers = async (req, res) => {
 
 export const getSinger = async (req, res) => {
     try {
-        const singer = await SingerModel.find({ _id: req.params._id });
+        const singer = await SingerModel.findOne({ _id: req.params.id });
         res.status(200).json(singer);
     } catch (err) {
         res.status(500).json({ error: err });
