@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/', getMusicians);
 router.get('/:id', getMusician);
 router.post('/', upload.single('image'), postMusician);
-router.put('/:id', updateMusician);
+router.put('/:id', upload.single('image'), updateMusician);
 router.delete('/:id', deleteMusician);
 
 export default router;

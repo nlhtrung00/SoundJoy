@@ -24,6 +24,7 @@ export const postSinger = async (req, res) => {
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Singers', resource_type: 'auto' });
         const newSinger = req.body;
         newSinger.image = result.secure_url;
+        newSinger.cloudinary_id = result.public_id;
         const singer = new SingerModel(newSinger);
         await singer.save();
         res.status(200).json(singer);
@@ -34,8 +35,15 @@ export const postSinger = async (req, res) => {
 
 export const updateSinger = async (req, res) => {
     try {
-        const updateSinger = req.body;
-        const singer = await SingerModel.findOneAndUpdate({ _id: req.params.id }, updateSinger, { new: true });
+        let singer = await SingerModel.findById(req.params.id);
+        let updateSinger = req.body;
+        if (req.file !== undefined){
+            await cloudinary.uploader.destroy(singer.cloudinary_id);
+            const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Singers', resource_type: 'auto' });
+            updateSinger.image = result.secure_url;
+            updateSinger.cloudinary_id = result.public_id;
+        }
+        singer = await SingerModel.findOneAndUpdate({ _id: req.params.id }, updateSinger, { new: true });
         res.status(200).json(singer);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -45,6 +53,7 @@ export const updateSinger = async (req, res) => {
 export const deleteSinger = async (req, res) => {
     try {
         const singer = await SingerModel.findOneAndDelete({ _id: req.params.id });
+        await cloudinary.uploader.destroy(singer.cloudinary_id);
         res.status(200).json(singer);
     } catch (err) {
         res.status(500).json({ error: err });

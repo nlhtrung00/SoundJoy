@@ -15,7 +15,7 @@ const router = express.Router();
 router.get('/', getGenres);
 router.get('/:id', getGenre);
 router.post('/', upload.single('image'), postGenre);
-router.put('/:id', updateGenre);
+router.put('/:id', upload.single('image'), updateGenre);
 router.delete('/:id', deleteGenre);
 
 

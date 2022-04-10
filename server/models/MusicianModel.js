@@ -18,6 +18,9 @@ const schema = new mongoose.Schema({
         // required: true,
         default: 0
     },
+    cloudinary_id: {
+        type: String
+    }
 }, {
     versionKey: false
 });

@@ -1,3 +1,4 @@
+import cloudinary from '../cloudinary.js';
 import { UserModel } from "../models/UserModel.js";
 
 export const getUsers = async (req, res) => {
@@ -18,19 +19,22 @@ export const getUser = async (req, res) => {
         res.status(500).json({ error: err});
     }
 };
+
 export const getUserByAccount = async (req, res) => {
     try {
-        const user = await UserModel.findOne({account: req.params.account });
+        const user = await UserModel.findOne({ account: req.params.account });
         res.status(200).json(user);        
     } catch (err) {
         res.status(500).json({ error: err});
     }
 };
 
-
 export const postUser = async (req, res) => {
     try {
+        const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Users', resource_type: 'auto' });
         const newUser = req.body;
+        newUser.image = result.secure_url;
+        newUser.cloudinary_id = result.public_id;
         const user = new UserModel(newUser);
         await user.save();
         res.status(200).json(user);
@@ -41,8 +45,15 @@ export const postUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        const updateUser = req.body;
-        const user = await UserModel.findOneAndUpdate({ _id: req.params.id }, updateUser, { new: true }); //dieu kien , gia tri moi, user = new?gia tri moi: gia tri cu
+        let user = await UserModel.findById(req.params.id);
+        let updateUser = req.body;
+        if (req.file !== undefined){
+            await cloudinary.uploader.destroy(user.cloudinary_id);
+            const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Users', resource_type: 'auto' });
+            updateUser.image = result.secure_url;
+            updateUser.cloudinary_id = result.public_id;
+        }
+        user = await UserModel.findOneAndUpdate({ _id: req.params.id }, updateUser, { new: true }); //dieu kien , gia tri moi, user = new?gia tri moi: gia tri cu
         res.status(200).json(user);
     } catch (err) {
         res.status(500).json({error: err});
@@ -51,8 +62,8 @@ export const updateUser = async (req, res) => {
 
 export const deletetUser = async (req, res) => {
     try {
-        const idUser = req.params.id;
-        const user = await UserModel.findOneAndDelete({ _id: idUser });
+        const user = await UserModel.findOneAndDelete({ _id: req.params.id });
+        await cloudinary.uploader.destroy(user.cloudinary_id);
         res.status(200).json(user);
     } catch (err) {
         console.log(err);
