@@ -4,7 +4,9 @@ import Axios from "../Axios";
 const initialState = {
     singers: [],
     singer: {},
-    updateresult:{}
+    updateresult:{},
+    createresult:{},
+    error:'',
 }
 export const fetchAsyncSingers = createAsyncThunk('singer/fetchAsyncSingers', async () => {
     const response = await Axios.get('singers');
@@ -15,59 +17,102 @@ export const fetchAsyncSingerById = createAsyncThunk('singer/fetchAsyncSingerByI
 
     return response.data;
 })
+
 export const AsyncUpdateSinger = createAsyncThunk('singer/AsyncUpdateSinger', async (data) => {
-    //console.log(data);
-    console.log(data.image)
+    let formData = new FormData();
+    formData.append('name',data.name);
+    formData.append('information',data.information);
+    formData.append('image',data.image);
+    formData.append('followers',data.followers);
+    
     await Axios.put(`singers/${data.id}`,
+        formData,
         {
-            name: data.name,
-            information:data.information,
-            image:data.image,
-            followers:data.followers
-        },        
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }        
         
     ).then((response)=>response.data)
     .catch(err=>console.log(err))
     
 })
+export const AsyncCreateSinger = createAsyncThunk('singer/AsyncCreateSinger',async(data)=>{
+    const response = await Axios.post('singers',
+        data,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }        
+        
+    )
+    return response.data;
+})
 const SingerSlice = createSlice({
     name: 'singer',
     initialState,
     reducers: {
-
+    
     },
     extraReducers: {
         [fetchAsyncSingers.pending]: () => {
+        
             console.log("Pending Singers");
+            
         },
-        [fetchAsyncSingers.fulfilled]: (state, { payload }) => {
+        [fetchAsyncSingers.fulfilled]: (state, action) => {
             console.log("Fetch Singers Successfully");
+            console.log(action)
             return {
                 ...state,
-                singers: payload
+                singers: action.payload
             }
         },
-        [fetchAsyncSingerById.fulfilled]: (state, { payload }) => {
+        [fetchAsyncSingerById.fulfilled]: (state, action) => {
             console.log("Fetch singer by id successfully");
-
+            console.log(action)
             return {
                 ...state,
-                singer: payload
+                singer: action.payload
             }
         },
-        [AsyncUpdateSinger.fulfilled]: (state,{payload}) => {
+        [AsyncUpdateSinger.fulfilled]: (state,action) => {
             console.log("Update singer successfully")
             return{
                 ...state,
-                updateresult: payload
+                updateresult: action.payload
+            }
+        },
+        [AsyncCreateSinger.fulfilled]: (state,action) => {
+            console.log("Create singer successfully")
+            console.log(action)
+            return{
+                ...state,
+                createresult: action.payload
             }
         },
 
-        [AsyncUpdateSinger.rejected]: () => {
+        [AsyncUpdateSinger.rejected]: (state,action) => {
             console.log("Update singer Rejected");
+            return{
+                ...state,
+                error:action.error
+            }
         },
-        [fetchAsyncSingers.rejected]: () => {
+        [fetchAsyncSingers.rejected]: (state,action) => {
             console.log("Singers Fetching Rejected");
+            return{
+                ...state,
+                error:action.error
+            }
+        },
+        [AsyncCreateSinger.rejected]: (state,action) => {
+            console.log("Create Singers Rejected");
+            return{
+                ...state,
+                error:action.error.message
+            }
         }
     }
 })

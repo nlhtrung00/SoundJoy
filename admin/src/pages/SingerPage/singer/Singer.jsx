@@ -35,6 +35,7 @@ export default function SingerDetail() {
     }
    const { singerId } = useParams();
    const data = useSelector(getSinger);
+   console.log(data)
    const dispatch = useDispatch();
    const classes = useStyle();
    useEffect(() => {

@@ -1,42 +1,33 @@
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAsyncSingerById, AsyncUpdateSinger, getSinger } from "../../../Redux/Slice/SingerSlice";
+import { getMusician,AsyncUpdateMusician,fetchAsyncMusicianById } from "../../../Redux/Slice/MusicianSlice";
 import { useParams } from "react-router-dom";
-import { makeStyles } from "@material-ui/styles";
 import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input } from '@mui/material';
 import React, { useState, useEffect, createRef } from 'react';
 
-const useStyle = makeStyles({
 
-})
-const UpdateSinger = () => {
-    const data = useSelector(getSinger);
-    const { singerId } = useParams();
+const UpdateMusician = () => {
+    const data = useSelector(getMusician);
+    const { musicianId } = useParams();
     const [edited, setEdited] = useState(false);
-    const [info, setInfo] = useState((
-        data ? {
-            id:singerId,
+    const [info, setInfo] = useState(
+        {
+            id: musicianId,
             name: data.name,
             information: data.information,
             followers: data.followers,
             image: data.image
-        } : {
-            id:singerId,
-            name: '',
-            information: '',
-            followers: '',
-            image:''
         }
-    ))
+    )
+    console.log(info)
     const [image, setImage] = useState(null);
     const [isFilePicked, setIsFilePicked] = useState(false);
-    const inputFileRef = createRef(null);
-    
-    const classes = useStyle();
     const dispatch = useDispatch();
-
+    const history = useHistory();
     useEffect(() => {
-        dispatch(fetchAsyncSingerById(singerId));
-    }, [singerId]);
+        dispatch(fetchAsyncMusicianById(musicianId));
+        
+    }, []);
 
     const handleInput = (e) => {
         setEdited(true);
@@ -55,20 +46,20 @@ const UpdateSinger = () => {
     }
     const handleUpdate = (e) => {
         e.preventDefault();
-        if(image){
+        if (image) {
             const form = {
-                id:singerId,
-                name:info.name,
-                information:info.information,
-                followers:info.followers,
+                id: musicianId,
+                name: info.name,
+                information: info.information,
+                followers: info.followers,
                 image: image
-            } 
-            dispatch(AsyncUpdateSinger(form))
+            }
+            dispatch(AsyncUpdateMusician(form))
         }
-        else{
-            dispatch(AsyncUpdateSinger(info))
+        else {
+            dispatch(AsyncUpdateMusician(info))
         }
-        
+
     }
     console.log(image)
     return (
@@ -131,7 +122,9 @@ const UpdateSinger = () => {
                                     </Button>
 
                                 }
-
+                                <Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                                    Back
+                                </Button>
                             </form>
                         </Grid>
                     </Grid>
@@ -141,4 +134,4 @@ const UpdateSinger = () => {
     );
 };
 
-export default UpdateSinger;
+export default UpdateMusician;

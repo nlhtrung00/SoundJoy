@@ -61,7 +61,12 @@ const SingerList = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Avatar src={singer.image} />
                       <Box sx={{ ml: 1 }}>
-                        <Typography sx={{ fontWeight: 500 }}>
+                        <Typography sx={{
+                          fontWeight: 500, width: '150px',height:'50px', display: 'box',
+                          lineClamp: 2,
+                          boxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}>
                           {singer.name}
                         </Typography>
                       </Box>
@@ -90,13 +95,13 @@ const SingerList = () => {
                   <StyledTableCell>
                     <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
                       <Link to={`singers/${singer._id}`}>
-                        <Button size='small' title='View detail' sx={{borderRadius:0}}>
+                        <Button size='small' title='View detail' sx={{ borderRadius: 0 }}>
                           <InfoIcon />
                         </Button>
                       </Link>
 
 
-                      <Button size='small' title="Delete singer" sx={{ borderRadius:0,bgcolor: '#f7532a', '&:hover': { bgcolor: '#e43e1d' } }}>
+                      <Button size='small' title="Delete singer" sx={{ borderRadius: 0, bgcolor: '#f7532a', '&:hover': { bgcolor: '#e43e1d' } }}>
                         <DeleteForeverIcon />
                       </Button>
                     </ButtonGroup>

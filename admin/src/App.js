@@ -16,6 +16,7 @@ import NewSinger from "./pages/SingerPage/newSinger/NewSinger";
 import MusicianDetail from "./pages/MusicianPage/musican/Musican";
 import MusicianList from "./pages/MusicianPage/musicanList/MusicanList";
 import NewMusician from "./pages/MusicianPage/newMusican/NewMusican";
+import UpdateMusician from "./pages/MusicianPage/updateMusician/updateMusician"
 import GenreDetail from "./pages/GenrePage/genre/Genre";
 import GenreList from "./pages/GenrePage/genreList/GenreList";
 import NewGenre from "./pages/GenrePage/newGenre/NewGenre";
@@ -75,10 +76,13 @@ function App() {
           <Route exact path='/musicians/add'>
             <NewMusician />
           </Route>
+          <Route path='/musicians/edit/:musicianId'>
+            <UpdateMusician />
+          </Route>
           <Route path='/musicians/:musicianId'>
             <MusicianDetail />
           </Route>
-
+          
           {/* route for song */}
           <Route exact path='/songs'>
             <listSong />   
