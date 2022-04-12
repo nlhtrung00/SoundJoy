@@ -39,6 +39,12 @@ const schema = new mongoose.Schema({
     link_mp3: {
         type: String,
         // required: true
+    },
+    cloudinary_image_id: {
+        type: String
+    },
+    cloudinary_mp3_id: {
+        type: String
     }
 },{
     versionKey: false
