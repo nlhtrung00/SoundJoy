@@ -1,10 +1,13 @@
+import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAsyncSingerById, AsyncUpdateSinger, getSinger } from "../../../Redux/Slice/SingerSlice";
+import { fetchAsyncSingerById,fetchAsyncSingers, AsyncUpdateSinger, getSinger } from "../../../Redux/Slice/SingerSlice";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
-import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input } from '@mui/material';
+import { Avatar, Button, Container, Grid,AlertTitle, TextField, Typography, Paper, Input, Box } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React, { useState, useEffect, createRef } from 'react';
-
+import { unwrapResult } from "@reduxjs/toolkit";
 const useStyle = makeStyles({
 
 })
@@ -12,6 +15,9 @@ const UpdateSinger = () => {
     const data = useSelector(getSinger);
     const { singerId } = useParams();
     const [edited, setEdited] = useState(false);
+    const [error, setError] = useState('');
+    const [createResult, setResult] = useState(false);
+    const [openToast, setOpen] = useState(false);
     const [info, setInfo] = useState((
         data ? {
             id:singerId,
@@ -30,20 +36,22 @@ const UpdateSinger = () => {
     const [image, setImage] = useState(null);
     const [isFilePicked, setIsFilePicked] = useState(false);
     const inputFileRef = createRef(null);
-    
+    const history = useHistory();
     const classes = useStyle();
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchAsyncSingerById(singerId));
     }, [singerId]);
-
+    useEffect(() => {
+        dispatch(fetchAsyncSingers());
+     }, [createResult])
     const handleInput = (e) => {
         setEdited(true);
         const newdata = { ...info };
         newdata[e.target.id] = e.target.value;
         setInfo(newdata);
-        console.log(newdata);
+        
     }
     const handleUpload = (e) => {
         const newImage = e.target.files[0];
@@ -53,7 +61,7 @@ const UpdateSinger = () => {
             setEdited(true)
         }
     }
-    const handleUpdate = (e) => {
+    const handleUpdate = async(e) => {
         e.preventDefault();
         if(image){
             const form = {
@@ -63,10 +71,35 @@ const UpdateSinger = () => {
                 followers:info.followers,
                 image: image
             } 
-            dispatch(AsyncUpdateSinger(form))
+            try {
+                let actionresult = await dispatch(AsyncUpdateSinger(form))
+                let result = unwrapResult(actionresult);
+                setResult(true);
+                setTimeout(()=>{
+                    history.goBack()
+                },1000)
+                
+            } catch (error) {
+                setError(error.message);
+                setResult(true);
+                setOpen(true);
+            }
+            
         }
         else{
-            dispatch(AsyncUpdateSinger(info))
+            try {
+                let actionresult = await dispatch(AsyncUpdateSinger(info));
+                let result = unwrapResult(actionresult);
+                setResult(true);
+                setTimeout(()=>{
+                    history.goBack()
+                },1000)
+            } catch (error) {
+                setError(error.message);
+                setResult(true);
+                setOpen(true);
+            }
+            
         }
         
     }
@@ -135,6 +168,20 @@ const UpdateSinger = () => {
                             </form>
                         </Grid>
                     </Grid>
+                    {createResult && error &&
+                        <Box>
+                            <Snackbar
+                                anchorOrigin={{ vertical:'bottom', horizontal:'right' }}
+                                open={openToast}
+                                autoHideDuration={6000}
+                            >
+                                <MuiAlert elevation={6} severity="error" variant="filled" >
+                                    <AlertTitle>Error</AlertTitle>
+                                    {error}
+                                </MuiAlert>
+                            </Snackbar>
+                        </Box>
+                    }
                 </>}
 
         </Container>

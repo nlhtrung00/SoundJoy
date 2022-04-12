@@ -1,14 +1,11 @@
-import { Container, Table, TableBody, ButtonGroup, Typography, Button, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Container,Avatar, Box, Table, TableBody, ButtonGroup, Typography, Button, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import InfoIcon from '@mui/icons-material/Info';
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getListMusicians } from "../../../Redux/Slice/MusicianSlice";
-import { Avatar, Box } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -32,12 +29,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function MusicianList() {
   const data = useSelector(getListMusicians);
   return (
-    <Container>
+    <Container maxWidth='lg' component={Paper}>
       <Typography variant="h6">
         List Musicians
       </Typography>
       <Link to='/musicians/add'>
-        <Button variant="contained" size="small" sx={{ my: 1 }}>
+        <Button variant="contained" size="small" sx={{ mt: 0.5, mb:1.5 }}>
           Create new
           <AddIcon />
         </Button>
@@ -62,7 +59,12 @@ export default function MusicianList() {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Avatar src={musician.image} />
                       <Box sx={{ ml: 1 }}>
-                        <Typography sx={{ fontWeight: 500 }}>
+                        <Typography sx={{
+                          fontWeight: 500, width: '150px', height: '50px', display: 'box',
+                          lineClamp: 2,
+                          boxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}>
                           {musician.name}
                         </Typography>
                       </Box>

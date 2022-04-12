@@ -6,10 +6,12 @@ const initialState = {
     singer: {},
     updateresult:{},
     createresult:{},
+    deleteresult:{},
     error:'',
 }
 export const fetchAsyncSingers = createAsyncThunk('singer/fetchAsyncSingers', async () => {
     const response = await Axios.get('singers');
+    console.log(response)
     return response.data;
 })
 export const fetchAsyncSingerById = createAsyncThunk('singer/fetchAsyncSingerById', async (id) => {
@@ -49,6 +51,10 @@ export const AsyncCreateSinger = createAsyncThunk('singer/AsyncCreateSinger',asy
     )
     return response.data;
 })
+export const AsyncDeleteSinger = createAsyncThunk('singer/AsyncDeleteSinger',async(id)=>{
+    const response = await Axios.delete(`singers/${id}`)
+    return response.data;
+})
 const SingerSlice = createSlice({
     name: 'singer',
     initialState,
@@ -56,11 +62,13 @@ const SingerSlice = createSlice({
     
     },
     extraReducers: {
+        // loading
         [fetchAsyncSingers.pending]: () => {
         
             console.log("Pending Singers");
             
         },
+        // fulfilled
         [fetchAsyncSingers.fulfilled]: (state, action) => {
             console.log("Fetch Singers Successfully");
             console.log(action)
@@ -92,13 +100,26 @@ const SingerSlice = createSlice({
                 createresult: action.payload
             }
         },
+        [AsyncDeleteSinger.fulfilled]:(state,action)=>{
+            console.log("Delete singer successfully");
+            return{
+                ...state,
+                deleteresult:action.payload
+            }
+        },
 
+        [AsyncDeleteSinger.rejected]:()=>{
+            console.log("Delete singer Rejected");
+        },
         [AsyncUpdateSinger.rejected]: (state,action) => {
             console.log("Update singer Rejected");
             return{
                 ...state,
                 error:action.error
             }
+        },
+        [fetchAsyncSingerById.rejected]:()=>{
+            console.log('fetching singer by id rejected')
         },
         [fetchAsyncSingers.rejected]: (state,action) => {
             console.log("Singers Fetching Rejected");

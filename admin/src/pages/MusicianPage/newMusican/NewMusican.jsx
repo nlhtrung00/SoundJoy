@@ -159,6 +159,7 @@ export default function NewMusician() {
          {createResult && !error ?
             <Box>
                <Snackbar
+                  anchorOrigin={{ vertical:'bottom', horizontal:'right' }}
                   open={openToast}
                   autoHideDuration={6000}
                   onClose={handleCloseToast}
@@ -174,6 +175,7 @@ export default function NewMusician() {
             </Box> :
             <Box>
                <Snackbar
+                  anchorOrigin={{ vertical:'bottom', horizontal:'right' }}
                   open={openToast}
                   autoHideDuration={6000}
                   onClose={handleCloseToast}

@@ -67,7 +67,7 @@ const MusicianSlice = createSlice({
         },
         [fetchAsyncMusicianById.fulfilled]:(state, action)=>{
             console.log("Fetch Musician by Id Successfully");  
-            console.log(action)  
+            //console.log(action)  
             return{
                 ...state,
                 musician:action.payload

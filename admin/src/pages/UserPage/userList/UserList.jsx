@@ -1,7 +1,7 @@
-import { Container, Table, TableBody,Button, Typoraphy, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Container, Table, TableBody,Button, Typoraphy, TableContainer, TableHead, TableRow, Paper, Box, Avatar, Typography } from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
-
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getListUsers } from "../../../Redux/Slice/UserSlice";
@@ -34,8 +34,10 @@ export default function UserList() {
   
 
   return (
-    <Container maxWidth='lg'>
-      
+    <Container maxWidth='lg' component={Paper}>
+       <Typography variant="h6" sx={{my:1}}>
+        List Users
+      </Typography>
       <TableContainer component={Paper}>
         <Table sx={{}} aria-label="table list user">
           <TableHead>
@@ -45,7 +47,7 @@ export default function UserList() {
               <StyledTableCell>Phone number</StyledTableCell>
               <StyledTableCell>Registration date</StyledTableCell>
               {/* <StyledTableCell>Role</StyledTableCell> */}
-              <StyledTableCell>Actions</StyledTableCell>
+              {/* <StyledTableCell>Actions</StyledTableCell> */}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -53,7 +55,19 @@ export default function UserList() {
               return(
                 <StyledTableRow key={user._id}>
                   <StyledTableCell>
-                    {user.name}
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Avatar src={user.image} alt='avatar user' />
+                      <Box sx={{ ml: 1 }}>
+                        <Typography sx={{
+                          fontWeight: 500, maxWidth: '150px', display: 'box',
+                          lineClamp: 1,
+                          boxOrient: 'horizontal',
+                          overflow: 'hidden',
+                        }}>
+                          {user.name}
+                        </Typography>
+                    </Box>
+                  </Box>
                   </StyledTableCell>
                   <StyledTableCell>
                     {user.address}
@@ -64,11 +78,14 @@ export default function UserList() {
                   <StyledTableCell>
                     {user.registration_date}
                   </StyledTableCell>
-                  <StyledTableCell>
-                    <Button size='small'>
-                      Detail
-                    </Button>
-                  </StyledTableCell>
+                  {/* <StyledTableCell>
+                    <Link to={`users/${user._id}`}>
+                      <Button size='small'>
+                        Detail
+                      </Button>
+                    </Link>
+                    
+                  </StyledTableCell> */}
                 </StyledTableRow>
               )
             })}

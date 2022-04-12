@@ -45,7 +45,7 @@ export default function SingerDetail() {
    return (
 
       <Container>
-         {Object.keys(data).length === 0 ? <div>Loading...</div>
+         {data&&Object.keys(data).length === 0 ? <div>Loading...</div>
             :
             <>
                <Box className={classes.info}>

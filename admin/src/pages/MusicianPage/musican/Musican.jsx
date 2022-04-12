@@ -34,12 +34,11 @@ export default function MusicianDetail() {
    }
    const { musicianId } = useParams();
    const data = useSelector(getMusician);
-   console.log(data);
    const dispatch = useDispatch();
    const classes = useStyle();
    useEffect(() => {
       dispatch(fetchAsyncMusicianById(musicianId));
-   }, [musicianId, dispatch])
+   }, [musicianId])
    return (
       <Container>
          {Object.keys(data).length === 0 ? <div>Loading...</div>

@@ -65,8 +65,9 @@ export default function NewSinger() {
       }
    }
    // handle create singer
-   const handleCreate = async (e) => {
+   const handleCreate = async(e) => {
       e.preventDefault();
+      console.log()
       if (image) {
          let formData = new FormData();
          formData.append('name', info.name);
@@ -74,7 +75,9 @@ export default function NewSinger() {
          formData.append('followers', info.followers);
          formData.append('image', image);
          try {
-            const actionResult = await dispatch(AsyncCreateSinger(formData));
+            // create singer after then, fetch list again to update changed list
+            const actionResult =await dispatch(AsyncCreateSinger(formData));
+            dispatch(fetchAsyncSingers());
             const result = unwrapResult(actionResult);
             setResult(true);
             setOpen(true);
@@ -107,12 +110,7 @@ export default function NewSinger() {
                      {isFilePicked ? 'Uploaded' : 'Upload'}
                      {/* Upload */}
                   </Button>
-                  {image ?
-                     <Typography>
-                        Filename: {image.name}
-                     </Typography> :
-                     <></>
-                  }
+                  
 
                </label>
             </Grid>
@@ -159,21 +157,21 @@ export default function NewSinger() {
          {createResult && !error ?
             <Box>
                <Snackbar
+                  anchorOrigin={{ vertical:'bottom', horizontal:'right' }}
                   open={openToast}
                   autoHideDuration={6000}
                   onClose={handleCloseToast}
                >
                   <MuiAlert elevation={6} severity="success" variant="filled" >
                      <AlertTitle>Success</AlertTitle>
-                     You created successfully.
-                     <Button onClick={history.goBack} variant='text' sx={{ color: 'white' }}>
-                        Let's check !
-                     </Button>
+                     You created successfully.Let's check !
+                     
                   </MuiAlert>
                </Snackbar>
             </Box> :
             <Box>
                <Snackbar
+                  anchorOrigin={{ vertical:'bottom', horizontal:'right' }}
                   open={openToast}
                   autoHideDuration={6000}
                   onClose={handleCloseToast}
