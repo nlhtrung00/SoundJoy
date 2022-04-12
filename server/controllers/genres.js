@@ -12,7 +12,7 @@ export const getGenres = async (req, res) => {
 
 export const getGenre = async (req, res) => {
     try {
-        const genre = await GenreModel.find({ _id: req.params.id });
+        const genre = await GenreModel.findOne({ _id: req.params.id });
         res.status(200).json(genre);
     } catch (err) {
         res.status(500).json({ error: err});

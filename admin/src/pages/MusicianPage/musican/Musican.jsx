@@ -1,88 +1,131 @@
-import { InfoOutlined, PersonAdd, Publish } from "@material-ui/icons";
+import React,{useState,useEffect} from "react";
 import { Link } from "react-router-dom";
-import "./musican.css";
+import { useSelector, useDispatch } from "react-redux";
+import { getMusician, fetchAsyncMusicianById } from "../../../Redux/Slice/MusicianSlice";
+import { useParams } from "react-router-dom";
+import { makeStyles } from "@material-ui/styles";
+import background from "../../../assets/images/background_sing.jpg"
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import EditIcon from '@mui/icons-material/Edit';
+import { Avatar, Container, Box, Typography, Button } from "@mui/material";
+const useStyle = makeStyles({
+   background: {
+      backgroundImage: `url(${background})`,
+      height: '150px',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      borderRadius: '20px 20px 0 0'
+   },
+   avatar: {
+      position: 'absolute',
+      zIndex: 1000,
+      top: '140px',
+      paddingLeft: '15px'
+   },
 
+})
 export default function MusicianDetail() {
-  return (
-    <div className="user">
-      <div className="userTitleContainer">
-        <h1 className="userTitle">Edit Musician</h1>
-        <Link to="/newMusican">
-          <button className="userAddButton">Create</button>
-        </Link>
-      </div>
-      <div className="userContainer">
-        <div className="userShow">
-          <div className="userShowTop">
-            <img
-              src="https://th.bing.com/th/id/R.b57b987700f339771b30d533ada205d7?rik=XPf5Qbzq2JI3eQ&pid=ImgRaw&r=0  "
-              alt=""
-              className="userShowImg"
-            />
-            <div className="userShowTopTitle">
-              <span className="userShowUsername">Tailor Swift</span>
-            </div>
-          </div>
-          <div className="userShowBottom">
-            <span className="userShowTitle">Musician Details</span>
-            <div className="userShowInfo">
-              <InfoOutlined className="userShowIcon" />
-              <href className="userShowInfoTitle">
-                https://en.wikipedia.org/wiki/Taylor_Swift
-              </href>
-            </div>
-            <div className="userShowInfo">
-              <PersonAdd className="userShowIcon" />
-              <span className="userShowInfoTitle">560</span>
-            </div>
-          </div>
-        </div>
-        <div className="userUpdate">
-          <span className="userUpdateTitle">Edit</span>
-          <form className="userUpdateForm">
-            <div className="userUpdateLeft">
-              <div className="userUpdateItem">
-                <label>Full Name</label>
-                <input
-                  type="text"
-                  placeholder="Tailor Swift"
-                  className="userUpdateInput"
-                />
-              </div>
-              <div className="userUpdateItem">
-                <label>Information</label>
-                <input
-                  type="link"
-                  placeholder="https://en.wikipedia.org/wiki/Taylor_Swift"
-                  className="userUpdateInput"
-                />
-              </div>
-              <div className="userUpdateItem">
-                <label>Followers</label>
-                <input
-                  type="text"
-                  placeholder="560"
-                  className="userUpdateInput"
-                />
-              </div>
-            </div>
-            <div className="userUpdateRight">
-              <div className="userUpdateUpload">
-                <img
-                  className="userUpdateImg"
-                  src="https://images.pexels.com/photos/1152994/pexels-photo-1152994.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-                  alt=""
-                />
-                <label htmlFor="file">
-                  <Publish className="userUpdateIcon" />
-                </label>
-                <input type="file" id="file" style={{ display: "none" }} />
-              </div>
-              <button className="userUpdateButton">Update</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+   const [valueTab, setValueTab] = useState('1');
+   const handleChangeTab = (e, value) => {
+      setValueTab(value);
+   }
+   const { musicianId } = useParams();
+   const data = useSelector(getMusician);
+   const dispatch = useDispatch();
+   const classes = useStyle();
+   useEffect(() => {
+      dispatch(fetchAsyncMusicianById(musicianId));
+   }, [musicianId])
+   return (
+      <Container>
+         {Object.keys(data).length === 0 ? <div>Loading...</div>
+            :
+            <>
+               <Box className={classes.info}>
+                  <Box sx={{ height: '300px' }}>
+                     <div className={classes.background}>
+
+                     </div>
+                     <Box className={classes.avatar} sx={{}}>
+                        <Avatar alt="avatar singer" src={data.image} sx={{
+                           width: '150px',
+                           height: '150px'
+                        }} />
+
+                        <Box >
+                           <Typography sx={{
+                              fontWeight: 500,
+                              fontSize: '28px',
+
+                              my: 0
+                           }}>
+                              {data.name}
+                           </Typography>
+
+                           <Button variant="contained" size="small" sx={{ mb: 1 }}>
+                              Follow: {data.followers}
+                           </Button>
+                        </Box>
+
+                     </Box>
+
+                  </Box>
+                  <Box className="introduction" sx={{ mb: 1 }}>
+                     <Typography variant="h6">
+                        Introduction
+                     </Typography>
+                     <Typography>
+                        {data.information}
+                     </Typography>
+                  </Box>
+
+                  <Box className="achievement">
+                     <Typography variant="h6">
+                        Achievement
+                     </Typography>
+                     <Box sx={{
+                        borderBottom: 1, borderColor: 'divider'
+                     }}>
+                        <TabContext value={valueTab}>
+                           <TabList onChange={handleChangeTab} aria-label="tab for login">
+                              <Tab label="Songs" value="1" />
+                              <Tab label="Albums" value="2" />
+                           </TabList>
+                           <TabPanel value="1" sx={{
+                              p: 0
+                           }}>
+                              Songs
+                           </TabPanel>
+                           <TabPanel value="2" sx={{
+                              p: 0
+                           }}>
+                              Album
+                           </TabPanel>
+                        </TabContext>
+
+                     </Box>
+                  </Box>
+
+               </Box>
+               <Box className="edit_info" sx={{
+                  position: 'fixed',
+                  bottom: 30,
+                  right: 30
+               }}>
+                  <Link to={`edit/${data._id}`}>
+                     <Button variant='contained'>
+                        Edit
+                        <EditIcon sx={{ fontSize: '16px', ml: 0.5 }} />
+                     </Button>
+                  </Link>
+
+
+               </Box>
+            </>
+         }
+      </Container>
+   );
 }

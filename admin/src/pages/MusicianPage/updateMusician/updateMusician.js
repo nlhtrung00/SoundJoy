@@ -1,32 +1,34 @@
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAsyncSingerById,fetchAsyncSingers, AsyncUpdateSinger, getSinger } from "../../../Redux/Slice/SingerSlice";
+import { getMusician, AsyncUpdateMusician, fetchAsyncMusicianById, fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
 import { useParams } from "react-router-dom";
-import { makeStyles } from "@material-ui/styles";
-import { Avatar, Button, Container, Grid,AlertTitle, TextField, Typography, Paper, Input, Box } from '@mui/material';
+import { Avatar, Box, Button, Container, Grid, AlertTitle, TextField, Typography, Paper, Input } from '@mui/material';
+import React, { useState, useEffect, createRef } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import React, { useState, useEffect, createRef } from 'react';
 import { unwrapResult } from "@reduxjs/toolkit";
-const useStyle = makeStyles({
-
-})
-const UpdateSinger = () => {
-    const data = useSelector(getSinger);
-    const { singerId } = useParams();
+const initialState={
+    name:'',
+    information:'',
+    followers:0,
+    image:''
+}
+const UpdateMusician = () => {
+    const data = useSelector(getMusician);
+    const { musicianId } = useParams();
     const [edited, setEdited] = useState(false);
     const [error, setError] = useState('');
     const [createResult, setResult] = useState(false);
     const [openToast, setOpen] = useState(false);
     const [info, setInfo] = useState((
         data ? {
-            id:singerId,
+            id:musicianId,
             name: data.name,
             information: data.information,
             followers: data.followers,
             image: data.image
         } : {
-            id:singerId,
+            id:musicianId,
             name: '',
             information: '',
             followers: '',
@@ -35,16 +37,13 @@ const UpdateSinger = () => {
     ))
     const [image, setImage] = useState(null);
     const [isFilePicked, setIsFilePicked] = useState(false);
-    const inputFileRef = createRef(null);
-    const history = useHistory();
-    const classes = useStyle();
     const dispatch = useDispatch();
-
+    const history = useHistory();
     useEffect(() => {
-        dispatch(fetchAsyncSingerById(singerId));
-    }, [singerId]);
+        dispatch(fetchAsyncMusicianById(musicianId));
+    }, []);
     useEffect(() => {
-        dispatch(fetchAsyncSingers());
+        dispatch(fetchAsyncMusicians());
      }, [createResult])
     const handleInput = (e) => {
         setEdited(true);
@@ -61,34 +60,18 @@ const UpdateSinger = () => {
             setEdited(true)
         }
     }
-    const handleUpdate = async(e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
-        if(image){
+        if (image) {
             const form = {
-                id:singerId,
-                name:info.name,
-                information:info.information,
-                followers:info.followers,
+                id: musicianId,
+                name: info.name,
+                information: info.information,
+                followers: info.followers,
                 image: image
-            } 
-            try {
-                let actionresult = await dispatch(AsyncUpdateSinger(form))
-                let result = unwrapResult(actionresult);
-                setResult(true);
-                setTimeout(()=>{
-                    history.goBack()
-                },1000)
-                
-            } catch (error) {
-                setError(error.message);
-                setResult(true);
-                setOpen(true);
             }
-            
-        }
-        else{
             try {
-                let actionresult = await dispatch(AsyncUpdateSinger(info));
+                let actionresult = await dispatch(AsyncUpdateMusician(form))
                 let result = unwrapResult(actionresult);
                 setResult(true);
                 setTimeout(()=>{
@@ -99,17 +82,31 @@ const UpdateSinger = () => {
                 setResult(true);
                 setOpen(true);
             }
-            
+
         }
-        
+        else {
+
+            try {
+                let actionresult = await dispatch(AsyncUpdateMusician(info));
+                let result = unwrapResult(actionresult);
+                setResult(true);
+                setTimeout(()=>{
+                    history.goBack()
+                },1000)
+            } catch (error) {
+                setError(error.message);
+                setResult(true);
+                setOpen(true);
+            }
+        }
+
     }
-    console.log(image)
     return (
         <Container component={Paper} elevation={4} sx={{ p: 1 }}>
             <Typography variant='h6'>
                 Update Information
             </Typography>
-            {Object.keys(data).length === 0 ? <div>Loading...</div>
+            {data&&Object.keys(data).length === 0 ? <div>Loading...</div>
                 :
                 <>
                     <Grid container justifyContent="center" sx={{ p: 2 }}
@@ -143,6 +140,7 @@ const UpdateSinger = () => {
                                     sx={{ my: 0.5 }}
                                     onChange={handleInput}
                                 />
+                                
                                 <TextField
                                     id='information'
                                     label='Information'
@@ -164,7 +162,9 @@ const UpdateSinger = () => {
                                     </Button>
 
                                 }
-
+                                <Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                                    Back
+                                </Button>
                             </form>
                         </Grid>
                     </Grid>
@@ -188,4 +188,4 @@ const UpdateSinger = () => {
     );
 };
 
-export default UpdateSinger;
+export default UpdateMusician;

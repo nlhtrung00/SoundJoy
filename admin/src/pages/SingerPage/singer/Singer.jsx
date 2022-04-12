@@ -35,6 +35,7 @@ export default function SingerDetail() {
     }
    const { singerId } = useParams();
    const data = useSelector(getSinger);
+   console.log(data)
    const dispatch = useDispatch();
    const classes = useStyle();
    useEffect(() => {
@@ -44,7 +45,7 @@ export default function SingerDetail() {
    return (
 
       <Container>
-         {Object.keys(data).length === 0 ? <div>Loading...</div>
+         {data&&Object.keys(data).length === 0 ? <div>Loading...</div>
             :
             <>
                <Box className={classes.info}>

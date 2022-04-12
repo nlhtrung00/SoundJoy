@@ -4,11 +4,9 @@ import "./App.css";
 import Home from "./pages/home/Home";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import UserList from "./pages/UserPage/userList/UserList";
-import UserDetail from "./pages/UserPage/user/User";
-import NewUser from "./pages/UserPage/newUser/NewUser";
-import listSong from "./pages/SongPage/ListSongs/listSongs";
+import ListSong from "./pages/SongPage/ListSongs/listSongs";
 import SongDetail from "./pages/SongPage/SongDetail/SongDetail";
-import newSong from "./pages/SongPage/NewSong/newSong";
+import NewSong from "./pages/SongPage/NewSong/newSong";
 import SingerList from "./pages/SingerPage/singerList/SingerList";
 import SingerDetail from "./pages/SingerPage/singer/Singer";
 import UpdateSinger from "./pages/SingerPage/updateSinger/updateSinger";
@@ -16,7 +14,7 @@ import NewSinger from "./pages/SingerPage/newSinger/NewSinger";
 import MusicianDetail from "./pages/MusicianPage/musican/Musican";
 import MusicianList from "./pages/MusicianPage/musicanList/MusicanList";
 import NewMusician from "./pages/MusicianPage/newMusican/NewMusican";
-import GenreDetail from "./pages/GenrePage/genre/Genre";
+import UpdateMusician from "./pages/MusicianPage/updateMusician/updateMusician"
 import GenreList from "./pages/GenrePage/genreList/GenreList";
 import NewGenre from "./pages/GenrePage/newGenre/NewGenre";
 import Album from "./pages/AlbumPage/album/Album";
@@ -27,12 +25,18 @@ import { useDispatch } from 'react-redux';
 import { fetchAsyncUsers } from "./Redux/Slice/UserSlice";
 import { fetchAsyncSingers } from "./Redux/Slice/SingerSlice";
 import { fetchAsyncMusicians } from "./Redux/Slice/MusicianSlice";
+import { fetchAsyncGenres } from "./Redux/Slice/GenreSlice";
+import { fetchAsyncSongs } from "./Redux/Slice/SongSlice";
+import { fetchAsyncAlbums } from "./Redux/Slice/AlbumSlice";
 function App() {
   const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(fetchAsyncUsers());
     dispatch(fetchAsyncSingers());
     dispatch(fetchAsyncMusicians());
+    dispatch(fetchAsyncGenres());
+    dispatch(fetchAsyncSongs());
+    dispatch(fetchAsyncAlbums());
   },[])
   return (
     <Router>
@@ -46,12 +50,7 @@ function App() {
           <Route exact path='/users'>
             <UserList />    
           </Route>
-          <Route exact path='/users/add'>
-            <NewUser />
-          </Route>
-          <Route path='/users/:userId'>
-            <UserDetail />
-          </Route>
+          
 
           {/* route for singer */}
           <Route exact path='/singers'>
@@ -75,19 +74,30 @@ function App() {
           <Route exact path='/musicians/add'>
             <NewMusician />
           </Route>
+          <Route path='/musicians/edit/:musicianId'>
+            <UpdateMusician />
+          </Route>
           <Route path='/musicians/:musicianId'>
             <MusicianDetail />
           </Route>
-
+          
           {/* route for song */}
           <Route exact path='/songs'>
-            <listSong />   
+            <ListSong />   
           </Route>
           <Route exact path='/songs/add'>
-            <newSong />
+            <NewSong />
           </Route>
           <Route path='/songs/:songId'>
             <SongDetail />
+          </Route>
+          
+          {/* route for genres */}
+          <Route exact path='/genres'>
+            <GenreList />   
+          </Route>
+          <Route exact path='/genres/add'>
+            <NewGenre />
           </Route>
           
         </Switch>
