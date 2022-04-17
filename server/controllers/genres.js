@@ -55,7 +55,9 @@ export const updateGenre = async (req, res) => {
 export const deleteGenre = async (req, res) => {
     try {
         const genre = await GenreModel.findOneAndDelete({ _id: req.params.id });
-        await cloudinary.uploader.destroy(genre.cloudinary_id);
+        if (genre.cloudinary_id !== undefined){
+            await cloudinary.uploader.destroy(genre.cloudinary_id);
+        }
         res.status(200).json(genre);
     } catch (err) {
         res.status(500).json({ error: err });
