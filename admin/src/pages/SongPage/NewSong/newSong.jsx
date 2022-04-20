@@ -2,7 +2,7 @@ import React, { useState, useEffect, createRef } from "react";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/styles";
-import { Avatar, FormLabel, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle } from '@mui/material';
+import { Avatar, FormLabel, CircularProgress, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -51,6 +51,7 @@ export default function NewSong() {
    const [createResult, setResult] = useState(false);
    const [openToast, setOpen] = useState(false);
    const [previewImg, setPreviewImg] = useState();
+   const [loading, setLoading] = useState(false);
    const [info, setInfo] = useState((
       {
          name: '',
@@ -68,7 +69,9 @@ export default function NewSong() {
    const dispatch = useDispatch();
    const history = useHistory();
    const classes = useStyles();
-   
+
+
+   const defaultSeclectValue ={ label: `Let's choose`, value: 0 }
    const SingerOptions = singers.map((singer) => {
       return (
          { label: singer.name, value: singer._id }
@@ -120,7 +123,8 @@ export default function NewSong() {
    }
    const handleChangeSelectSinger = (value) => {
       const newdata = { ...info };
-      newdata['singer'] = value;
+      const array = value.split(",");
+      newdata['singer'] = array;
       setInfo(newdata);
    }
    const handleChangeSelectMusician = (value) => {
@@ -128,7 +132,7 @@ export default function NewSong() {
       const array = value.split(",");
       newdata['musician'] = array;
       setInfo(newdata);
-      
+
    }
    const handleChangeSelectGenre = (data) => {
       const newdata = { ...info };
@@ -184,21 +188,40 @@ export default function NewSong() {
    // handle create singer
    const handleCreate = async (e) => {
       e.preventDefault();
+      setLoading(true);
       let formData = new FormData();
       formData.append('name', info.name);
       formData.append('listens', info.listens);
       formData.append('debuted_date', info.debuted_date);
       formData.append('image', info.image);
-      formData.append('musician', info.musician);
-      formData.append('singer', info.singer);
       formData.append('album', info.album);
       formData.append('genre', info.genre);
       formData.append('mp3', info.mp3);
+      Array.from(info.musician).map((value, index) => {
+         formData.append('musician', value);
+      })
+      Array.from(info.singer).map((value, index) => {
+         formData.append('singer', value);
+      })
+
       try {
          let actionResult = await dispatch(AsyncCreateSong(formData));
          let result = unwrapResult(actionResult);
          setResult(true);
          setOpen(true);
+         setInfo(() => (
+            {
+               name: '',
+               listens: 0,
+               debuted_date: new Date(),
+               image: null,
+               musician: [],
+               singer: [],
+               album: '',
+               genre: '',
+               mp3: null
+            }
+         ))
       } catch (error) {
          console.log(error.message);
          setError(error.message)
@@ -206,7 +229,7 @@ export default function NewSong() {
          setOpen(true);
       }
 
-
+      setLoading(false);
 
 
    }
@@ -270,6 +293,7 @@ export default function NewSong() {
                         name='singer'
                         onChange={handleChangeSelectSinger}
                         options={SingerOptions}
+                        value={info.singer}
                      />
                   </div>
                   <div className={classes.marginInput}>
@@ -282,20 +306,21 @@ export default function NewSong() {
                         name='musician'
                         onChange={handleChangeSelectMusician}
                         options={MusiciansOptions}
+                       
                      />
                   </div>
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
                         Genre:
                      </FormLabel>
-                     <Select required styles={customStylesSelect} name='genre' options={GenresOptions} onChange={handleChangeSelectGenre} />
+                     <Select required  styles={customStylesSelect} name='genre' options={GenresOptions} onChange={handleChangeSelectGenre} />
                   </div>
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
                         Album:
                      </FormLabel>
                      <Select required styles={customStylesSelect} name='album'
-                        options={AlbumsOptions} onChange={handleChangeSelectAlbum} />
+                        options={AlbumsOptions}  onChange={handleChangeSelectAlbum} />
                   </div>
 
                   <div className={classes.marginInput}>
@@ -323,14 +348,21 @@ export default function NewSong() {
                      </label>
                   </div>
 
-                  {edited && isFilePicked ?
+                  {edited && isFilePicked && !loading &&
                      <Button type='submit' variant='contained' sx={{ my: 1 }}>
                         Create
                      </Button>
-                     : <Button type='submit' disabled variant='contained' sx={{ my: 1 }}>
+                  }
+                  {!edited && !loading &&
+                     <Button type='submit' disabled variant='contained' sx={{ my: 1 }}>
                         Create
                      </Button>
+                  }
 
+                  {loading &&
+                     <Button type='submit' disabled variant='contained' sx={{ my: 1 }}>
+                        Loading...
+                     </Button>
                   }
                   <Button onClick={history.goBack} variant='contained' sx={{ m: 1, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
                      Back

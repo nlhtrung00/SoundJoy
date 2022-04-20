@@ -18,6 +18,17 @@ export const fetchAsyncGenreById = createAsyncThunk('genre/fetchAsyncGenreById',
     const response = await Axios.get(`genres/${id}`);
     return response.data;
 })
+export const AsyncCreateGenre = createAsyncThunk('genre/AsyncCreateGenre',async(data)=>{
+    const response = await Axios.post(`genres`,
+        data,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        } 
+    );
+    return response.data;
+})
 // create slice cho Genre
 const GenreSlice = createSlice({
     name:'genre',
@@ -31,6 +42,7 @@ const GenreSlice = createSlice({
         [fetchAsyncGenres.pending]:()=>{
             console.log("Pending Genres");
         },
+        
 
         // fulfilled - call success
         [fetchAsyncGenres.fulfilled]:(state, action)=>{
@@ -47,6 +59,13 @@ const GenreSlice = createSlice({
                 genre:action.payload
             }
         },
+        [AsyncCreateGenre.fulfilled]:(state,action)=>{
+            console.log("Create genre successfully");
+            return{
+                ...state,
+                createresult:action.payload
+            }
+        },
         
         
         // rejected - call failed due to errors
@@ -55,7 +74,10 @@ const GenreSlice = createSlice({
         },
         [fetchAsyncGenreById.rejected]:()=>{
             console.log('Fetch genre by id rejected')
-        }
+        },
+        [AsyncCreateGenre.rejected]:()=>{
+            console.log("Create genre rejected");
+        },
         
     }
 });
