@@ -20,6 +20,7 @@ import NewGenre from "./pages/GenrePage/newGenre/NewGenre";
 import Album from "./pages/AlbumPage/album/Album";
 import AlbumList from "./pages/AlbumPage/albumList/AlbumList";
 import NewAlbum from "./pages/AlbumPage/newAlbum/NewAlbum";
+import GenreUpdate from "./pages/GenrePage/GenreUpdate/GenreUpdate";
 import { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { fetchAsyncUsers } from "./Redux/Slice/UserSlice";
@@ -98,6 +99,9 @@ function App() {
           </Route>
           <Route exact path='/genres/add'>
             <NewGenre />
+          </Route>
+          <Route exact path='/genres/edit/:genreId'>
+            <GenreUpdate />
           </Route>
           
           {/* route for singer */}

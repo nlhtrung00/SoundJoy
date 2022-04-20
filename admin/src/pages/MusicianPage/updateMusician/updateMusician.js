@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Avatar, Box, Button, Container, Grid, AlertTitle, TextField, Typography, Paper, Input } from '@mui/material';
 import React, { useState, useEffect, createRef } from 'react';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import MuiAlert from '@mui/material/Alert';
 import { unwrapResult } from "@reduxjs/toolkit";
 const initialState={
     name:'',
@@ -35,6 +35,7 @@ const UpdateMusician = () => {
             image:''
         }
     ))
+    console.log(info);
     const [image, setImage] = useState(null);
     const [isFilePicked, setIsFilePicked] = useState(false);
     const dispatch = useDispatch();
@@ -42,9 +43,11 @@ const UpdateMusician = () => {
     useEffect(() => {
         dispatch(fetchAsyncMusicianById(musicianId));
     }, []);
+
     useEffect(() => {
         dispatch(fetchAsyncMusicians());
      }, [createResult])
+
     const handleInput = (e) => {
         setEdited(true);
         const newdata = { ...info };
@@ -60,6 +63,9 @@ const UpdateMusician = () => {
             setEdited(true)
         }
     }
+    const handleCloseToast = () => {
+        setOpen(false);
+     }
     const handleUpdate = async (e) => {
         e.preventDefault();
         if (image) {
