@@ -100,6 +100,19 @@ function App() {
             <NewGenre />
           </Route>
           
+          {/* route for singer */}
+          <Route exact path='/albums'>
+            <AlbumList />   
+          </Route>
+          <Route exact path='/albums/add'>
+            <NewAlbum />
+          </Route>
+          <Route path='/albums/edit/:albumId'>
+            {/* <UpdateAlbum /> */}
+          </Route>
+          <Route path='/albums/:albumId'>
+            {/* <AlbumDetail /> */}
+          </Route>
         </Switch>
       </div>
     </Router>

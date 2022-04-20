@@ -54,7 +54,7 @@ export const deleteAlbum = async (req, res) => {
     try {
         const album = await AlbumModel.findOneAndDelete({ _id: req.params.id });
         await cloudinary.uploader.destroy(album.cloudinary_id);
-        res.status(200).json(albums);
+        res.status(200).json(album);
     } catch (err) {
         res.status(500).json({ error: err });
     }
