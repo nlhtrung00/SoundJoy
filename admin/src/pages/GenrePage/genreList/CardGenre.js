@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Card, AlertTitle, CardActionArea, CardContent, CardHeader, CardMedia, IconButton, Typography, Button } from '@mui/material';
+import React, {useState } from 'react';
+import { Box, Card ,CardActionArea, CardContent, CardHeader, CardMedia, IconButton, Typography, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Link } from 'react-router-dom';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { AsyncDeleteGenre, fetchAsyncGenres } from '../../../Redux/Slice/GenreSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { unwrapResult } from "@reduxjs/toolkit";
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
+
 const useStyle = makeStyles((theme) => ({
     cardcontent: {
         backgroundColor: '#171334',
@@ -51,9 +51,9 @@ const CardGenre = (props) => {
         }
 
     }
-    
-    
-    
+
+
+
     return (
         <>
             <Card
@@ -63,10 +63,18 @@ const CardGenre = (props) => {
                 <CardActionArea sx={{ cursor: 'default' }}>
                     <CardHeader
                         action={
-                            showDel&&
-                            <Box sx={{cursor:'pointer'}} onClick={() => handleDelete(props.genre._id)}>
-                                <DeleteForeverIcon sx={{ alignItems:'center',fontSize: '25px', color: 'white', transition: 'ease-in-out',bgcolor:'black',width:'30px',height:'30px',borderRadius:'50%',p:0.5 }} />
-                            </Box>
+                            showDel &&
+                            <>
+                                <Box sx={{ cursor: 'pointer' }} onClick={() => handleDelete(props.genre._id)}>
+                                    <DeleteForeverIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
+                                </Box>
+                                <Link to={`genres/edit/${props.genre._id}`}>
+                                    <Box sx={{ cursor: 'pointer' }}>
+                                        <ModeEditIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
+                                    </Box>
+                                </Link>
+                            </>
+
 
                         }
                         sx={{
@@ -93,7 +101,7 @@ const CardGenre = (props) => {
 
                 </CardActionArea>
             </Card>
-            
+
         </>
     );
 };

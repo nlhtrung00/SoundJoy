@@ -29,6 +29,18 @@ export const AsyncCreateGenre = createAsyncThunk('genre/AsyncCreateGenre',async(
     );
     return response.data;
 })
+export const AsyncUpdateGenre = createAsyncThunk('genre/AsyncUpdateGenre',async(data)=>{
+    const {formdata,id} = data;
+    const response = await Axios.put(`genres/${id}`,
+        formdata,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        } 
+    );
+    return response.data;
+})
 export const AsyncDeleteGenre = createAsyncThunk('genre/AsyncDeleteGenre',async(id)=>{
     const response = await Axios.delete(`genres/${id}`);
     return response.data;
@@ -38,7 +50,9 @@ const GenreSlice = createSlice({
     name:'genre',
     initialState,
     reducers:{
-
+        refreshGenre:(state)=>{
+            state.genre={}
+        }
     },
     // voi moi lenh call api, co 3 giai doan : pending ( loading call), fulfilled ( call success ) và rejected ( call failed)
     extraReducers:{
@@ -73,7 +87,9 @@ const GenreSlice = createSlice({
         [AsyncDeleteGenre.fulfilled]:()=>{
             console.log('Delete genre successfully');
         },
-        
+        [AsyncUpdateGenre.fulfilled]:()=>{
+            console.log("Update genre successfully");
+        },
         
         // rejected - call failed due to errors
         [fetchAsyncGenres.rejected]:()=>{
@@ -88,9 +104,13 @@ const GenreSlice = createSlice({
         [AsyncDeleteGenre.rejected]:()=>{
             console.log('Delete genre rejected');
         },
+        [AsyncUpdateGenre.rejected]:()=>{
+            console.log("Update genre rejected");
+        },
         
     }
 });
+export const {refreshGenre} = GenreSlice.actions;
 export const getListGenres = (state) => state.genre.genres;
 export const getGenre = (state)=>state.genre.genre;
 export default GenreSlice.reducer;

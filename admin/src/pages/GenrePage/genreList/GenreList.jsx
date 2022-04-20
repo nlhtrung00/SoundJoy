@@ -1,13 +1,19 @@
 import { Button, Container, Grid, Paper, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CardGenre from "./CardGenre";
-import { getListGenres } from "../../../Redux/Slice/GenreSlice";
+import { getGenre, getListGenres, refreshGenre } from "../../../Redux/Slice/GenreSlice";
 import { useSelector, useDispatch } from "react-redux";
 export default function GenreList() {
   const genres = useSelector(getListGenres);
+  const dispatch = useDispatch();
   console.log(genres)
+  const genre = useSelector(getGenre);
+  console.log(genre)
+  useEffect(()=>{
+    dispatch(refreshGenre());
+  },[])
   return (
     <Container maxWidth='lg' component={Paper}>
       <Typography variant="h6" sx={{ }}>
