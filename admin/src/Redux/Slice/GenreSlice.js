@@ -29,6 +29,10 @@ export const AsyncCreateGenre = createAsyncThunk('genre/AsyncCreateGenre',async(
     );
     return response.data;
 })
+export const AsyncDeleteGenre = createAsyncThunk('genre/AsyncDeleteGenre',async(id)=>{
+    const response = await Axios.delete(`genres/${id}`);
+    return response.data;
+})
 // create slice cho Genre
 const GenreSlice = createSlice({
     name:'genre',
@@ -66,6 +70,9 @@ const GenreSlice = createSlice({
                 createresult:action.payload
             }
         },
+        [AsyncDeleteGenre.fulfilled]:()=>{
+            console.log('Delete genre successfully');
+        },
         
         
         // rejected - call failed due to errors
@@ -77,6 +84,9 @@ const GenreSlice = createSlice({
         },
         [AsyncCreateGenre.rejected]:()=>{
             console.log("Create genre rejected");
+        },
+        [AsyncDeleteGenre.rejected]:()=>{
+            console.log('Delete genre rejected');
         },
         
     }

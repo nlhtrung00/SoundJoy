@@ -25,20 +25,19 @@ export default function NewSinger() {
          image: ''
       }
    ))
-   const [image, setImage] = useState(null);
    const [isFilePicked, setIsFilePicked] = useState(false);
    const dispatch = useDispatch();
    const history = useHistory();
    useEffect(() => {
-      if (!image) {
+      if (!info.image) {
          setPreviewImg(undefined);
          return
       }
-      const objectURL = URL.createObjectURL(image);
+      const objectURL = URL.createObjectURL(info.image);
       setPreviewImg(objectURL);
       // free memory when ever this component is unmounted
       return () => URL.revokeObjectURL(objectURL);
-   }, [image])
+   }, [info.image])
 
    // fetch list singer again after add singer
    useEffect(() => {
@@ -59,7 +58,9 @@ export default function NewSinger() {
    const handleUpload = (e) => {
       const newImage = e.target.files[0];
       if (newImage) {
-         setImage(newImage);
+         const newdata = { ...info };
+         newdata[e.target.id] = newImage;
+         setInfo(newdata);
          setIsFilePicked(true);
          setEdited(true)
       }
@@ -67,13 +68,12 @@ export default function NewSinger() {
    // handle create singer
    const handleCreate = async(e) => {
       e.preventDefault();
-      console.log()
-      if (image) {
+      if (info.image) {
          let formData = new FormData();
          formData.append('name', info.name);
          formData.append('information', info.information);
          formData.append('followers', info.followers);
-         formData.append('image', image);
+         formData.append('image', info.image);
          try {
             // create singer after then, fetch list again to update changed list
             const actionResult =await dispatch(AsyncCreateSinger(formData));
@@ -81,6 +81,14 @@ export default function NewSinger() {
             const result = unwrapResult(actionResult);
             setResult(true);
             setOpen(true);
+            setInfo(()=>(
+               {
+                  name: '',
+                  information: '',
+                  followers: 0,
+                  image: ''
+               }
+            ))
          } catch (error) {
             console.log(error.message);
             setError(error.message)
@@ -104,8 +112,8 @@ export default function NewSinger() {
          >
             <Grid item md={3} align='center'>
                <Avatar src={previewImg} alt='image of singer' sx={{ width: 150, height: 150, my: 0.5, mx: "auto" }} />
-               <label htmlFor="contained-button-file">
-                  <Input accept="image/*" id="contained-button-file" multiple type="file" sx={{ display: 'none', }} onChange={handleUpload} />
+               <label htmlFor="image">
+                  <Input accept="image/*" id="image" multiple type="file" sx={{ display: 'none', }} onChange={handleUpload} />
                   <Button variant="contained" component="span" size='small' sx={{ bgcolor: '#8a8a8a', '&:hover': { bgcolor: '#5c5c5c' } }}>
                      {isFilePicked ? 'Uploaded' : 'Upload'}
                      {/* Upload */}

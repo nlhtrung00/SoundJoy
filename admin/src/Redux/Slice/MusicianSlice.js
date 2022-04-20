@@ -47,7 +47,10 @@ export const AsyncCreateMusician = createAsyncThunk('musician/AsyncCreateMusicia
     )
     return response.data;
 })
-
+export const AsyncDeleteMusician = createAsyncThunk('musician/AsyncDeleteMusician',async(id)=>{
+    const response = await Axios.delete(`musicians/${id}`)
+    return response.data;
+})
 const MusicianSlice = createSlice({
     name:'musician',
     initialState,
@@ -87,6 +90,10 @@ const MusicianSlice = createSlice({
                 createresult:action.payload
             }
         },
+        [AsyncDeleteMusician.fulfilled]:()=>{
+            console.log("Delete Musician successfully")
+        },
+
         [fetchAsyncMusicians.rejected]:()=>{
             console.log("Musicians Fetching Rejected");
         },
@@ -98,7 +105,10 @@ const MusicianSlice = createSlice({
         },
         [AsyncCreateMusician.rejected]:()=>{
             console.log("Create Musician rejected")
-        }
+        },
+        [AsyncDeleteMusician.rejected]:()=>{
+            console.log("Delete Musician rejected");
+        },
     }
 })
 export const getListMusicians = (state) => state.musician.musicians;

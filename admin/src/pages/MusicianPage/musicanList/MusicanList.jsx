@@ -1,12 +1,17 @@
-import { Container,Avatar, Box, Table, TableBody, ButtonGroup, Typography, Button, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Container, Avatar, Box,AlertTitle, Table, TableBody, ButtonGroup, Typography, Button, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import InfoIcon from '@mui/icons-material/Info';
 import AddIcon from '@mui/icons-material/Add';
-import { useSelector } from "react-redux";
-import { getListMusicians } from "../../../Redux/Slice/MusicianSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { getListMusicians, AsyncDeleteMusician, fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
 import { Link } from "react-router-dom";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { useState } from "react";
+import { unwrapResult } from "@reduxjs/toolkit";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,13 +33,41 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 export default function MusicianList() {
   const data = useSelector(getListMusicians);
+  const [errorDel, setErrorDel] = useState('');
+  const [openToast, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const [actionDel, setActionDel] = useState(false);
+  const handleDeleteMusician = async (id) => {
+
+    try {
+      // delete singer after then, fetch list changed singer
+      const actionResult = await dispatch(AsyncDeleteMusician(id));
+      let result = unwrapResult(actionResult);
+      // set state to display toast message
+      setActionDel(true);
+      setOpen(true);
+      // fetch list again
+      dispatch(fetchAsyncMusicians());
+    }
+    catch (err) {
+      // set state to display toast message if error
+      setErrorDel(err.message)
+      setActionDel(true);
+      setOpen(true);
+    }
+
+  }
+  // close toast after seconds of time
+  const handleCloseToast = () => {
+    setOpen(false);
+  }
   return (
     <Container maxWidth='lg' component={Paper}>
       <Typography variant="h6">
         List Musicians
       </Typography>
       <Link to='/musicians/add'>
-        <Button variant="contained" size="small" sx={{ mt: 0.5, mb:1.5 }}>
+        <Button variant="contained" size="small" sx={{ mt: 0.5, mb: 1.5 }}>
           Create new
           <AddIcon />
         </Button>
@@ -97,7 +130,7 @@ export default function MusicianList() {
                           <InfoIcon />
                         </Button>
                       </Link>
-                      <Button size='small' title="Delete musician" sx={{ borderRadius: 0, bgcolor: '#f7532a', '&:hover': { bgcolor: '#e43e1d' } }}>
+                      <Button onClick={(e) => handleDeleteMusician(musician._id)} id={musician._id} size='small' title="Delete musician" sx={{ borderRadius: 0, bgcolor: '#f7532a', '&:hover': { bgcolor: '#e43e1d' } }}>
                         <DeleteForeverIcon />
                       </Button>
                     </ButtonGroup>
@@ -108,6 +141,34 @@ export default function MusicianList() {
           </TableBody>
         </Table>
       </TableContainer>
+      {actionDel && !errorDel ?
+        <Box>
+          <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            open={openToast}
+            autoHideDuration={4000}
+            onClose={handleCloseToast}
+          >
+            <MuiAlert elevation={6} severity="success" variant="filled" >
+              <AlertTitle>Success</AlertTitle>
+              You removed musician successfully.Let's check !
+
+            </MuiAlert>
+          </Snackbar>
+        </Box> :
+        <Box>
+          <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            open={openToast}
+            autoHideDuration={4000}
+            onClose={handleCloseToast}
+          >
+            <MuiAlert elevation={6} severity="error" variant="filled" >
+              <AlertTitle>Error</AlertTitle>
+              {errorDel}
+            </MuiAlert>
+          </Snackbar>
+        </Box>}
     </Container>
   );
 }
