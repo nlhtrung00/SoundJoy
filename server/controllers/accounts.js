@@ -1,6 +1,21 @@
 import { AccountModel } from "../models/AccountModel.js";
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import { UserModel } from "../models/UserModel.js";
+
+let refreshTokens = [];
+
+export const refresh = (req, res) => {
+    const refreshToken = req.body.token;
+    if (refreshToken == null) return res.status(400);
+    if (!refreshTokens.includes(refreshToken)) return res.sendStatus(400);
+    jwt.verify(refreshToken, 'ecaps', (err, data) =>{
+        if (err) return res.sendStatus(400);
+        const accessToken = generateAccessToken({ name: data.name });
+        res.status(200).json({ accessToken: accessToken });
+    })
+}
+
 export const registerAccount = async (req, res) => {
     try {
         const accountCheck = await AccountModel.findOne({ username: req.body.username });
@@ -32,16 +47,28 @@ export const registerAccount = async (req, res) => {
 
 export const loginAccount = async (req, res) => {
     try {
-        const account = await AccountModel.findOne({ username: req.body.username });
+        const username = req.body.username;
+        const password = req.body.password;
+        const account = await AccountModel.findOne({ username: username });
         if (!account) res.status(400).json({ message: 'Username is not found!'});
         
-        const validPass = await bcrypt.compare(req.body.password, account.password);    
+        const validPass = await bcrypt.compare(password, account.password);    
         if (!validPass) res.status(400).json({ message: 'Invalid password'});
-        res.status(200).json({ message: 'Login success!', isloged:true, accountId:account._id });
+        //jwt
+        const data = { name: username };
+        const accessToken = generateAccessToken(data);
+        const refreshToken = jwt.sign(data, 'ecaps');
+        refreshTokens.push(refreshToken);
+        res.status(200).json({ message: 'Login success!', isloged:true, accountId:account._id, accessToken: accessToken, refreshToken: refreshToken });
     } catch (err) {
         res.status(500).json({ error: err });
     }
 };
+
+function generateAccessToken(data) {
+    return jwt.sign(data, 'space', { expiresIn: '20s' });
+}
+
 export const getAccounts = async (req, res)=>{
     try{
         const accounts = await AccountModel.find();
@@ -50,11 +77,23 @@ export const getAccounts = async (req, res)=>{
         res.status(500).json({error:err})
     }
 }
+
+export const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    if (token == null) return res.status(400);
+    jwt.verify(token, 'space', (err, data) => {
+        if (err) return res.sendStatus(403);
+        req.data = data;
+        next()
+    })
+}
+
 export const getAccount = async (req, res) => {
     try {
-        const account = await AccountModel.findOne({ _id: req.params.id });
-        
-        res.status(200).json(account);    
+        const accounts = await AccountModel.find();
+        // console.log(req);
+        res.status(200).json(accounts.filter(account => account.username === req.data.name));    
     } catch (err) {
         res.status(500).json({ error: err});
     }
@@ -62,8 +101,14 @@ export const getAccount = async (req, res) => {
 export const deleteAccount = async (req, res) => {
     try {
         const account = await AccountModel.findOneAndDelete({ _id: req.params.id });
-        res.status(200).json(account);
+        const user = await UserModel.findByIdAndDelete({ _id: account._id });
+        res.status(200).json({ account: account, user: user });
     } catch (err) {
         res.status(500).json({ error: err });
     }
+};
+
+export const logout = (req, res) => {
+    refreshTokens = refreshTokens.filter(token => token !== req.body.token);
+    res.sendStatus(200);
 };

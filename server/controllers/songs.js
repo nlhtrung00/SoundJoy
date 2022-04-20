@@ -60,13 +60,14 @@ export const postSong = async (req, res) => {
         // cloudinary.v2.uploader.upload(file, options, callback);
         const resultImage = await cloudinary.uploader.upload(req.files.image[0].path, { folder : 'SoundJoy/Images', resource_type: 'auto' });
         const resultAudio = await cloudinary.uploader.upload(req.files.mp3[0].path, { folder : 'SoundJoy/Audios', resource_type: 'auto' });
-
        
         // console.log(resultImage);
         // console.log(resultAudio);
         const newSong = req.body;
         newSong.image = resultImage.secure_url;
         newSong.link_mp3 = resultAudio.secure_url;
+        newSong.cloudinary_image_id = resultImage.public_id;
+        newSong.cloudinary_mp3_id = resultAudio.public_id;
 
         const song = new SongModel(newSong);
         // console.log(song);
@@ -91,6 +92,8 @@ export const updateSong = async (req, res) => {
 export const deleteSong = async (req, res) => {
     try {
         const song = await SongModel.findOneAndDelete({ _id: req.params.id });
+        await cloudinary.uploader.destroy(song.cloudinary_image_id);
+        await cloudinary.uploader.destroy(song.cloudinary_mp3_id);
         res.status(200).json(song);
     } catch (err) {
         res.status(500).json({ error: err });

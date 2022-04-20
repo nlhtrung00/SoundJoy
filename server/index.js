@@ -41,3 +41,4 @@ app.use('/albums', albums);
 app.use('/songs', songs);
 app.use('/comments', comments);
 app.use('/listens', listens);
+app.use('/likelists', likelists);

@@ -53,7 +53,9 @@ export const updateSinger = async (req, res) => {
 export const deleteSinger = async (req, res) => {
     try {
         const singer = await SingerModel.findOneAndDelete({ _id: req.params.id });
-        await cloudinary.uploader.destroy(singer.cloudinary_id);
+        if (singer.cloudinary_id !== undefined){
+            await cloudinary.uploader.destroy(singer.cloudinary_id);
+        }
         res.status(200).json(singer);
     } catch (err) {
         res.status(500).json({ error: err });
