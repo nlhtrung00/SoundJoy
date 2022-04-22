@@ -14,49 +14,43 @@ import { ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { getIsLogedin } from './Redux/Slices/AccountSlice';
 import { fetchAsyncUserByAccount, getUser } from "./Redux/Slices/UserSlice";
-
+import Layout from "./layout";
+import SingerDetail from "./Components/Singers/SingerDetail";
+import MusicianDetail from "./Components/Musician/MusicianDetail";
+import GenreDetail from "./Components/Genres/GenreDetail";
 
 function App() {
-   const {isloged,accountId} = useSelector(getIsLogedin);
+   const { isloged, accountId } = useSelector(getIsLogedin);
    const dispatch = useDispatch();
    console.log(accountId);
-   useEffect(()=>{
-      if(accountId)
-      dispatch(fetchAsyncUserByAccount(accountId));
-   },[accountId]);
-      
+   useEffect(() => {
+      if (accountId)
+         dispatch(fetchAsyncUserByAccount(accountId));
+   }, [accountId]);
+
    return (
       <BrowserRouter>
          <ScrollToTop />
-            <Grid container>
-               {isloged && 
-               <Grid item lg={2.5}>
-                  <LeftBar />
-               </Grid>
-               }
-               {isloged &&
-               <Grid item lg={9.5}>
-                  <Routes>
-                     <Route exact path="/" element={<Home />} />
-                     <Route exact path="/search" element={<Search />} />
-                     <Route exact path="/genres" element={<Genres />} />
-                     <Route exact path="/singers" element={<Singer />} />
-                     <Route exact path="/musicians" element={<Musicians />} />
-                     <Route path="/welcome" element={<LandingPage />} />
-                  </Routes>
-               </Grid>
-               }
-               {!isloged&&
-               <Grid item xs={12}>
-                  <Routes>
-                     <Route path="/" element={<LandingPage />} />
-                  </Routes>
-               </Grid>
-               }
+         <Routes>
+            <Route exact path="/" element={<Layout page={Home} />} />
+            <Route exact path="/search" element={<Layout page={Search} />} />
+            <Route exact path="/genres" element={<Layout page={Genres} />} />
+            <Route path="/genre">
+               <Route path=":genreId" element={<Layout page={GenreDetail} />} />
 
+            </Route>
+            <Route exact path="/singers" element={<Layout page={Singer} />} />
+            <Route path="/singer" >
+               <Route path=":singerId" element={<Layout page={SingerDetail}/>}/>
+            </Route>
+            <Route exact path="/musicians" element={<Layout page={Musicians} />} />
+            <Route path="/musician" >
+               <Route path=":musicianId" element={<Layout page={MusicianDetail}/>}/>
+            </Route>
+            <Route path="/welcome" element={<LandingPage />} />
+         </Routes>
 
-            </Grid>
-      </BrowserRouter>
+      </BrowserRouter >
 
    )
 

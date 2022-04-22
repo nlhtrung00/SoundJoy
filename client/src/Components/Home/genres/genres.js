@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles';
 import genreImg from "../../../Images/genre.jfif";
 import { useSelector } from 'react-redux';
 import { getGenres } from '../../../Redux/Slices/GenreSlice';
+import { Link } from 'react-router-dom';
 const useStyle = makeStyles((theme) => ({
     cardcontent: {
         backgroundColor: '#171334',
@@ -44,11 +45,14 @@ const Genres = () => {
                                     alt="genre image"
 
                                 />
-                                <CardContent className={classes.cardcontent}>
-                                    <Typography className={classes.namegenre}>
-                                       {genre.name}
-                                    </Typography>
-                                </CardContent>
+                                <Link to={`/genre/${genre._id}`}>
+                                    <CardContent className={classes.cardcontent}>
+                                        <Typography className={classes.namegenre}>
+                                            {genre.name}
+                                        </Typography>
+                                    </CardContent>
+                                </Link>
+
                             </CardActionArea>
                         </Card>
                     </Grid>

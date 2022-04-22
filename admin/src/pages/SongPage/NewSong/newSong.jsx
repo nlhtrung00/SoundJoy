@@ -65,13 +65,13 @@ export default function NewSong() {
          mp3: null
       }
    ))
-   const [isFilePicked, setIsFilePicked] = useState(false);
+   const [isMp3Picked, setIsMp3Picked] = useState(false);
    const dispatch = useDispatch();
    const history = useHistory();
    const classes = useStyles();
 
 
-   const defaultSeclectValue ={ label: `Let's choose`, value: 0 }
+   const defaultSeclectValue = { label: `Let's choose`, value: 0 }
    const SingerOptions = singers.map((singer) => {
       return (
          { label: singer.name, value: singer._id }
@@ -156,78 +156,100 @@ export default function NewSong() {
    const handleUploadImage = (e) => {
       const filesFormats = ["image/jpeg", "image/png"]
       const newFile = e.target.files[0];
-      const isRightFormat = filesFormats.includes(newFile.type);
-      if (isRightFormat) {
-         const newdata = { ...info }
-         newdata[e.target.id] = newFile;
-         setInfo(newdata);
-         setEdited(true);
-         setErrorFileImage(false)
+      if(newFile){
+         const isRightFormat = filesFormats.includes(newFile.type);
+         if (isRightFormat) {
+            const newdata = { ...info }
+            newdata[e.target.id] = newFile;
+            setInfo(newdata);
+            setEdited(true);
+            setErrorFileImage(false)
+         }
+         else {
+            setErrorFileImage(true)
+         }
       }
-      else {
-         setErrorFileImage(true)
-      }
+      
+      
    }
    const handleUploadMP3 = (e) => {
       const filesFormats = ["audio/mpeg"]
       const newFile = e.target.files[0];
-      const isRightFormat = filesFormats.includes(newFile.type);
-      if (isRightFormat) {
-         const newdata = { ...info }
-         newdata[e.target.id] = newFile;
-         setInfo(newdata);
-         setIsFilePicked(true);
-         setEdited(true);
-         setErrorFileMP3(false)
+      if(newFile){
+         const isRightFormat = filesFormats.includes(newFile.type);
+         if (isRightFormat) {
+            const newdata = { ...info }
+            newdata[e.target.id] = newFile;
+            setInfo(newdata);
+            setIsMp3Picked(true);
+            setEdited(true);
+            setErrorFileMP3(false)
+         }
+         else {
+            setErrorFileMP3(true)
+         }
       }
-      else {
-         setErrorFileMP3(true)
-      }
+      
    }
 
    // handle create singer
    const handleCreate = async (e) => {
       e.preventDefault();
       setLoading(true);
+      setError('');
+      var checkright =true;
       let formData = new FormData();
       formData.append('name', info.name);
       formData.append('listens', info.listens);
       formData.append('debuted_date', info.debuted_date);
-      formData.append('image', info.image);
-      formData.append('album', info.album);
-      formData.append('genre', info.genre);
+      formData.append('image', info.image ? info.image : 'https://thumbs.dreamstime.com/b/male-avatar-profile-picture-silhouette-34443055.jpg');
+      info.album && formData.append('album', info.album);
+      
       formData.append('mp3', info.mp3);
-      Array.from(info.musician).map((value, index) => {
-         formData.append('musician', value);
-      })
-      Array.from(info.singer).map((value, index) => {
-         formData.append('singer', value);
-      })
-
-      try {
-         let actionResult = await dispatch(AsyncCreateSong(formData));
-         let result = unwrapResult(actionResult);
-         setResult(true);
-         setOpen(true);
-         setInfo(() => (
-            {
-               name: '',
-               listens: 0,
-               debuted_date: new Date(),
-               image: null,
-               musician: [],
-               singer: [],
-               album: '',
-               genre: '',
-               mp3: null
-            }
-         ))
-      } catch (error) {
-         console.log(error.message);
-         setError(error.message)
-         setResult(true);
+      if(info.musician.length>0 && info.singer.length>0 && info.genre){
+         formData.append('genre', info.genre);
+         Array.from(info.musician).map((value, index) => {
+            formData.append('musician', value);
+         })
+         Array.from(info.singer).map((value, index) => {
+            formData.append('singer', value);
+         })
+      }
+      else{
+         checkright=false;
+      }
+      
+      if (checkright) {
+         try {
+            let actionResult = await dispatch(AsyncCreateSong(formData));
+            let result = unwrapResult(actionResult);
+            setResult(true);
+            setOpen(true);
+            setInfo(() => (
+               {
+                  name: '',
+                  listens: 0,
+                  debuted_date: new Date(),
+                  image: null,
+                  musician: [],
+                  singer: [],
+                  album: '',
+                  genre: '',
+                  mp3: null
+               }
+            ))
+         } catch (error) {
+            console.log(error.message);
+            setError(error.message)
+            setResult(true);
+            setOpen(true);
+         }
+      }
+      else {
+         setError('Please fill required field')
          setOpen(true);
       }
+
 
       setLoading(false);
 
@@ -272,7 +294,7 @@ export default function NewSong() {
                   />
                   <div>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-                        Debuted date:
+                        Debuted date *:
                      </FormLabel>
                      <DatePicker
                         required
@@ -285,7 +307,7 @@ export default function NewSong() {
                   </div>
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-                        Singers:
+                        Singers *:
                      </FormLabel>
                      <MultiSelect
                         required
@@ -298,7 +320,7 @@ export default function NewSong() {
                   </div>
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-                        Musicians:
+                        Musicians *:
                      </FormLabel>
                      <MultiSelect
                         required
@@ -306,29 +328,28 @@ export default function NewSong() {
                         name='musician'
                         onChange={handleChangeSelectMusician}
                         options={MusiciansOptions}
-                       
+
                      />
                   </div>
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-                        Genre:
+                        Genre *:
                      </FormLabel>
-                     <Select required  styles={customStylesSelect} name='genre' options={GenresOptions} onChange={handleChangeSelectGenre} />
+                     <Select required styles={customStylesSelect} name='genre' options={GenresOptions} onChange={handleChangeSelectGenre} />
                   </div>
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
                         Album:
                      </FormLabel>
                      <Select required styles={customStylesSelect} name='album'
-                        options={AlbumsOptions}  onChange={handleChangeSelectAlbum} />
+                        options={AlbumsOptions} onChange={handleChangeSelectAlbum} />
                   </div>
 
                   <div className={classes.marginInput}>
                      <label htmlFor="mp3">
                         <Input required accept="mp3/*" id="mp3" multiple type="file" sx={{ display: 'none', }} onChange={handleUploadMP3} />
                         <Button variant="contained" component="span" size='small' sx={{ bgcolor: '#242424', '&:hover': { bgcolor: '#1a1a1a' } }}>
-                           {isFilePicked ? 'MP3 Uploaded' : 'Upload MP3'}
-                           {/* Upload */}
+                           Upload
                         </Button>
                         {errorFileMP3 ?
                            <Typography sx={{ color: 'red' }}>
@@ -348,12 +369,12 @@ export default function NewSong() {
                      </label>
                   </div>
 
-                  {edited && isFilePicked && !loading &&
+                  {edited && isMp3Picked && !loading &&
                      <Button type='submit' variant='contained' sx={{ my: 1 }}>
                         Create
                      </Button>
                   }
-                  {!edited && !loading &&
+                  {(!edited || !isMp3Picked) && !loading &&
                      <Button type='submit' disabled variant='contained' sx={{ my: 1 }}>
                         Create
                      </Button>

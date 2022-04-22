@@ -4,6 +4,7 @@ import { makeStyles } from '@mui/styles';
 import CardSinger from './CardSinger';
 import { useSelector } from 'react-redux';
 import { getSingers } from '../../Redux/Slices/SingerSlice';
+import { Link } from 'react-router-dom';
 const useStyle = makeStyles((theme) => ({
     home_container: {
         backgroundColor: 'white',
@@ -27,8 +28,11 @@ const Singer = () => {
             <Grid container spacing={2}>
                 {singers && singers.map((singer) => {
                     return (
-                        <Grid item lg={2} md={3} xs={6}>
-                            <CardSinger singer={singer} />
+                        <Grid item lg={2} md={3} xs={6} key={singer._id}>
+                            <Link to={`/singer/${singer._id}`}>
+                                <CardSinger singer={singer} />
+                            </Link>
+                            
                         </Grid>
                     )
                 })}

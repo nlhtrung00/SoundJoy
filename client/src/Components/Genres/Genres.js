@@ -4,6 +4,7 @@ import CardGenre from './CardGenre';
 import { makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { getGenres } from '../../Redux/Slices/GenreSlice';
+import { Link } from 'react-router-dom';
 
 const useStyle = makeStyles((theme) => ({
     home_container: {
@@ -27,7 +28,9 @@ const Genres = () => {
                 {genres && genres.map((genre) => {
                     return (
                         <Grid item lg={2} md={3} xs={6} key={genre._id}>
-                            <CardGenre genre={genre}/>
+                            <Link to={`/genre/${genre._id}`}>
+                                <CardGenre genre={genre} />
+                            </Link>
                         </Grid>
                     )
                 })}

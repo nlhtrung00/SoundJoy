@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import heroImg from "../../Images/heroimg.jpg";
 import Genres from './genres/genres';
@@ -10,6 +10,8 @@ import { fetchAsyncMusicians } from '../../Redux/Slices/MusicianSlice';
 import { fetchAsyncSingers } from '../../Redux/Slices/SingerSlice';
 import { fetchAsyncGenres } from '../../Redux/Slices/GenreSlice';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import NewestAlbum from './NewestAlbum/NewestAlbum';
 const useStyle = makeStyles((theme) => ({
     home_container: {
         backgroundColor: 'white',
@@ -46,34 +48,93 @@ const useStyle = makeStyles((theme) => ({
 const Home = () => {
     const classes = useStyle();
     const dispatch = useDispatch();
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchAsyncMusicians());
         dispatch(fetchAsyncSingers());
         dispatch(fetchAsyncGenres());
-    },[])
+    }, [])
     return (
-                <Container disableGutters maxWidth="xl" className={classes.home_container}>
-                    <div className={classes.titlepage}>
-                        <Typography className={classes.title_text}>
-                            Homepage
-                        </Typography>
-                    </div>
-                    <div className={classes.wrapper_heroimg}>
-                        <img src={heroImg} className={classes.heroimg} alt="hero image" />
-                    </div>
-                    <Typography className={classes.catalogtitle}>
-                        Genres
-                    </Typography>
-                    <Genres />
-                    <Typography className={classes.catalogtitle}>
-                        Singers
-                    </Typography>
-                    <Singers />
-                    <Typography className={classes.catalogtitle}>
-                        Musician
-                    </Typography>
-                    <Musicians />
-                </Container>
+        <Container disableGutters maxWidth="xl" className={classes.home_container}>
+            <div className={classes.titlepage}>
+                <Typography className={classes.title_text}>
+                    Homepage
+                </Typography>
+            </div>
+            <div className={classes.wrapper_heroimg}>
+                <img src={heroImg} className={classes.heroimg} alt="hero image" />
+            </div>
+            <div>
+                <Typography className={classes.catalogtitle}>
+                    Genres
+                </Typography>
+                <Genres />
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end'
+                }}>
+                    <Link to='/genres'>
+                        <Button>
+                            See more
+                        </Button>
+                    </Link>
+
+                </div>
+            </div>
+            <div>
+                <Typography className={classes.catalogtitle}>
+                    Singers
+                </Typography>
+                <Singers />
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end'
+                }}>
+                    <Link to='/singers'>
+                        <Button>
+                            See more
+                        </Button>
+                    </Link>
+
+                </div>
+            </div>
+            <div>
+                <Typography className={classes.catalogtitle}>
+                    Musician
+                </Typography>
+                <Musicians />
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end'
+                }}>
+                    <Link to='/musicians'>
+                        <Button>
+                            See more
+                        </Button>
+                    </Link>
+
+                </div>
+
+            </div>
+            <div>
+                <Typography className={classes.catalogtitle}>
+                    Newest Albums
+                </Typography>
+                <NewestAlbum />
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end'
+                }}>
+                    <Link to='/albums'>
+                        <Button>
+                            See more
+                        </Button>
+                    </Link>
+
+                </div>
+
+            </div>
+
+        </Container>
 
     );
 };

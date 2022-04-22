@@ -1,4 +1,4 @@
-import { Avatar, Container, Typography, Button } from '@mui/material';
+import { Avatar, Container, Typography, Button, Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import HomeIcon from '@mui/icons-material/Home';
 import CategoryIcon from '@mui/icons-material/Category';
@@ -7,10 +7,11 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import LogoutIcon from '@mui/icons-material/Logout';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AlbumIcon from '@mui/icons-material/Album';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import avatar from "../../Images/avatardemo.jpg";
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Logout } from '../../Redux/Slices/AccountSlice';
 import { getUser } from '../../Redux/Slices/UserSlice';
 import { useNavigate } from "react-router-dom";
@@ -19,8 +20,8 @@ const useStyle = makeStyles((theme) => ({
         position: 'sticky',
         top: 0,
         backgroundColor: '#171334',
-        height:'100vh',
-        padding:'20px 10px'
+        height: '100vh',
+        padding: '20px 10px'
     },
     titlelist: {
         fontSize: '20px',
@@ -31,8 +32,7 @@ const useStyle = makeStyles((theme) => ({
         display: 'flex',
         alignItems: "center",
         color: 'white',
-        margin: '20px 0px 20px 15px',
-        cursor:'pointer',
+        cursor: 'pointer',
     },
     icon: {
         marginRight: '10px'
@@ -41,7 +41,7 @@ const useStyle = makeStyles((theme) => ({
         fontSize: '19px',
         fontWeight: 500,
     },
-    
+
     avt_user: {
         alignContent: 'center'
     },
@@ -60,15 +60,15 @@ const LeftBar = () => {
     const classes = useStyle();
     const dispatch = useDispatch();
     const user = useSelector(getUser);
-    const logoutHandle=(e)=>{
+    const logoutHandle = (e) => {
         console.log('log out');
-        dispatch(Logout());    
+        dispatch(Logout());
         return navigate("/");
     }
     console.log(user);
     return (
         <Container disableGutters className={classes.container}>
-            {user&&<div className={classes.user_section}>
+            {user && <div className={classes.user_section}>
                 <Avatar
                     className={classes.avt_user}
                     alt="avatar user"
@@ -86,38 +86,110 @@ const LeftBar = () => {
                     Menu
                 </Typography>
                 <Link to="/">
-                    <div className={classes.item}>
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
                         <HomeIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Homepage</Typography>
-                    </div>
+                    </Box>
                 </Link>
 
                 <Link to="/search">
-                    <div className={classes.item}>
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
                         <ManageSearchIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Search</Typography>
-                    </div>
+                    </Box>
                 </Link>
 
                 <Link to="/genres">
-                    <div className={classes.item}>
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
                         <CategoryIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Genres</Typography>
-                    </div>
+                    </Box>
                 </Link>
 
                 <Link to="/singers">
-                    <div className={classes.item}>
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
                         <PeopleIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Singers</Typography>
-                    </div>
+                    </Box>
                 </Link>
 
                 <Link to="/musicians">
-                    <div className={classes.item}>
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
                         <PeopleIcon className={classes.icon} />
-                        <Typography className={classes.text} variant="p">Musician</Typography>
-                    </div>
+                        <Typography className={classes.text} variant="p">Musicians</Typography>
+                    </Box>
+                </Link>
+                <Link to="/albums">
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
+                        <AlbumIcon className={classes.icon} />
+                        <Typography className={classes.text} variant="p">Albums</Typography>
+                    </Box>
                 </Link>
 
             </div>
@@ -127,10 +199,21 @@ const LeftBar = () => {
                     Library
                 </Typography>
                 <Link to="">
-                    <div className={classes.item}>
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
                         <FavoriteBorderIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Favourites</Typography>
-                    </div>
+                    </Box>
                 </Link>
 
             </div>
@@ -138,15 +221,37 @@ const LeftBar = () => {
                 <Typography className={classes.titlelist}>
                     Redirect
                 </Typography>
-                    <div className={classes.item} onClick={logoutHandle}>
-                        <LogoutIcon className={classes.icon} />
-                        <Typography className={classes.text} variant="p">Logout</Typography>
-                    </div>
+                <Box className={classes.item} onClick={logoutHandle} sx={{
+                    borderRadius: '20px',
+                    '&:hover': {
+                        bgcolor: 'white',
+                        color: 'black',
+
+                        transition: 'ease-in-out',
+                        transitionDuration: '0.4s'
+                    },
+                    p: 1.5,
+                    transition: 'ease-in-out',
+                }}>
+                    <LogoutIcon className={classes.icon} />
+                    <Typography className={classes.text} variant="p">Logout</Typography>
+                </Box>
                 <Link to="">
-                    <div className={classes.item}>
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
+
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
                         <AccountCircleIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Profile</Typography>
-                    </div>
+                    </Box>
                 </Link>
 
 

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getSingers } from '../../../Redux/Slices/SingerSlice';
 import singerImg from "../../../Images/binz.jpeg";
 import singerImg2 from "../../../Images/denvau.jpg"
+import { Link } from 'react-router-dom';
 const useStyle = makeStyles((theme) => ({
     card: {
         backgroundColor: "#272727",
@@ -51,11 +52,14 @@ const Singers = () => {
                                         mx: "auto"
                                     }}
                                 />
-                                <CardContent className={classes.cardcontent}>
-                                    <Typography className={classes.namegenre}>
-                                        {singer.name}
-                                    </Typography>
-                                </CardContent>
+                                <Link to={`singer/${singer._id}`}>
+                                    <CardContent className={classes.cardcontent}>
+                                        <Typography className={classes.namegenre}>
+                                            {singer.name}
+                                        </Typography>
+                                    </CardContent>
+                                </Link>
+
                             </CardActionArea>
                         </Card>
 

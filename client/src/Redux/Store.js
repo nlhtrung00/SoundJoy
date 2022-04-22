@@ -1,4 +1,4 @@
-import {configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import AccountReducer from './Slices/AccountSlice';
 import SingerReducer from './Slices/SingerSlice';
 import MusicianReducer from './Slices/MusicianSlice';
@@ -13,25 +13,42 @@ import {
     PERSIST,
     PURGE,
     REGISTER,
-    
-  } from 'redux-persist';
+    createMigrate
+} from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+const migrations = {
+    0: (state) => {
+        // migration clear out device state
+        return {
+            ...state,
+            device: undefined
+        }
+    },
+    1: (state) => {
+        // migration to keep only device state
+        return {
+            device: state.device
+        }
+    }
+}
 const persistConfig = {
     key: 'root',
     storage,
-  }
+    version:1,
+    migrate: createMigrate(migrations, { debug: false })
+}
 const rootReducer = combineReducers({
     account: AccountReducer,
     user: UserReducer,
     singer: SingerReducer,
     musician: MusicianReducer,
-    genre:GenreReducer,
+    genre: GenreReducer,
 })
 // const persistedAccount = persistReducer(persistConfig, AccountReducer);
 // const persistedUser = persistReducer(persistConfig, UserReducer);
 const persistedReducer = persistReducer(persistConfig, rootReducer);
-const store =  configureStore({
-    reducer:persistedReducer,
+const store = configureStore({
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {
