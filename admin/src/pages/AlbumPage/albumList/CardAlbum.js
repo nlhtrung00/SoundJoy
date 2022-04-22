@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { AsyncDeleteAlbum, fetchAsyncAlbums } from '../../../Redux/Slice/AlbumSlice';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import { Link } from 'react-router-dom';
 
 const useStyle = makeStyles((theme) => ({
     cardcontent: {
@@ -55,9 +57,16 @@ const CardAlbum = (props) => {
                 <CardHeader
                     action={
                         showDel&&
-                        <Box sx={{cursor:'pointer'}} onClick={() => handleDelete(props.album._id)}>
-                            <DeleteForeverIcon sx={{ alignItems:'center',fontSize: '25px', color: 'white', transition: 'ease-in-out',bgcolor:'black',width:'30px',height:'30px',borderRadius:'50%',p:0.5 }} />
-                        </Box>
+                        <>
+                            <Box sx={{cursor:'pointer'}} onClick={() => handleDelete(props.album._id)}>
+                                <DeleteForeverIcon sx={{ alignItems:'center',fontSize: '25px', color: 'white', transition: 'ease-in-out',bgcolor:'black',width:'30px',height:'30px',borderRadius:'50%',p:0.5 }} />
+                            </Box>
+                            <Link to={`albums/edit/${props.album._id}`}>
+                                <Box sx={{ cursor: 'pointer' }}>
+                                    <ModeEditIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
+                                </Box>
+                            </Link>
+                        </>
 
                     }
                     sx={{

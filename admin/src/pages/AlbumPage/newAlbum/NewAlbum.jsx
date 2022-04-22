@@ -92,7 +92,6 @@ export default function NewAlbum() {
       const newdata = { ...info };
       newdata[e.target.id] = e.target.value;
       setInfo(newdata);
-      setEdited(true);
    }
 
    const handleChangeSelectGenre = (data) => {

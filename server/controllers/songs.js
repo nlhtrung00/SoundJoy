@@ -68,14 +68,15 @@ export const postSong = async (req, res) => {
         newSong.link_mp3 = resultAudio.secure_url;
         newSong.cloudinary_image_id = resultImage.public_id;
         newSong.cloudinary_mp3_id = resultAudio.public_id;
-
+        // console.log(newSong);
         const song = new SongModel(newSong);
         // console.log(song);
         await song.save();
+        // res.status(200);
         res.status(200).json(song);
     } catch (err) {
         res.status(500).json({ error: err });
-        console.log(err);
+        // console.log(err);
     }    
 };
 

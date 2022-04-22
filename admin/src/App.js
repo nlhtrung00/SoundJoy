@@ -21,6 +21,7 @@ import Album from "./pages/AlbumPage/album/Album";
 import AlbumList from "./pages/AlbumPage/albumList/AlbumList";
 import NewAlbum from "./pages/AlbumPage/newAlbum/NewAlbum";
 import GenreUpdate from "./pages/GenrePage/GenreUpdate/GenreUpdate";
+import AlbumUpdate from "./pages/AlbumPage/AlbumUpdate/AlbumUpdate";
 import { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { fetchAsyncUsers } from "./Redux/Slice/UserSlice";
@@ -104,15 +105,15 @@ function App() {
             <GenreUpdate />
           </Route>
           
-          {/* route for singer */}
+          {/* route for album */}
           <Route exact path='/albums'>
             <AlbumList />   
           </Route>
           <Route exact path='/albums/add'>
             <NewAlbum />
           </Route>
-          <Route path='/albums/edit/:albumId'>
-            {/* <UpdateAlbum /> */}
+          <Route exact path='/albums/edit/:albumId'>
+            <AlbumUpdate />
           </Route>
           <Route path='/albums/:albumId'>
             {/* <AlbumDetail /> */}

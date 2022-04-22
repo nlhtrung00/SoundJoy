@@ -19,23 +19,26 @@ export const fetchAsyncAlbumById = createAsyncThunk('album/fetchAsyncAlbumById',
     return response.data;
 })
 export const AsyncUpdateAlbum = createAsyncThunk('album/AsyncUpdateAlbum', async (data) => {
-    let formData = new FormData();
-    formData.append('name',data.name);
-    formData.append('image',data.image);
-    formData.append('reactions',data.reactions);
-    formData.append('debuted_day',data.debuted_day);
-    formData.append('genre',data.genre);
+    const {formdata,id} = data;
+    // let formData = new FormData();
+    // formData.append('name',data.name);
+    // formData.append('image',data.image);
+    // formData.append('reactions',parseInt(data.reactions));
+    // formData.append('debuted_date',data.debuted_date);
+    // formData.append('genre',data.genre);
     
-    await Axios.put(`albums/${data.id}`,
-        formData,
+    const response = await Axios.put(`albums/${id}`,
+        formdata,
         {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         }        
         
-    ).then((response)=>response.data)
-    .catch(err=>console.log(err))
+    );
+    return response.data;
+    // .then((response)=>response.data)
+    // .catch(err=>console.log(err))
     
 })
 
