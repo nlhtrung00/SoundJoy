@@ -60,8 +60,8 @@ export default function NewSong() {
          image: null,
          musician: [],
          singer: [],
-         album: '',
-         genre: '',
+         album: null,
+         genre: null,
          mp3: null
       }
    ))
