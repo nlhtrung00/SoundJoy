@@ -5,6 +5,7 @@ import ImgSongdemo from '../../Images/demosong.jpg';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { Link } from 'react-router-dom';
 const useStyle = makeStyles({
     actionarea: {
         '&:hover': {
@@ -19,9 +20,9 @@ const useStyle = makeStyles({
     nameofsong: {
         display: 'box',
         lineClamp: 1,
-        boxOrient: 'vertical',  
+        boxOrient: 'vertical',
         overflow: 'hidden',
-      }
+    }
 })
 const CardSong = (props) => {
     const classes = useStyle();
@@ -60,16 +61,17 @@ const CardSong = (props) => {
                                     },
                                     transitionDuration: '0.4s'
                                 }} />
-                                <PlayCircleOutlineIcon sx={{
-                                    color: 'white', fontSize: '40px',
-                                    '&:hover': {
-                                        transform: 'scale(1.15)',
-                                        transition: 'ease-in-out',
+                                <Link to='/song/123'>
+                                    <PlayCircleOutlineIcon sx={{
+                                        color: 'white', fontSize: '40px',
+                                        '&:hover': {
+                                            transform: 'scale(1.15)',
+                                            transition: 'ease-in-out',
+                                            transitionDuration: '0.4s'
+                                        },
                                         transitionDuration: '0.4s'
-                                    },
-                                    transitionDuration: '0.4s'
-                                }} />
-
+                                    }} />
+                                </Link>
                                 <FileDownloadIcon sx={{
                                     color: 'white', fontSize: '40px',
                                     '&:hover': {
@@ -83,17 +85,19 @@ const CardSong = (props) => {
                         </Box>}
 
                 </Box>
+                <Link to='/song/123'>
+                    <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
+                        <Typography className={classes.nameofsong} sx={{
+                            fontWeight: 600, fontSize: 16,
+                        }}>
+                            Co hen voi thanh xuan
+                        </Typography>
+                        <Typography variant='body4' sx={{ fontSize: 15 }}>
+                            Monstar
+                        </Typography>
+                    </CardContent>
+                </Link>
 
-                <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
-                    <Typography className={classes.nameofsong}  sx={{
-                        fontWeight: 600, fontSize: 16,
-                    }}>
-                        Co hen voi thanh xuan
-                    </Typography>
-                    <Typography variant='body4' sx={{fontSize:15}}>
-                        Monstar
-                    </Typography>
-                </CardContent>
             </CardActionArea>
         </Card>
     );

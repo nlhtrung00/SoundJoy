@@ -18,6 +18,7 @@ import Layout from "./layout";
 import SingerDetail from "./Components/Singers/SingerDetail";
 import MusicianDetail from "./Components/Musician/MusicianDetail";
 import GenreDetail from "./Components/Genres/GenreDetail";
+import SongDetail from "./Components/Song/SongDetail";
 
 function App() {
    const { isloged, accountId } = useSelector(getIsLogedin);
@@ -46,6 +47,9 @@ function App() {
             <Route exact path="/musicians" element={<Layout page={Musicians} />} />
             <Route path="/musician" >
                <Route path=":musicianId" element={<Layout page={MusicianDetail}/>}/>
+            </Route>
+            <Route path="/song" >
+               <Route path=":Id" element={<Layout page={SongDetail}/>}/>
             </Route>
             <Route path="/welcome" element={<LandingPage />} />
          </Routes>
