@@ -4,11 +4,14 @@ import LeftBar from './Components/LeftBar/LeftBar';
 const Layout = (props) => {
     return (
         <>
-        <Grid container>
+        <Grid container sx={{
+            bgcolor:'#171334',
+            
+        }}>
                <Grid item lg={2.5}>
                   <LeftBar />
                </Grid>
-               <Grid item lg={9.5}>
+               <Grid item lg={9.5} sx={{p:1}}>
                     {<props.page />}
                </Grid>
         </Grid>

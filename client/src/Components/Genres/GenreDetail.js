@@ -10,7 +10,12 @@ import CardSong from "../Song/CardSong";
 import CardAlbum from "../Album/CardAlbum";
 
 const useStyle = makeStyles({
-
+    home_container: {
+        backgroundColor: 'white',
+        minHeight: '100%',
+        borderRadius: '20px',
+        padding: '15px 20px',
+    },
 })
 const GenreDetail = () => {
     const classes = useStyle();
@@ -24,7 +29,7 @@ const GenreDetail = () => {
     console.log(data !== undefined);
     return (
 
-        <Container sx={{ p: 1 }}>
+        <Container disableGutters maxWidth="xl" className={classes.home_container}>
             {data !== undefined && Object.keys(data).length === 0 ? <div>Loading...</div>
                 :
                 <>{console.log(data)}
