@@ -13,6 +13,12 @@ import songs from './routers/songs.js';
 import comments from './routers/comments.js';
 import likelists from './routers/likelists.js';
 import listens from './routers/listens.js';
+import ratingalbums from './routers/ratingalbums.js';
+import ratinggenres from './routers/ratinggenres.js';
+import ratingsingers from './routers/ratingsingers.js';
+import ratingmusicians from './routers/ratingmusicians.js';
+import ratingsongs from './routers/ratingsongs.js';
+
 
 const app = express();
 const PORT = 5000;
@@ -42,3 +48,8 @@ app.use('/songs', songs);
 app.use('/comments', comments);
 app.use('/listens', listens);
 app.use('/likelists', likelists);
+app.use('/ratingalbums', ratingalbums);
+app.use('/ratinggenres', ratinggenres);
+app.use('/ratingsingers', ratingsingers);
+app.use('/ratingmusicians', ratingmusicians);
+app.use('/ratingsongs', ratingsongs);
