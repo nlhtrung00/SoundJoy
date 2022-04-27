@@ -28,7 +28,8 @@ const schema = new mongoose.Schema({
         type: String
     }
 }, {
-    versionKey: false
+    versionKey: false,
+    timestamps: true 
 });
 
 export const AlbumModel = mongoose.model('Album', schema);

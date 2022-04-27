@@ -16,7 +16,8 @@ const schema = new mongoose.Schema({
         // required: true
     }   
 }, {
-    versionKey: false
+    versionKey: false,
+    timestamps: true 
 });
 
 export const ListenModel = mongoose.model('Listen', schema);
