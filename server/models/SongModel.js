@@ -31,11 +31,11 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Album'
     },
-    genre: {
+    genre: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Genre',
         // required: true
-    },
+    }],
     link_mp3: {
         type: String,
         // required: true
@@ -45,9 +45,11 @@ const schema = new mongoose.Schema({
     },
     cloudinary_mp3_id: {
         type: String
-    }
+    },
+    
 },{
-    versionKey: false
+    versionKey: false,
+    timestamps: true 
 });
 
 export const SongModel = mongoose.model('Song', schema);

@@ -14,7 +14,8 @@ const schema = mongoose.Schema({
         default: false
     }
 }, {
-    versionKey: false
+    versionKey: false,
+    timestamps: true 
 });
 
 export const AccountModel = mongoose.model('Account', schema);

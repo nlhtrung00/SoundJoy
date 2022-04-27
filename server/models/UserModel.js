@@ -36,6 +36,7 @@ const schema = new mongoose.Schema({
     }    
 }, {
     versionKey: false,
+    timestamps: true 
 }); //,{ timestamps: true} => createdAt + updatedAt
 
 export const UserModel = mongoose.model('User', schema);

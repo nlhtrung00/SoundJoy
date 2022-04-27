@@ -13,7 +13,8 @@ const schema = new mongoose.Schema({
         type: String
     }
 },{
-    versionKey: false
+    versionKey: false,
+    timestamps: true 
 });
 
 export const GenreModel = mongoose.model('Genre', schema);
