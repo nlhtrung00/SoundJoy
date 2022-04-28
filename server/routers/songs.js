@@ -23,7 +23,7 @@ router.get('/genre/:id', getSongByGenre);
 router.get('/album/:id', getSongByAlbum);
 router.get('/musician/:id', getSongByMusician);
 router.get('/singer/:id', getSongBySinger);
-router.get('/recent', getRecentSongs);
+router.get('/recent/recent', getRecentSongs);
 router.get('/top', getTopSongs);
 router.get('/bad', getBadSongs);
 

@@ -5,6 +5,7 @@ import Axios from "../Axios";
 const initialState={
     genres:[],
     genre:{},
+    recentgenres:[],
     updateresult:{},
     createresult:{},
     error:'',
@@ -14,6 +15,12 @@ export const fetchAsyncGenres = createAsyncThunk('genre/fetchAsyncGenres',async(
     const response = await Axios.get('genres');
     return response.data;
 })
+
+export const fetchAsyncRecentGenres = createAsyncThunk('genre/fetchAsyncRecentGenres',async()=>{
+    const response = await Axios.get('genres/recent/recent');
+    return response.data;
+})
+
 export const fetchAsyncGenreById = createAsyncThunk('genre/fetchAsyncGenreById',async(id)=>{
     const response = await Axios.get(`genres/${id}`);
     return response.data;
@@ -77,6 +84,12 @@ const GenreSlice = createSlice({
                 genre:action.payload
             }
         },
+        [fetchAsyncRecentGenres.fulfilled]:(state, action)=>{
+            return{
+                ...state,
+                recentgenres:action.payload
+            }
+        },
         [AsyncCreateGenre.fulfilled]:(state,action)=>{
             console.log("Create genre successfully");
             return{
@@ -108,9 +121,11 @@ const GenreSlice = createSlice({
             console.log("Update genre rejected");
         },
         
+        
     }
 });
 export const {refreshGenre} = GenreSlice.actions;
 export const getListGenres = (state) => state.genre.genres;
 export const getGenre = (state)=>state.genre.genre;
+export const getRecentGenres = (state) => state.genre.recentgenres;
 export default GenreSlice.reducer;

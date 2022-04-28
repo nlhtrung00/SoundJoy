@@ -3,10 +3,15 @@ import Axios from "../Axios";
 
 const initialState = {
     users:[],
-    user:{}
+    user:{},
+    recentusers:[]
 };
 export const fetchAsyncUsers = createAsyncThunk('users/fetchAsyncUsers',async()=>{
     const response = await Axios.get('users');
+    return response.data;
+})
+export const fetchAsyncRecentUsers = createAsyncThunk('users/fetchAsyncRecentUsers',async()=>{
+    const response = await Axios.get('users/recent/recent');
     return response.data;
 })
 export const fetchAsyncUserById = createAsyncThunk('users/fetchAsyncUserById',async(userId)=>{
@@ -35,6 +40,12 @@ const UserSlice = createSlice({
                 users:payload
             }
         },
+        [fetchAsyncRecentUsers.fulfilled]:(state, {payload})=>{
+            return {
+                ...state,
+                recentusers:payload
+            }
+        },
         [fetchAsyncUserById.fulfilled]:(state, {payload})=>{
             console.log("Fetch user successfully");
             return {
@@ -53,4 +64,5 @@ const UserSlice = createSlice({
 });
 export const getListUsers = (state) => state.user.users;
 export const getUser = (state) => state.user.user;
+export const getRecentUsers = (state) => state.user.recentusers;
 export default UserSlice.reducer;

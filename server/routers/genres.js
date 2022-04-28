@@ -17,7 +17,6 @@ router.get('/:id', getGenre);
 router.post('/', upload.single('image'), postGenre);
 router.put('/:id', upload.single('image'), updateGenre);
 router.delete('/:id', deleteGenre);
-router.get('/recent', getRecentGenres);
-
+router.get('/recent/recent', getRecentGenres);
 
 export default router;

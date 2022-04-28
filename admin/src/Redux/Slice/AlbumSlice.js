@@ -5,6 +5,7 @@ import Axios from "../Axios";
 const initialState={
     albums:[],
     album:{},
+    recentalbums:[],
     createresult:{},
     updateresult:{},
     deleteresult:{},
@@ -12,6 +13,10 @@ const initialState={
 }
 export const fetchAsyncAlbums = createAsyncThunk('album/fetchAsyncAlbums',async()=>{
     const response = await Axios.get('albums');
+    return response.data;
+})
+export const fetchAsyncRecentAlbums = createAsyncThunk('album/fetchAsyncRecentAlbums',async()=>{
+    const response = await Axios.get('albums/recent/recent');
     return response.data;
 })
 export const fetchAsyncAlbumById = createAsyncThunk('album/fetchAsyncAlbumById',async(id)=>{
@@ -78,6 +83,13 @@ const AlbumSlice = createSlice({
                 albums:action.payload
             }
         },
+        [fetchAsyncRecentAlbums.fulfilled]:(state,action)=>{
+            console.log("Fetching albums successfully");
+            return{
+                ...state,
+                recentalbums:action.payload
+            }
+        },
         [fetchAsyncAlbumById.fulfilled]:(state,action)=>{
             console.log("Fetching album by id successfully");
             return{
@@ -139,4 +151,5 @@ const AlbumSlice = createSlice({
 })
 export const getListAlbums = (state) =>state.album.albums;
 export const getAlbum = (state) =>state.album.album;
+export const getRecentAlbums = (state) => state.album.recentalbums;
 export default AlbumSlice.reducer;

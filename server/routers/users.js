@@ -18,6 +18,6 @@ router.get('/account/:account', getUserByAccount);
 router.post('/', upload.single('image'), postUser);
 router.put('/:id', upload.single('image'), updateUser);
 router.delete('/:id', deletetUser);
-router.get('/recent', getRecentUsers);
+router.get('/recent/recent', getRecentUsers);
 
 export default router;

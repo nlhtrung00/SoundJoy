@@ -1,5 +1,5 @@
 import { Box, Container, Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
@@ -8,9 +8,48 @@ import TopSinger from '../../components/Ranking/TopSinger';
 import TopMusician from '../../components/Ranking/TopMusician';
 import TopAlbum from '../../components/Ranking/TopAlbum';
 import BadSong from '../../components/Ranking/BadSong';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAsyncGenres, fetchAsyncRecentGenres, getListGenres, getRecentGenres } from '../../Redux/Slice/GenreSlice';
+import { fetchAsyncAlbums, fetchAsyncRecentAlbums, getListAlbums, getRecentAlbums } from '../../Redux/Slice/AlbumSlice';
+import { fetchAsyncRecentSongs, fetchAsyncSongs, getListSongs, getRecentSongs } from '../../Redux/Slice/SongSlice';
+import { fetchAsyncRecentSingers, fetchAsyncSingers, getListSingers, getRecentSingers } from '../../Redux/Slice/SingerSlice';
+import { fetchAsyncMusicians, fetchAsyncRecentMusicians, getListMusicians, getRecentMusicians } from '../../Redux/Slice/MusicianSlice';
+import { fetchAsyncRecentUsers, fetchAsyncUsers, getListUsers, getRecentUsers } from '../../Redux/Slice/UserSlice';
 
 const Home = () => {
-    const [statistic, setStatistic] = useState('topsong')
+    const dispatch = useDispatch();
+  
+    useEffect(()=>{
+        dispatch(fetchAsyncSongs());
+        dispatch(fetchAsyncAlbums());
+        dispatch(fetchAsyncGenres());
+        dispatch(fetchAsyncSingers());
+        dispatch(fetchAsyncMusicians());
+        dispatch(fetchAsyncUsers());
+
+        dispatch(fetchAsyncRecentSongs());
+        dispatch(fetchAsyncRecentAlbums());
+        dispatch(fetchAsyncRecentGenres());
+        dispatch(fetchAsyncRecentSingers());
+        dispatch(fetchAsyncRecentMusicians());
+        dispatch(fetchAsyncRecentUsers());
+    },[])
+    
+    const [statistic, setStatistic] = useState('topsong');
+
+    const songs = useSelector(getListSongs);
+    const albums = useSelector(getListAlbums);
+    const genres = useSelector(getListGenres);
+    const singers = useSelector(getListSingers);
+    const musicians = useSelector(getListMusicians);
+    const users = useSelector(getListUsers);
+    
+    const recentSongs = useSelector(getRecentSongs);
+    const recentAlbums = useSelector(getRecentAlbums);
+    const recentGenres = useSelector(getRecentGenres);
+    const recentSingers = useSelector(getRecentSingers);
+    const recentMusicians = useSelector(getRecentMusicians);
+    const recentUsers = useSelector(getRecentUsers);
 
     const handleChangeChart = (event, newValue) => {
         setStatistic(newValue);
@@ -36,10 +75,10 @@ const Home = () => {
                             Total of Songs
                         </Typography>
                         <Typography sx={{ fontWeight: 600, fontSize: '60px', textAlign: 'center' }}>
-                            20
+                            {songs.length}
                         </Typography>
                         <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                            Recent added: + 5
+                            Recent added: + {recentSongs.length}
                         </Typography>
                     </Box>
                 </Grid>
@@ -55,10 +94,10 @@ const Home = () => {
                             Total of Albums
                         </Typography>
                         <Typography sx={{ fontWeight: 600, fontSize: '60px', textAlign: 'center' }}>
-                            13
+                            {albums.length}
                         </Typography>
                         <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                            Recent added: + 5
+                            Recent added: + {recentAlbums.length}
                         </Typography>
                     </Box>
                 </Grid>
@@ -74,10 +113,10 @@ const Home = () => {
                             Total of Genres
                         </Typography>
                         <Typography sx={{ fontWeight: 600, fontSize: '60px', textAlign: 'center' }}>
-                            13
+                            {genres.length}
                         </Typography>
                         <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                            Recent added: + 2
+                            Recent added: + {recentGenres.length}
                         </Typography>
                     </Box>
                 </Grid>
@@ -93,10 +132,10 @@ const Home = () => {
                             Total of Singers
                         </Typography>
                         <Typography sx={{ fontWeight: 600, fontSize: '60px', textAlign: 'center' }}>
-                            13
+                            {singers.length}
                         </Typography>
                         <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                            Recent added: + 2
+                            Recent added: + {recentSingers.length}
                         </Typography>
                     </Box>
                 </Grid>
@@ -112,10 +151,10 @@ const Home = () => {
                             Total of Musicians
                         </Typography>
                         <Typography sx={{ fontWeight: 600, fontSize: '60px', textAlign: 'center' }}>
-                            13
+                            {musicians.length}
                         </Typography>
                         <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                            Recent added: + 2
+                            Recent added: + {recentMusicians.length}
                         </Typography>
                     </Box>
                 </Grid>
@@ -131,10 +170,10 @@ const Home = () => {
                             Total of Users
                         </Typography>
                         <Typography sx={{ fontWeight: 600, fontSize: '60px', textAlign: 'center' }}>
-                            13
+                            {users.length}
                         </Typography>
                         <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                            Recent added: + 2
+                            Recent added: + {recentUsers.length}
                         </Typography>
                     </Box>
                 </Grid>

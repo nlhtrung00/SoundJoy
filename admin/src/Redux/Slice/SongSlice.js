@@ -4,6 +4,7 @@ import Axios from "../Axios";
 const initialState={
     songs:[],
     song:{},
+    recentsongs:[],
     createresult:{},
 }
 export const fetchAsyncSongs =createAsyncThunk('song/fetchAsyncSongs',async()=>{
@@ -17,6 +18,10 @@ export const fetchAsyncSongById =createAsyncThunk('song/fetchAsyncSongById',asyn
 })
 export const fetchAsyncSongByAlbum =createAsyncThunk('song/fetchAsyncSongByAlbum',async(albumId)=>{
     const response = await Axios.get(`songs/album/${albumId}`);
+    return response.data;
+})
+export const fetchAsyncRecentSongs =createAsyncThunk('song/fetchAsyncRecentSongs',async()=>{
+    const response = await Axios.get('songs/recent/recent');
     return response.data;
 })
 export const AsyncCreateSong = createAsyncThunk('song/AsyncCreateSong',async(data)=>{
@@ -55,6 +60,12 @@ const SongSlice = createSlice({
                 songs:action.payload
             }
         },
+        [fetchAsyncRecentSongs.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                recentsongs:action.payload
+            }
+        },
         [fetchAsyncSongById.fulfilled]:(state,action)=>{
             console.log('Song fetch by id successfully');
             return{
@@ -80,5 +91,6 @@ const SongSlice = createSlice({
     }
 });
 export const getListSongs = (state)=>state.song.songs;
-export const getSong = (state)=>state.song.song
+export const getSong = (state)=>state.song.song;
+export const getRecentSongs = (state) => state.song.recentsongs;
 export default SongSlice.reducer;
