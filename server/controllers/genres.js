@@ -19,6 +19,17 @@ export const getGenre = async (req, res) => {
     }
 };
 
+export const getRecentGenres = async (req, res) => {
+    try {
+        const today = new Date();
+        const tomorrow = new Date(today - 24*60*60*1000);
+        const genres = await GenreModel.find({ createdAt :{ $gt: tomorrow, $lte: today } });
+        res.status(200).json(genres);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const postGenre = async (req, res) => {
     try {
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Genres', resource_type: 'auto' });

@@ -20,6 +20,17 @@ export const getUser = async (req, res) => {
     }
 };
 
+export const getRecentUsers = async (req, res) => {
+    try {
+        const today = new Date();
+        const tomorrow = new Date(today - 24*60*60*1000);
+        const users = await UserModel.find({ createdAt :{ $gt: tomorrow, $lte: today } });
+        res.status(200).json(users);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const getUserByAccount = async (req, res) => {
     try {
         const user = await UserModel.findOne({ account: req.params.account });

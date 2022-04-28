@@ -133,7 +133,7 @@ export default function ListSong() {
                                  singers.map(data => {
                                     if (data._id === song.singer[0]) {
                                        return (
-                                          <Typography>
+                                          <Typography key={data._id}>
                                              {data.name}
                                           </Typography>
                                        )

@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { getSingers, postSinger, updateSinger, deleteSinger, getSinger } from '../controllers/singers.js';
+import { getSingers, postSinger, updateSinger, deleteSinger, getSinger, getRecentSingers } from '../controllers/singers.js';
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
@@ -16,5 +16,6 @@ router.get('/:id', getSinger);
 router.post('/', upload.single('image'), postSinger);
 router.put('/:id', upload.single('image'), updateSinger);
 router.delete('/:id', deleteSinger);
+router.get('/recent', getRecentSingers);
 
 export default router;

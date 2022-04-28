@@ -19,6 +19,17 @@ export const getAlbum = async (req, res) => {
     }
 };
 
+export const getRecentAlbums = async (req, res) => {
+    try {
+        const today = new Date();
+        const tomorrow = new Date(today - 24*60*60*1000);
+        const albums = await AlbumModel.find({ createdAt :{ $gt: tomorrow, $lte: today } });
+        res.status(200).json(albums);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const postAlbum = async (req, res) => {
     try {
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Albums', resource_type: 'auto' });

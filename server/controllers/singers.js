@@ -19,6 +19,17 @@ export const getSinger = async (req, res) => {
     }
 };
 
+export const getRecentSingers = async (req, res) => {
+    try {
+        const today = new Date();
+        const tomorrow = new Date(today - 24*60*60*1000);
+        const singers = await SingerModel.find({ createdAt :{ $gt: tomorrow, $lte: today } });
+        res.status(200).json(singers);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const postSinger = async (req, res) => {
     try {
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Singers', resource_type: 'auto' });

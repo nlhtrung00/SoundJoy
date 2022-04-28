@@ -19,6 +19,17 @@ export const getSong = async (req, res) => {
     }    
 };
 
+export const getRecentSongs = async (req, res) => {
+    try {
+        const today = new Date();
+        const tomorrow = new Date(today - 24*60*60*1000);
+        const songs = await SongModel.find({ createdAt :{ $gt: tomorrow, $lte: today } });
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const getSongByGenre = async (req, res) => {
     try {
         const songs = await SongModel.find({ genre: req.params._id });

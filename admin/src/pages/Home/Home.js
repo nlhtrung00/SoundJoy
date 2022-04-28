@@ -6,6 +6,8 @@ import TabPanel from '@mui/lab/TabPanel';
 import TopSong from '../../components/Ranking/TopSong';
 import TopSinger from '../../components/Ranking/TopSinger';
 import TopAlbum from '../../components/Ranking/TopAlbum';
+import BadSong from '../../components/Ranking/BadSong';
+
 const Home = () => {
     const [statistic, setStatistic] = useState('topsong')
 
@@ -159,7 +161,7 @@ const Home = () => {
                             <TopSinger />
                         </TabPanel>
                         <TabPanel value='badsong'>
-                            4
+                            <BadSong />
                         </TabPanel>
 
                     </TabContext>
