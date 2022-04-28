@@ -10,10 +10,10 @@ import TopAlbum from '../../components/Ranking/TopAlbum';
 import BadSong from '../../components/Ranking/BadSong';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAsyncGenres, fetchAsyncRecentGenres, getListGenres, getRecentGenres } from '../../Redux/Slice/GenreSlice';
-import { fetchAsyncAlbums, fetchAsyncRecentAlbums, getListAlbums, getRecentAlbums } from '../../Redux/Slice/AlbumSlice';
-import { fetchAsyncRecentSongs, fetchAsyncSongs, getListSongs, getRecentSongs } from '../../Redux/Slice/SongSlice';
-import { fetchAsyncRecentSingers, fetchAsyncSingers, getListSingers, getRecentSingers } from '../../Redux/Slice/SingerSlice';
-import { fetchAsyncMusicians, fetchAsyncRecentMusicians, getListMusicians, getRecentMusicians } from '../../Redux/Slice/MusicianSlice';
+import { fetchAsyncAlbums, fetchAsyncRecentAlbums, fetchAsyncTopAlbums, getListAlbums, getRecentAlbums, getTopAlbums } from '../../Redux/Slice/AlbumSlice';
+import { fetchAsyncBadSongs, fetchAsyncRecentSongs, fetchAsyncSongs, fetchAsyncTopSongs, getBadSongs, getListSongs, getRecentSongs, getTopSongs } from '../../Redux/Slice/SongSlice';
+import { fetchAsyncRecentSingers, fetchAsyncSingers, fetchAsyncTopSingers, getListSingers, getRecentSingers, getTopSingers } from '../../Redux/Slice/SingerSlice';
+import { fetchAsyncMusicians, fetchAsyncRecentMusicians, fetchAsyncTopMusicians, getListMusicians, getRecentMusicians, getTopMusicians} from '../../Redux/Slice/MusicianSlice';
 import { fetchAsyncRecentUsers, fetchAsyncUsers, getListUsers, getRecentUsers } from '../../Redux/Slice/UserSlice';
 
 const Home = () => {
@@ -33,10 +33,15 @@ const Home = () => {
         dispatch(fetchAsyncRecentSingers());
         dispatch(fetchAsyncRecentMusicians());
         dispatch(fetchAsyncRecentUsers());
-    },[])
-    
-    const [statistic, setStatistic] = useState('topsong');
 
+        dispatch(fetchAsyncTopSongs());
+        dispatch(fetchAsyncBadSongs());
+        dispatch(fetchAsyncTopAlbums());
+        dispatch(fetchAsyncTopSingers());
+        dispatch(fetchAsyncTopMusicians());
+    },[])
+    const [statistic, setStatistic] = useState('topsong');
+    
     const songs = useSelector(getListSongs);
     const albums = useSelector(getListAlbums);
     const genres = useSelector(getListGenres);
@@ -51,6 +56,13 @@ const Home = () => {
     const recentMusicians = useSelector(getRecentMusicians);
     const recentUsers = useSelector(getRecentUsers);
 
+    const top = useSelector(getTopSongs);
+    const bad = useSelector(getBadSongs);
+    const topAlbums = useSelector(getTopAlbums);
+    const topSingers = useSelector(getTopSingers);
+    const topMusicians = useSelector(getTopMusicians);
+    
+    console.log(topMusicians);
     const handleChangeChart = (event, newValue) => {
         setStatistic(newValue);
       };
@@ -193,19 +205,19 @@ const Home = () => {
 
                         </TabList>
                         <TabPanel value='topsong'>
-                            <TopSong />
+                            <TopSong top={top}/>
                         </TabPanel>
                         <TabPanel value='topalbum'>
-                            <TopAlbum />
+                            <TopAlbum topAlbums={topAlbums}/>
                         </TabPanel>
                         <TabPanel value='topsinger'>
-                            <TopSinger />
+                            <TopSinger topSingers={topSingers}/>
                         </TabPanel>
                         <TabPanel value='topmusician'>
                             <TopMusician />
                         </TabPanel>
                         <TabPanel value='badsong'>
-                            <BadSong />
+                            <BadSong bad={bad}/>
                         </TabPanel>
 
                     </TabContext>

@@ -12,11 +12,11 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get('/', getSingers);
+router.get('/top', getTopSingers);
 router.get('/:id', getSinger);
 router.post('/', upload.single('image'), postSinger);
 router.put('/:id', upload.single('image'), updateSinger);
 router.delete('/:id', deleteSinger);
 router.get('/recent/recent', getRecentSingers);
-router.get('/top', getTopSingers);
 
 export default router;

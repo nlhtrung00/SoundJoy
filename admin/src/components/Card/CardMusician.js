@@ -20,7 +20,7 @@ const useStyle = makeStyles({
         overflow: 'hidden',
     }
 })
-const CardMusician = (props) => {
+const CardMusician = (musician) => {
     const classes = useStyle();
     const [option, setOption] = useState(false)
     return (
@@ -34,7 +34,7 @@ const CardMusician = (props) => {
 
                         component="img"
                         className='cardimg'
-                        image='https://vcdn1-giaitri.vnecdn.net/2019/07/03/Ariana-Grande-1-1561978756-r-680x0.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=YhfYfzle9ie6IkjBb6iouQ'
+                        image={musician.musician.image}
                         alt="musician img"
                         sx={{
                             objectFit: 'cover',
@@ -45,12 +45,12 @@ const CardMusician = (props) => {
 
                     />
                 </Box>
-                <Link to='/musicians/123'>
+                <Link to={`/musicians/${musician.musician._id}`}>
                     <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
                         <Typography className={classes.nameofmusician} sx={{
                             fontWeight: 600, fontSize: 16,
                         }}>
-                            Ariana Grande
+                            {musician.musician.name}
                         </Typography>
                         <Typography variant='body4' sx={{ fontSize: 15 }}>
                             Musician
