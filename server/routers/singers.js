@@ -16,7 +16,7 @@ router.get('/:id', getSinger);
 router.post('/', upload.single('image'), postSinger);
 router.put('/:id', upload.single('image'), updateSinger);
 router.delete('/:id', deleteSinger);
-router.get('/recent', getRecentSingers);
+router.get('/recent/recent', getRecentSingers);
 router.get('/top', getTopSingers);
 
 export default router;
