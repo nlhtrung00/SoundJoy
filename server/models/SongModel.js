@@ -46,7 +46,10 @@ const schema = new mongoose.Schema({
     cloudinary_mp3_id: {
         type: String
     },
-    
+    rating : {
+        type: Number,
+        // required: true
+    }
 },{
     versionKey: false,
     timestamps: true 

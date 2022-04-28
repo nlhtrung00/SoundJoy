@@ -5,6 +5,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import TopSong from '../../components/Ranking/TopSong';
 import TopSinger from '../../components/Ranking/TopSinger';
+import TopMusician from '../../components/Ranking/TopMusician';
 import TopAlbum from '../../components/Ranking/TopAlbum';
 import BadSong from '../../components/Ranking/BadSong';
 
@@ -148,6 +149,7 @@ const Home = () => {
                             <Tab label="Top Songs" value="topsong" />
                             <Tab label="Top Albums" value="topalbum" />
                             <Tab label="Top Singers" value="topsinger" />
+                            <Tab label="Top Musicians" value="topmusician" />
                             <Tab label="Bad Songs" value="badsong" />
 
                         </TabList>
@@ -159,6 +161,9 @@ const Home = () => {
                         </TabPanel>
                         <TabPanel value='topsinger'>
                             <TopSinger />
+                        </TabPanel>
+                        <TabPanel value='topmusician'>
+                            <TopMusician />
                         </TabPanel>
                         <TabPanel value='badsong'>
                             <BadSong />

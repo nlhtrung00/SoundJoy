@@ -30,6 +30,24 @@ export const getRecentSongs = async (req, res) => {
     }    
 };
 
+export const getTopSongs = async (req, res) => {
+    try {
+        const songs = await SongModel.find().limit(10).sort('-rating createdAt');
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
+export const getBadSongs = async (req, res) => {
+    try {
+        const songs = await SongModel.find().limit(10).sort('rating createdAt');
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const getSongByGenre = async (req, res) => {
     try {
         const songs = await SongModel.find({ genre: req.params._id });

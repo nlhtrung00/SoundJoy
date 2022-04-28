@@ -30,6 +30,15 @@ export const getRecentSingers = async (req, res) => {
     }    
 };
 
+export const getTopSingers = async (req, res) => {
+    try {
+        const singers = await SingerModel.find().limit(10).sort('-rating createdAt');
+        res.status(200).json(singers);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const postSinger = async (req, res) => {
     try {
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Singers', resource_type: 'auto' });

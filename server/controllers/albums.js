@@ -30,6 +30,15 @@ export const getRecentAlbums = async (req, res) => {
     }    
 };
 
+export const getTopAlbums = async (req, res) => {
+    try {
+        const albums = await AlbumModel.find().limit(10).sort('-rating createdAt');
+        res.status(200).json(albums);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+};
+
 export const postAlbum = async (req, res) => {
     try {
         const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Albums', resource_type: 'auto' });
