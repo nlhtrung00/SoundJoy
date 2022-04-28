@@ -6,7 +6,7 @@ import MuiAlert from '@mui/material/Alert';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import AddIcon from '@mui/icons-material/Add';
 import { styled } from '@mui/material/styles';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AsyncDeleteSongById, fetchAsyncSongs, getListSongs } from "../../../Redux/Slice/SongSlice";
 import { useSelector, useDispatch } from "react-redux";
@@ -49,7 +49,9 @@ export default function ListSong() {
    const [errorDel, setErrorDel] = useState('');
    const [openToast, setOpen] = useState(false);
    const [actionDel, setActionDel] = useState(false);
-
+   useEffect(()=>{
+      dispatch(fetchAsyncSongs());
+   },[])
    const handleDeleteSong = async (id) => {
 
       try {

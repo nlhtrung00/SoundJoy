@@ -29,16 +29,17 @@ import { fetchAsyncGenres } from "./Redux/Slice/GenreSlice";
 import { fetchAsyncSongs } from "./Redux/Slice/SongSlice";
 import { fetchAsyncAlbums } from "./Redux/Slice/AlbumSlice";
 import Layout from "./Layout";
+import AlbumDetail from "./pages/AlbumPage/album/AlbumDetail";
 function App() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchAsyncUsers());
-    dispatch(fetchAsyncSingers());
-    dispatch(fetchAsyncMusicians());
-    dispatch(fetchAsyncGenres());
-    dispatch(fetchAsyncSongs());
-    dispatch(fetchAsyncAlbums());
-  }, [])
+  // useEffect(() => {
+  //   dispatch(fetchAsyncUsers());
+  //   dispatch(fetchAsyncSingers());
+  //   dispatch(fetchAsyncMusicians());
+  //   dispatch(fetchAsyncGenres());
+  //   dispatch(fetchAsyncSongs());
+  //   dispatch(fetchAsyncAlbums());
+  // }, [])
   return (
     <Router>
       <Switch>
@@ -117,7 +118,7 @@ function App() {
           <Layout page={AlbumUpdate} />
         </Route>
         <Route path='/albums/:albumId'>
-          {/* <AlbumDetail /> */}
+          <Layout page={AlbumDetail} />
         </Route>
       </Switch>
     </Router>

@@ -1,13 +1,18 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { getListAlbums } from "../../../Redux/Slice/AlbumSlice";
+import { useSelector,useDispatch } from "react-redux";
+import { fetchAsyncAlbums, getListAlbums } from "../../../Redux/Slice/AlbumSlice";
 import { Button, Container, Grid, Paper, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import CardAlbum from "./CardAlbum";
+import { useEffect } from "react";
 
 
 export default function AlbumList() {
+  const dispatch = useDispatch();
   const albums = useSelector(getListAlbums);
+  useEffect(()=>{
+    dispatch(fetchAsyncAlbums());
+  },[])
   return (
     <Container maxWidth='xl' component={Paper} sx={{height:'100%'}} >
       <Typography variant="h6" sx={{ }}>

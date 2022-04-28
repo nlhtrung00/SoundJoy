@@ -12,7 +12,11 @@ export const fetchAsyncSongs =createAsyncThunk('song/fetchAsyncSongs',async()=>{
     return response.data;
 })
 export const fetchAsyncSongById =createAsyncThunk('song/fetchAsyncSongById',async(id)=>{
-    const response = Axios.get(`songs/${id}`);
+    const response = await Axios.get(`songs/${id}`);
+    return response.data;
+})
+export const fetchAsyncSongByAlbum =createAsyncThunk('song/fetchAsyncSongByAlbum',async(albumId)=>{
+    const response = await Axios.get(`songs/album/${albumId}`);
     return response.data;
 })
 export const AsyncCreateSong = createAsyncThunk('song/AsyncCreateSong',async(data)=>{
@@ -56,6 +60,13 @@ const SongSlice = createSlice({
             return{
                 ...state,
                 song:action.payload
+            }
+        },
+        [fetchAsyncSongByAlbum.fulfilled]:(state,action)=>{
+            console.log('fetch song by album')
+            return{
+                ...state,
+                songs:action.payload
             }
         },
 
