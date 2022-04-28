@@ -50,7 +50,7 @@ const AlbumDetail = () => {
                             <Grid container>
                                 <Grid item md={2}>
                                     <Box>
-                                        <img src={album.image} style={{ width: '100%', objectFit: 'cover' }} />
+                                        <img src={album.image} style={{ width: '100%', height:200,objectFit: 'cover' }} />
                                     </Box>
 
                                 </Grid>
@@ -77,7 +77,10 @@ const AlbumDetail = () => {
                                             }
                                         </Typography>
                                         <Typography sx={{ lineHeight: 2 }}>
-                                            <span style={{ fontWeight: 500 }}>Total of songs:</span> 5
+                                            <span style={{ fontWeight: 500 }}>Total of songs:</span>
+                                            {
+                                                songsbyalbum.length
+                                            }
                                         </Typography>
                                         <Box sx={{display:'flex'}}>
                                             <Box sx={{ display: 'flex', alignItems: 'center',mr:2 }}>
@@ -110,7 +113,9 @@ const AlbumDetail = () => {
                                         <Tab label="Songs" value="1" />
                                     </TabList>
                                     <TabPanel value="1" sx={{
-                                        p: 1
+                                        p: 1,
+                                        minHeight:350,
+                                        bgcolor:'#eeeeee'
                                     }}>
                                         <Tablistsong listSongs={songsbyalbum}/>
                                     </TabPanel>

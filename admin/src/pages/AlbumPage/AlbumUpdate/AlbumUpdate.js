@@ -11,29 +11,30 @@ import { useParams } from "react-router-dom";
 import DatePicker from "react-date-picker";
 import Select from "react-select";
 import { getListGenres } from "../../../Redux/Slice/GenreSlice";
-
+import MultiSelect from 'react-multiple-select-dropdown-lite'
+import 'react-multiple-select-dropdown-lite/dist/index.css'
 const useStyles = makeStyles({
 	datetimepicker: {
-	   margin: '5px 10px',
- 
+		margin: '5px 10px',
+
 	},
 	marginInput: {
-	   margin: '0 0 5px 0'
+		margin: '0 0 5px 0'
 	}
- })
- 
- const customStylesSelect = {
+})
+
+const customStylesSelect = {
 	menu: (provided, state) => ({
-	   ...provided,
-	   color: state.selectProps.menuColor,
+		...provided,
+		color: state.selectProps.menuColor,
 	}),
- 
- 
+
+
 	singleValue: (provided, state) => {
-	   const opacity = state.isDisabled ? 0.5 : 1;
-	   const transition = 'opacity 300ms';
- 
-	   return { ...provided, opacity, transition };
+		const opacity = state.isDisabled ? 0.5 : 1;
+		const transition = 'opacity 300ms';
+
+		return { ...provided, opacity, transition };
 	}
 }
 
@@ -62,7 +63,7 @@ const AlbumUpdate = () => {
 
 	const GenresOptions = genres.map((genre) => {
 		return (
-		   { label: genre.name, value: genre._id }
+			{ label: genre.name, value: genre._id }
 		)
 	})
 	// fetch album by id when render UI
@@ -77,7 +78,8 @@ const AlbumUpdate = () => {
 				image: album.image,
 				reactions: album.reactions,
 				debuted_date: new Date(album.debuted_date),
-				genre: album.genre
+				genre: album.genre,
+				rating:album.rating ? album.rating : "",
 			})
 		}
 	}, [album])
@@ -94,16 +96,18 @@ const AlbumUpdate = () => {
 		setInfo(newdata);
 
 	}
-	const handleChangeSelectGenre = (data) => {
+	const handleChangeSelectGenre = (value) => {
 		const newdata = { ...info };
-		newdata['genre'] = data.value;
+		const array = value.split(",");
+		newdata['genre'] = array;
 		setInfo(newdata);
-	}
+  
+	 }
 	const handleSelectDate = (value) => {
 		const newdata = { ...info };
 		newdata['debuted_date'] = value;
 		setInfo(newdata);
-  
+
 	}
 	const handleUpload = (e) => {
 		const newImage = e.target.files[0];
@@ -129,7 +133,10 @@ const AlbumUpdate = () => {
 		formdata.append('image', image);
 		formdata.append('reactions', reactions);
 		formdata.append('debuted_date', debuted_date);
-		formdata.append('genre', genre);
+		info.rating && formdata.append('rating',info.rating);
+		Array.from(genre).map((value) => {
+            formdata.append('genre', value);
+         })
 		// console.log(formdata.get('id'), formdata.get('name'), formdata.get('image'), formdata.get('reactions'), formdata.get('debuted_date'), formdata.get('genre'));
 		try {
 			let action = await dispatch(AsyncUpdateAlbum({ formdata, id }))
@@ -158,9 +165,9 @@ const AlbumUpdate = () => {
 		// free memory when ever this component is unmounted
 		return () => URL.revokeObjectURL(objectURL);
 	}, [imagefile])
-
+	console.log(info)
 	return (
-		<Container maxWidth='xl' component={Paper} sx={{height:'100%',pt:2}}>
+		<Container maxWidth='xl' component={Paper} sx={{ height: '100%', pt: 2 }}>
 			<Typography variant='h6'>
 				Update information of Album
 			</Typography>
@@ -209,10 +216,15 @@ const AlbumUpdate = () => {
 
 								<div className={classes.marginInput}>
 									<FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-										Genre:
+										Genres *:
 									</FormLabel>
-									<Select required  styles={customStylesSelect} name='genre' options={GenresOptions} onChange={handleChangeSelectGenre} 
-										value={GenreDefault}
+									<MultiSelect
+										required
+										placeholder='select genre'
+										name='genre'
+										onChange={handleChangeSelectGenre}
+										options={GenresOptions}
+
 									/>
 								</div>
 								{edited &&

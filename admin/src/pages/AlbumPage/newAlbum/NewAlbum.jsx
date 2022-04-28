@@ -10,6 +10,8 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { getListGenres } from "../../../Redux/Slice/GenreSlice";
 import DatePicker from "react-date-picker";
 import Select from 'react-select';
+import MultiSelect from 'react-multiple-select-dropdown-lite'
+import 'react-multiple-select-dropdown-lite/dist/index.css'
 
 const useStyles = makeStyles({
    datetimepicker: {
@@ -94,10 +96,12 @@ export default function NewAlbum() {
       setInfo(newdata);
    }
 
-   const handleChangeSelectGenre = (data) => {
+   const handleChangeSelectGenre = (value) => {
       const newdata = { ...info };
-      newdata['genre'] = data.value;
+      const array = value.split(",");
+      newdata['genre'] = array;
       setInfo(newdata);
+
    }
 
    const handleSelectDate = (value) => {
@@ -119,7 +123,7 @@ export default function NewAlbum() {
          setEdited(true);
          setErrorFileImage(false);
       }
-      else{
+      else {
          setErrorFileImage(true);
       }
    }
@@ -132,7 +136,9 @@ export default function NewAlbum() {
       formData.append('image', info.image);
       formData.append('reactions', info.reactions);
       formData.append('debuted_date', info.debuted_date);
-      formData.append('genre', info.genre);
+      Array.from(info.genre).map((value) => {
+         formData.append('genre', value);
+      })
       try {
          // create singer after then, fetch list again to update changed list
          const actionResult = await dispatch(AsyncCreateAlbum(formData));
@@ -141,7 +147,7 @@ export default function NewAlbum() {
          const result = unwrapResult(actionResult);
          setResult(true);
          setOpen(true);
-         setInfo(()=>(
+         setInfo(() => (
             {
                name: '',
                image: '',
@@ -159,7 +165,7 @@ export default function NewAlbum() {
       setLoading(false);
    }
    return (
-      <Container maxWidth='xl' component={Paper} sx={{height:'100%',pt:2}}>
+      <Container maxWidth='xl' component={Paper} sx={{ height: '100%', pt: 2 }}>
          <Typography variant='h6'>
             Add more Album
          </Typography>
@@ -210,9 +216,16 @@ export default function NewAlbum() {
 
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-                        Genre:
+                        Genres *:
                      </FormLabel>
-                     <Select required  styles={customStylesSelect} name='genre' options={GenresOptions} onChange={handleChangeSelectGenre} />
+                     <MultiSelect
+                        required
+                        placeholder='select genre'
+                        name='genre'
+                        onChange={handleChangeSelectGenre}
+                        options={GenresOptions}
+
+                     />
                   </div>
                   {edited && !loading && isFilePicked &&
                      <Button type='submit' variant='contained' sx={{ my: 1 }}>
