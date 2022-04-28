@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getMusician, AsyncUpdateMusician, fetchAsyncMusicianById, fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
 import { useParams } from "react-router-dom";
 import { Avatar, Box, Button, Container, Grid, AlertTitle, TextField, Typography, Paper, Input } from '@mui/material';
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { unwrapResult } from "@reduxjs/toolkit";
@@ -108,7 +108,7 @@ const UpdateMusician = () => {
 
     }
     return (
-        <Container component={Paper} elevation={4} sx={{ p: 1 }}>
+        <Container component={Paper} maxWidth='xl'  sx={{height:'100%',pt:1}}>
             <Typography variant='h6'>
                 Update Information
             </Typography>

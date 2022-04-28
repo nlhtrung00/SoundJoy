@@ -8,9 +8,8 @@ import CardAlbum from "./CardAlbum";
 
 export default function AlbumList() {
   const albums = useSelector(getListAlbums);
-  console.log(albums)
   return (
-    <Container maxWidth='lg' component={Paper}>
+    <Container maxWidth='xl' component={Paper} sx={{height:'100%'}} >
       <Typography variant="h6" sx={{ }}>
         List Albums
       </Typography>

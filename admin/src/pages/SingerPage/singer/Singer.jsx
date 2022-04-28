@@ -1,4 +1,4 @@
-import { Avatar, Container, Box, Typography, Button } from "@mui/material";
+import { Avatar, Container, Box, Typography, Button, Paper } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,26 +13,13 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
 const useStyle = makeStyles({
-   background: {
-      backgroundImage: `url(${background})`,
-      height: '150px',
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      borderRadius: '20px 20px 0 0'
-   },
-   avatar: {
-      position: 'absolute',
-      zIndex: 1000,
-      top: '140px',
-      paddingLeft: '15px'
-   },
 
 })
 export default function SingerDetail() {
    const [valueTab, setValueTab] = useState('1');
-    const handleChangeTab = (e, value) => {
-        setValueTab(value);
-    }
+   const handleChangeTab = (e, value) => {
+      setValueTab(value);
+   }
    const { singerId } = useParams();
    const data = useSelector(getSinger);
    console.log(data)
@@ -44,36 +31,30 @@ export default function SingerDetail() {
 
    return (
 
-      <Container>
-         {data&&Object.keys(data).length === 0 ? <div>Loading...</div>
+      <Container maxWidth='xl' component={Paper} sx={{ height: '100%' }}>
+         {data && Object.keys(data).length === 0 ? <div>Loading...</div>
             :
             <>
                <Box className={classes.info}>
-                  <Box sx={{ height: '300px' }}>
-                     <div className={classes.background}>
-
-                     </div>
-                     <Box className={classes.avatar} sx={{}}>
+                  <Box>
+                     <Box sx={{ display: 'flex', alignItems: 'flex-end', py: 1 }}>
                         <Avatar alt="avatar singer" src={data.image} sx={{
                            width: '150px',
                            height: '150px'
                         }} />
-
-                        <Box >
+                        <Box sx={{ml: 2,}}>
                            <Typography sx={{
-                              fontWeight: 500,
-                              fontSize: '28px',
-
+                              fontWeight: 600,
+                              fontSize: '70px',
+                              letterSpacing: '8px',
                               my: 0
                            }}>
                               {data.name}
                            </Typography>
-
-                           <Button variant="contained" size="small" sx={{ mb: 1 }}>
-                              Follow: {data.followers}
+                           <Button variant="contained" size="small" sx={{ml:1,cursor: 'default' }}>
+                              Follows: {data.followers}
                            </Button>
                         </Box>
-
                      </Box>
 
                   </Box>
@@ -115,18 +96,18 @@ export default function SingerDetail() {
 
                </Box>
                <Box className="edit_info" sx={{
-                  position:'fixed',
-                  bottom:30,
-                  right:30
+                  position: 'fixed',
+                  bottom: 30,
+                  right: 30
                }}>
                   <Link to={`edit/${data._id}`}>
                      <Button variant='contained'>
                         Edit
-                        <EditIcon sx={{fontSize:'16px',ml:0.5}}/>
+                        <EditIcon sx={{ fontSize: '16px', ml: 0.5 }} />
                      </Button>
                   </Link>
-                  
-                  
+
+
                </Box>
             </>
          }

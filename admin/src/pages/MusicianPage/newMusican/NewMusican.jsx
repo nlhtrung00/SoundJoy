@@ -1,12 +1,11 @@
 import { useHistory } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { AsyncCreateMusician, fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
-import { makeStyles } from "@material-ui/styles";
 import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import MuiAlert from '@mui/material/Alert';
 
-import React, { useState, useEffect, createRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function NewMusician() {
@@ -90,7 +89,7 @@ export default function NewMusician() {
 
    }
    return (
-      <Container component={Paper} elevation={4} sx={{ p: 1 }}>
+      <Container component={Paper} maxWidth='xl'  sx={{height:'100%',pt:1}}>
          <Typography variant='h6'>
             Add more Musician
          </Typography>

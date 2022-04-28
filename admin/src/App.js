@@ -1,7 +1,5 @@
-import Sidebar from "./components/sidebar/Sidebar";
-import Topbar from "./components/topbar/Topbar";
 import "./App.css";
-import Home from "./pages/home/Home";
+import Home from './pages/Home/Home';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import UserList from "./pages/UserPage/userList/UserList";
 import ListSong from "./pages/SongPage/ListSongs/listSongs";
@@ -17,7 +15,7 @@ import NewMusician from "./pages/MusicianPage/newMusican/NewMusican";
 import UpdateMusician from "./pages/MusicianPage/updateMusician/updateMusician"
 import GenreList from "./pages/GenrePage/genreList/GenreList";
 import NewGenre from "./pages/GenrePage/newGenre/NewGenre";
-import Album from "./pages/AlbumPage/album/Album";
+
 import AlbumList from "./pages/AlbumPage/albumList/AlbumList";
 import NewAlbum from "./pages/AlbumPage/newAlbum/NewAlbum";
 import GenreUpdate from "./pages/GenrePage/GenreUpdate/GenreUpdate";
@@ -30,96 +28,98 @@ import { fetchAsyncMusicians } from "./Redux/Slice/MusicianSlice";
 import { fetchAsyncGenres } from "./Redux/Slice/GenreSlice";
 import { fetchAsyncSongs } from "./Redux/Slice/SongSlice";
 import { fetchAsyncAlbums } from "./Redux/Slice/AlbumSlice";
+import Layout from "./Layout";
 function App() {
   const dispatch = useDispatch();
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(fetchAsyncUsers());
     dispatch(fetchAsyncSingers());
     dispatch(fetchAsyncMusicians());
     dispatch(fetchAsyncGenres());
     dispatch(fetchAsyncSongs());
     dispatch(fetchAsyncAlbums());
-  },[])
+  }, [])
   return (
     <Router>
-      <Topbar />
-      <div className="container">
-        <Sidebar />
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path='/users'>
-            <UserList />    
-          </Route>
-          
+      <Switch>
+        <Route exact path="/">
+          <Layout page={Home} />
+        </Route>
+        <Route exact path='/users'>
+          <Layout page={UserList} />
+        </Route>
 
-          {/* route for singer */}
-          <Route exact path='/singers'>
-            <SingerList />   
-          </Route>
-          <Route exact path='/singers/add'>
-            <NewSinger />
-          </Route>
-          <Route path='/singers/edit/:singerId'>
-            <UpdateSinger />
-          </Route>
-          <Route path='/singers/:singerId'>
-            <SingerDetail />
-          </Route>
-          
 
-          {/* route for musician */}
-          <Route exact path='/musicians'>
-            <MusicianList />   
-          </Route>
-          <Route exact path='/musicians/add'>
-            <NewMusician />
-          </Route>
-          <Route path='/musicians/edit/:musicianId'>
-            <UpdateMusician />
-          </Route>
-          <Route path='/musicians/:musicianId'>
-            <MusicianDetail />
-          </Route>
-          
-          {/* route for song */}
-          <Route exact path='/songs'>
-            <ListSong />   
-          </Route>
-          <Route exact path='/songs/add'>
-            <NewSong />
-          </Route>
-          <Route path='/songs/:songId'>
-            <SongDetail />
-          </Route>
-          
-          {/* route for genres */}
-          <Route exact path='/genres'>
-            <GenreList />   
-          </Route>
-          <Route exact path='/genres/add'>
-            <NewGenre />
-          </Route>
-          <Route exact path='/genres/edit/:genreId'>
-            <GenreUpdate />
-          </Route>
-          
-          {/* route for album */}
-          <Route exact path='/albums'>
-            <AlbumList />   
-          </Route>
-          <Route exact path='/albums/add'>
-            <NewAlbum />
-          </Route>
-          <Route exact path='/albums/edit/:albumId'>
-            <AlbumUpdate />
-          </Route>
-          <Route path='/albums/:albumId'>
-            {/* <AlbumDetail /> */}
-          </Route>
-        </Switch>
-      </div>
+        {/* route for singer */}
+        <Route exact path='/singers'>
+          <Layout page={SingerList} />
+        </Route>
+        <Route exact path='/singers/add'>
+          <Layout page={NewSinger} />
+        </Route>
+        <Route path='/singers/edit/:singerId'>
+          <Layout page={UpdateSinger} />
+        </Route>
+        <Route path='/singers/:singerId'>
+          <Layout page={SingerDetail} />
+        </Route>
+
+
+        {/* route for musician */}
+        <Route exact path='/musicians'>
+
+          <Layout page={MusicianList} />
+        </Route>
+        <Route exact path='/musicians/add'>
+          <Layout page={NewMusician} />
+        </Route>
+        <Route path='/musicians/edit/:musicianId'>
+          <Layout page={UpdateMusician} />
+        </Route>
+        <Route path='/musicians/:musicianId'>
+          <Layout page={MusicianDetail} />
+        </Route>
+
+        {/* route for song */}
+        <Route exact path='/songs'>
+
+          <Layout page={ListSong} />
+        </Route>
+        <Route exact path='/songs/add'>
+          <Layout page={NewSong} />
+        </Route>
+        <Route path='/songs/:songId'>
+          <SongDetail />
+          <Layout page={NewSong} />
+        </Route>
+
+        {/* route for genres */}
+        <Route exact path='/genres'>
+
+          <Layout page={GenreList} />
+        </Route>
+        <Route exact path='/genres/add'>
+          <Layout page={NewGenre} />
+        </Route>
+        <Route exact path='/genres/edit/:genreId'>
+          <Layout page={GenreUpdate} />
+        </Route>
+
+        {/* route for album */}
+        <Route exact path='/albums'>
+
+          <Layout page={AlbumList} />
+        </Route>
+        <Route exact path='/albums/add'>
+          <Layout page={NewAlbum} />
+        </Route>
+        <Route exact path='/albums/edit/:albumId'>
+          <Layout page={AlbumUpdate} />
+        </Route>
+        <Route path='/albums/:albumId'>
+          {/* <AlbumDetail /> */}
+        </Route>
+      </Switch>
     </Router>
   );
 }

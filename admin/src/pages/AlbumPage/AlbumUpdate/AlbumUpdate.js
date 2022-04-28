@@ -160,7 +160,7 @@ const AlbumUpdate = () => {
 	}, [imagefile])
 
 	return (
-		<Container component={Paper} elevation={4} sx={{ p: 1 }}>
+		<Container maxWidth='xl' component={Paper} sx={{height:'100%',pt:2}}>
 			<Typography variant='h6'>
 				Update information of Album
 			</Typography>

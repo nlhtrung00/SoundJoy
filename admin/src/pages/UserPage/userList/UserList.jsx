@@ -34,7 +34,7 @@ export default function UserList() {
   
 
   return (
-    <Container maxWidth='lg' component={Paper}>
+    <Container maxWidth='xl' component={Paper} sx={{height:'100%'}}>
        <Typography variant="h6" sx={{my:1}}>
         List Users
       </Typography>

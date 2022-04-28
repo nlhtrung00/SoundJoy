@@ -159,7 +159,7 @@ export default function NewAlbum() {
       setLoading(false);
    }
    return (
-      <Container component={Paper} elevation={4} sx={{ p: 1 }}>
+      <Container maxWidth='xl' component={Paper} sx={{height:'100%',pt:2}}>
          <Typography variant='h6'>
             Add more Album
          </Typography>

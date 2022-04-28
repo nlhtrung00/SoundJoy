@@ -102,7 +102,7 @@ export default function NewSinger() {
 
    }
    return (
-      <Container component={Paper} elevation={4} sx={{ p: 1 }}>
+      <Container component={Paper} maxWidth='xl'  sx={{height:'100%',pt:1}}>
          <Typography variant='h6'>
             Add more Singer
          </Typography>

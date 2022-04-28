@@ -57,12 +57,12 @@ export default function NewSong() {
          name: '',
          listens: 0,
          debuted_date: new Date(),
-         image: null,
+         image: '',
          musician: [],
          singer: [],
-         album: null,
-         genre: null,
-         mp3: null
+         album: '',
+         genre: [],
+         mp3: ''
       }
    ))
    const [isMp3Picked, setIsMp3Picked] = useState(false);
@@ -134,9 +134,10 @@ export default function NewSong() {
       setInfo(newdata);
 
    }
-   const handleChangeSelectGenre = (data) => {
+   const handleChangeSelectGenre = (value) => {
       const newdata = { ...info };
-      newdata['genre'] = data.value;
+      const array = value.split(",");
+      newdata['genre'] = array;
       setInfo(newdata);
 
    }
@@ -207,7 +208,10 @@ export default function NewSong() {
       
       formData.append('mp3', info.mp3);
       if(info.musician.length>0 && info.singer.length>0 && info.genre){
-         formData.append('genre', info.genre);
+         
+         Array.from(info.genre).map((value) => {
+            formData.append('genre', value);
+         })
          Array.from(info.musician).map((value, index) => {
             formData.append('musician', value);
          })
@@ -257,7 +261,7 @@ export default function NewSong() {
    }
    console.log(info)
    return (
-      <Container component={Paper} elevation={4} sx={{ p: 1 }}>
+      <Container maxWidth='xl' component={Paper} sx={{height:'100%',pt:2}}>
          <Typography variant='h6'>
             Add more Song
          </Typography>
@@ -331,11 +335,19 @@ export default function NewSong() {
 
                      />
                   </div>
+                  
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-                        Genre *:
+                        Genres *:
                      </FormLabel>
-                     <Select required styles={customStylesSelect} name='genre' options={GenresOptions} onChange={handleChangeSelectGenre} />
+                     <MultiSelect
+                        required
+                        placeholder='select genre'
+                        name='genre'
+                        onChange={handleChangeSelectGenre}
+                        options={GenresOptions}
+                        
+                     />
                   </div>
                   <div className={classes.marginInput}>
                      <FormLabel sx={{ fontWeight: 500, color: 'black' }}>

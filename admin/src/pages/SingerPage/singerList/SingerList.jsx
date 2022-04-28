@@ -63,7 +63,7 @@ const SingerList = () => {
     setOpen(false);
   }
   return (
-    <Container maxWidth='lg' component={Paper}>
+    <Container  maxWidth='xl' component={Paper} sx={{height:'100%'}}>
       <Typography variant="h6">
         List Singers
       </Typography>

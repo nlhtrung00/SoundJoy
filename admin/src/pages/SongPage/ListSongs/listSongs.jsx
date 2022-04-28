@@ -6,13 +6,13 @@ import MuiAlert from '@mui/material/Alert';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import AddIcon from '@mui/icons-material/Add';
 import { styled } from '@mui/material/styles';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AsyncDeleteSongById, fetchAsyncSongs, getListSongs } from "../../../Redux/Slice/SongSlice";
 import { useSelector, useDispatch } from "react-redux";
-import * as moment from 'moment';
-import { fetchAsyncAlbumById, fetchAsyncAlbums, getAlbum, getListAlbums } from "../../../Redux/Slice/AlbumSlice";
-import { fetchAsyncGenreById, fetchAsyncGenres, getGenre, getListGenres } from "../../../Redux/Slice/GenreSlice"
+import { makeStyles } from "@mui/styles";
+import { getListAlbums } from "../../../Redux/Slice/AlbumSlice";
+import { getListGenres } from "../../../Redux/Slice/GenreSlice"
 import { getListSingers } from "../../../Redux/Slice/SingerSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -30,49 +30,51 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
    },
 
 }));
+
+const useStyle = makeStyles({
+   break_line: {
+      display: 'box',
+      lineClamp: 2,
+      boxOrient: 'vertical',
+      overflow: 'hidden',
+   },
+})
 export default function ListSong() {
    const dispatch = useDispatch();
    const data = useSelector(getListSongs);
    const genres = useSelector(getListGenres);
    const albums = useSelector(getListAlbums);
    const singers = useSelector(getListSingers);
-
+   const classes = useStyle();
    const [errorDel, setErrorDel] = useState('');
    const [openToast, setOpen] = useState(false);
    const [actionDel, setActionDel] = useState(false);
-   const filterSinger = (singerid) => {
-      singers.map(item => {
-         if (item._id === singerid) {
-            return item.name
-         }
-      })
 
-   }
    const handleDeleteSong = async (id) => {
 
       try {
-        // delete song after then, fetch list changed song
-        const actionResult = await dispatch(AsyncDeleteSongById(id));
-        let result = unwrapResult(actionResult);
-        // set state to display toast message
-        setActionDel(true);
-        setOpen(true);
-        // fetch list again
-        dispatch(fetchAsyncSongs());
+         // delete song after then, fetch list changed song
+         const actionResult = await dispatch(AsyncDeleteSongById(id));
+         let result = unwrapResult(actionResult);
+         // set state to display toast message
+         setActionDel(true);
+         setOpen(true);
+         // fetch list again
+         dispatch(fetchAsyncSongs());
       }
       catch (err) {
-        // set state to display toast message if error
-        setErrorDel(err.message)
-        setActionDel(true);
-        setOpen(true);
+         // set state to display toast message if error
+         setErrorDel(err.message)
+         setActionDel(true);
+         setOpen(true);
       }
-  
+
    }
    const handleCloseToast = () => {
       setOpen(false);
-    }
+   }
    return (
-      <Container maxWidth='lg' component={Paper}>
+      <Container maxWidth='xl' component={Paper} sx={{height:'100%'}}>
          <Typography variant="h6" sx={{}}>
             List Songs
          </Typography>
@@ -103,9 +105,9 @@ export default function ListSong() {
                                  {index + 1}
                               </Typography>
                            </StyledTableCell>
-                           <StyledTableCell>
+                           <StyledTableCell sx={{ p: 1.5 }}>
                               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                 <Avatar src={song.image} />
+                                 <Avatar src={song.image} sx={{ height: 50, width: 50 }} />
                                  <Box sx={{ ml: 1 }}>
                                     <Typography sx={{
                                        fontWeight: 500, width: '150px', display: 'box',
@@ -126,37 +128,46 @@ export default function ListSong() {
                                  {song.listens}
                               </Typography>
                            </StyledTableCell>
-                           <StyledTableCell>
+                           <StyledTableCell >
                               {
-                                 song.singer.map(item => (
-                                    <Typography key={item}>
-                                      {
-                                         singers.map(data => {
-                                          if (data._id === item) {
-                                             return data.name
-                                          }
-                                       })
-                                      }
-                                      
-                                    </Typography>
-
-                                 ))
+                                 singers.map(data => {
+                                    if (data._id === song.singer[0]) {
+                                       return (
+                                          <Typography>
+                                             {data.name}
+                                          </Typography>
+                                       )
+                                    }
+                                 })
                               }
-
+                              {
+                                 song.singer.length > 1 
+                                 && 
+                                 <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                                    And more...
+                                 </Typography>
+                              }
 
                            </StyledTableCell>
                            <StyledTableCell>
+                              <Typography>
+                                 {
+                                    genres.map((item) => {
 
-                              {genres.map((genre) => {
-                                 if (genre._id === song.genre) {
-                                    return (
-                                       <Typography key={genre._id}>
-                                          {genre.name}
-                                       </Typography>
+                                       if (item._id === song.genre[0]) {
+                                          return item.name
+                                       }
+                                    })
 
-                                    )
                                  }
-                              })}
+                              </Typography>
+                              {
+                                 song.genre.length > 1 
+                                 && 
+                                 <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                                    And more...
+                                 </Typography>
+                              }
 
                            </StyledTableCell>
                            <StyledTableCell>
@@ -190,33 +201,33 @@ export default function ListSong() {
             </Table>
          </TableContainer>
          {actionDel && !errorDel ?
-        <Box>
-          <Snackbar
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            open={openToast}
-            autoHideDuration={4000}
-            onClose={handleCloseToast}
-          >
-            <MuiAlert elevation={6} severity="success" variant="filled" >
-              <AlertTitle>Success</AlertTitle>
-              You removed singer successfully.Let's check !
+            <Box>
+               <Snackbar
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  open={openToast}
+                  autoHideDuration={4000}
+                  onClose={handleCloseToast}
+               >
+                  <MuiAlert elevation={6} severity="success" variant="filled" >
+                     <AlertTitle>Success</AlertTitle>
+                     You removed singer successfully.Let's check !
 
-            </MuiAlert>
-          </Snackbar>
-        </Box> :
-        <Box>
-          <Snackbar
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            open={openToast}
-            autoHideDuration={4000}
-            onClose={handleCloseToast}
-          >
-            <MuiAlert elevation={6} severity="error" variant="filled" >
-              <AlertTitle>Error</AlertTitle>
-              {errorDel}
-            </MuiAlert>
-          </Snackbar>
-        </Box>}
+                  </MuiAlert>
+               </Snackbar>
+            </Box> :
+            <Box>
+               <Snackbar
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  open={openToast}
+                  autoHideDuration={4000}
+                  onClose={handleCloseToast}
+               >
+                  <MuiAlert elevation={6} severity="error" variant="filled" >
+                     <AlertTitle>Error</AlertTitle>
+                     {errorDel}
+                  </MuiAlert>
+               </Snackbar>
+            </Box>}
       </Container>
    );
 }
