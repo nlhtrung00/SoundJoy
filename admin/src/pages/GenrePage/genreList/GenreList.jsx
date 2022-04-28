@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CardGenre from "./CardGenre";
-import { getGenre, getListGenres, refreshGenre } from "../../../Redux/Slice/GenreSlice";
+import { fetchAsyncGenres, getGenre, getListGenres, refreshGenre } from "../../../Redux/Slice/GenreSlice";
 import { useSelector, useDispatch } from "react-redux";
 export default function GenreList() {
   const genres = useSelector(getListGenres);
@@ -13,6 +13,7 @@ export default function GenreList() {
   console.log(genre)
   useEffect(()=>{
     dispatch(refreshGenre());
+    dispatch(fetchAsyncGenres());
   },[])
   return (
     <Container maxWidth='lg' component={Paper}>

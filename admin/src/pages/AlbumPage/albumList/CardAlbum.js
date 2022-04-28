@@ -49,17 +49,17 @@ const CardAlbum = (props) => {
 
     }
     return (
-        <Card 
+        <Card
             onMouseOver={() => setShowDel(true)}
             onMouseLeave={() => setShowDel(false)}
         >
             <CardActionArea sx={{ cursor: 'default' }}>
                 <CardHeader
                     action={
-                        showDel&&
+                        showDel &&
                         <>
-                            <Box sx={{cursor:'pointer'}} onClick={() => handleDelete(props.album._id)}>
-                                <DeleteForeverIcon sx={{ alignItems:'center',fontSize: '25px', color: 'white', transition: 'ease-in-out',bgcolor:'black',width:'30px',height:'30px',borderRadius:'50%',p:0.5 }} />
+                            <Box sx={{ cursor: 'pointer' }} onClick={() => handleDelete(props.album._id)}>
+                                <DeleteForeverIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
                             </Box>
                             <Link to={`albums/edit/${props.album._id}`}>
                                 <Box sx={{ cursor: 'pointer' }}>
@@ -82,14 +82,13 @@ const CardAlbum = (props) => {
                     alt="album image"
 
                 />
-
-                <CardContent className={classes.cardcontent}>
-                    <Typography className={classes.namealbum}>
-                        {props.album.name}
-                    </Typography>
-                </CardContent>
-
-
+                <Link to={`albums/${props.album._id}`}>
+                    <CardContent className={classes.cardcontent}>
+                        <Typography className={classes.namealbum}>
+                            {props.album.name}
+                        </Typography>
+                    </CardContent>
+                </Link>
             </CardActionArea>
         </Card>
     );

@@ -76,7 +76,7 @@ const AlbumUpdate = () => {
 				name: album.name,
 				image: album.image,
 				reactions: album.reactions,
-				debuted_date: album.debuted_date,
+				debuted_date: new Date(album.debuted_date),
 				genre: album.genre
 			})
 		}

@@ -19,11 +19,11 @@ const schema = new mongoose.Schema({
         default: Date.now,
         // required: true
     },
-    genre: {
+    genre: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Genre',
         // required: true,
-    },
+    }],
     cloudinary_id: {
         type: String
     },

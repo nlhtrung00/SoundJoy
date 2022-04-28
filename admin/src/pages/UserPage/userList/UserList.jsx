@@ -3,8 +3,8 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { getListUsers } from "../../../Redux/Slice/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAsyncUsers, getListUsers } from "../../../Redux/Slice/UserSlice";
 
 const StyledTableCell = styled(TableCell)(({theme})=>({
   [`&.${tableCellClasses.head}`]:{
@@ -27,10 +27,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function UserList() {
   const data = useSelector(getListUsers);
+  const dispatch = useDispatch();
   const handleDelete = (id) => {
     
   };
-  console.log(data);
+  useEffect(()=>{
+    dispatch(fetchAsyncUsers());
+  },[])
   
 
   return (

@@ -38,6 +38,9 @@ const SingerList = () => {
   const data = useSelector(getListSingers);
   const dispatch = useDispatch();
   const [actionDel, setActionDel] = useState(false);
+  useEffect(()=>{
+    dispatch(fetchAsyncSingers())
+  },[])
   const handleDeleteSinger = async (id) => {
 
     try {
@@ -63,7 +66,7 @@ const SingerList = () => {
     setOpen(false);
   }
   return (
-    <Container  maxWidth='xl' component={Paper} sx={{height:'100%'}}>
+    <Container maxWidth='xl' component={Paper} sx={{ height: '100%' }}>
       <Typography variant="h6">
         List Singers
       </Typography>
