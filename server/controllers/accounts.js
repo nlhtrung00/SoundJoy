@@ -50,16 +50,16 @@ export const loginAccount = async (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
         const account = await AccountModel.findOne({ username: username });
-        if (!account) res.status(400).json({ message: 'Username is not found!'});
+        if (!account) return res.status(400).json({ message: 'Username is not found!'});
         
         const validPass = await bcrypt.compare(password, account.password);    
-        if (!validPass) res.status(400).json({ message: 'Invalid password'});
+        if (!validPass)return res.status(400).json({ message: 'Invalid password'});
         //jwt
         const data = { name: username };
         const accessToken = generateAccessToken(data);
         const refreshToken = jwt.sign(data, 'ecaps');
         refreshTokens.push(refreshToken);
-        res.status(200).json({ message: 'Login success!', isloged:true, accountId:account._id, accessToken: accessToken, refreshToken: refreshToken });
+        res.status(200).json({ message: 'Login success!', islogged:true, accountId:account._id, accessToken: accessToken, refreshToken: refreshToken });
     } catch (err) {
         res.status(500).json({ error: err });
     }

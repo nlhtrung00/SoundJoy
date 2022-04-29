@@ -4,6 +4,10 @@ import SingerReducer from './Slices/SingerSlice';
 import MusicianReducer from './Slices/MusicianSlice';
 import UserReducer from './Slices/UserSlice';
 import GenreReducer from './Slices/GenreSlice';
+import AlbumReducer from './Slices/AlbumSlice';
+import SongReducer from './Slices/SongSlice';
+import CommentReducer from './Slices/CommentSlice';
+
 import { combineReducers } from 'redux';
 import {
     persistReducer,
@@ -43,6 +47,9 @@ const rootReducer = combineReducers({
     singer: SingerReducer,
     musician: MusicianReducer,
     genre: GenreReducer,
+    album:AlbumReducer,
+    song:SongReducer,
+    comment:CommentReducer,
 })
 // const persistedAccount = persistReducer(persistConfig, AccountReducer);
 // const persistedUser = persistReducer(persistConfig, UserReducer);

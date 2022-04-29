@@ -65,14 +65,14 @@ const LeftBar = () => {
         dispatch(Logout());
         return navigate("/");
     }
-    console.log(user);
+    
     return (
         <Container disableGutters className={classes.container}>
             {user && <div className={classes.user_section}>
                 <Avatar
                     className={classes.avt_user}
                     alt="avatar user"
-                    src={avatar}
+                    src={user.image}
                     sx={{ width: 80, height: 80, mx: "auto" }}
 
                 />

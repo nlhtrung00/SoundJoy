@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Card, CardActionArea, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ImgAlbumdemo from '../../Images/demoalbum.jpg';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAsyncSingers, getSingers } from '../../Redux/Slices/SingerSlice';
 const useStyle = makeStyles({
     actionarea: {
         '&:hover': {
@@ -23,9 +25,15 @@ const useStyle = makeStyles({
         overflow: 'hidden',
       }
 })
-const CardAlbum = (props) => {
+const CardAlbum = ({album}) => {
     const classes = useStyle();
-    const [option, setOption] = useState(false)
+    const dispatch = useDispatch();
+    const [option, setOption] = useState(false);
+    const singers = useSelector(getSingers);
+    useEffect(()=>{
+        dispatch(fetchAsyncSingers());
+    },[])
+    console.log(album)
     return (
         <Card elevation={0} sx={{ borderRadius: '10px' }}>
             <CardActionArea
@@ -37,12 +45,12 @@ const CardAlbum = (props) => {
 
                         component="img"
                         className='cardimg'
-                        image={ImgAlbumdemo}
+                        image={album.image}
                         alt="album img"
                         sx={{
                             objectFit: 'cover',
                             objectPosition: 'center',
-                            height: '250px',
+                            height: '200px',
                             transitionDuration: '0.6s'
                         }}
 
@@ -88,11 +96,15 @@ const CardAlbum = (props) => {
                     <Typography className={classes.nameofsong}  sx={{
                         fontWeight: 600, fontSize: 16,color:'white'
                     }}>
-                        Show cua Den
+                        {album.name}
                     </Typography>
-                    <Typography variant='body4' sx={{fontSize:15,color:'white'}}>
-                        Den
-                    </Typography>
+                    {/* <Typography variant='body4' sx={{fontSize:15,color:'white'}}>
+                        {album.singer.map((item,index)=>{
+                            return(
+                                singers.find(singer=>singer._id===item).name
+                            )
+                        })}
+                    </Typography> */}
                 </CardContent>
             </CardActionArea>
         </Card>

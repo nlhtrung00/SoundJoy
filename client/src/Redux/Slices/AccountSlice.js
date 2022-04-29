@@ -2,13 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Axios from '../../Common/Axios';
 
 const initialState = {
-    loginprocess: {
-        message: '',
-        isloged: false,
-        accountId: '',
-    },
-
-    signupprocess: {}
+    loginresult:{},
+    signupresult: {}
 };
 
 export const fetchAsyncAccount = createAsyncThunk('account/fetchAsyncAccount', async (data) => {
@@ -56,7 +51,7 @@ const AccountSlice = createSlice({
             console.log("Fetched Succesfully");
             return {
                 ...state,
-                loginprocess: payload
+                loginresult: payload
             }
         },
         [AsyncRegisterAccount.fulfilled]: (state, { payload }) => {
@@ -64,7 +59,7 @@ const AccountSlice = createSlice({
             console.log(payload);
             return {
                 ...state,
-                signupprocess: payload
+                signupresult: payload
             }
         },
         [fetchAsyncAccount.rejected]: () => {
@@ -76,6 +71,6 @@ const AccountSlice = createSlice({
     },
 });
 export const { Logout,refreshSignup } = AccountSlice.actions;
-export const getIsLogedin = (state) => state.account.loginprocess;
-export const getIsSignedup = (state) => state.account.signupprocess;
+export const getIsLoggedin = (state) => state.account.loginresult;
+export const getIsSignedup = (state) => state.account.signupresult;
 export default AccountSlice.reducer;

@@ -6,8 +6,10 @@ import LockIcon from '@mui/icons-material/Lock';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAsyncAccount, getIsLogedin } from "../../../Redux/Slices/AccountSlice";
-import React from "react";
+import { fetchAsyncAccount, getIsLoggedin } from "../../../Redux/Slices/AccountSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import React, { useEffect, useState } from "react";
+import { fetchAsyncUserByAccount, getUser } from "../../../Redux/Slices/UserSlice";
 const theme = createTheme({
     spacing: [0, 4, 8, 10, 12, 16, 32],
 });
@@ -29,6 +31,7 @@ const initialState = {
 const Login = () => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const [error, setError] = useState(false);
     const validationSchema = Yup.object().shape({
         username: Yup.string().min(6, "Minimum 6 characters").required("Required!"),
         password: Yup.string().min(6, "Minimum 6 characters").required("Required!"),
@@ -37,16 +40,30 @@ const Login = () => {
         // .required("Required!")
 
     })
-    const onSubmit = (value, props) => {
+    const resultLogin= useSelector(getIsLoggedin);
+    const user = useSelector(getUser);
+    console.log(resultLogin)
+    console.log(user)
+    const onSubmit = async (value, props) => {
         // setTimeout(() => {
         //     props.resetForm();
         //     props.setSubmitting(true);
         // }, 1000)
-        const data={
-            username:value.username,
-            password:value.password
+        setError(false)
+        const data = {
+            username: value.username,
+            password: value.password
         }
-        dispatch(fetchAsyncAccount(data));
+        try {
+            let action = await dispatch(fetchAsyncAccount(data));
+            unwrapResult(action);
+            dispatch(fetchAsyncUserByAccount(resultLogin.accountId))
+            setError(false);
+        } catch (err) {
+            setError(true)
+            console.log(err);
+        }
+
     }
     return (
         <Grid>
@@ -57,10 +74,18 @@ const Login = () => {
                     <Avatar sx={{ backgroundColor: '#4545ce' }}>
                         <GraphicEqIcon sx={{ color: 'white' }} />
                     </Avatar>
-                    <Typography variant="h5" sx={{ fontWeight: 500 }}>
+                    <Typography variant="h5" sx={{ fontWeight: 500,textAlign:'center' }}>
                         SoundJoy
                     </Typography>
                 </Grid>
+                {error ? 
+                <Typography sx={{color:'red',fontSize:15}}>
+                    Check your info again
+                </Typography>
+                    :
+                    <></>
+                }
+
                 <Formik initialValues={initialState} onSubmit={onSubmit} validationSchema={validationSchema}>
                     {
 
