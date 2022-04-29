@@ -6,6 +6,7 @@ const initialState={
     albums:[],
     album:{},
     recentalbums:[],
+    topalbums:[],
     createresult:{},
     updateresult:{},
     deleteresult:{},
@@ -13,6 +14,10 @@ const initialState={
 }
 export const fetchAsyncAlbums = createAsyncThunk('album/fetchAsyncAlbums',async()=>{
     const response = await Axios.get('albums');
+    return response.data;
+})
+export const fetchAsyncTopAlbums = createAsyncThunk('album/fetchAsyncTopAlbums',async()=>{
+    const response = await Axios.get('albums/top');
     return response.data;
 })
 export const fetchAsyncRecentAlbums = createAsyncThunk('album/fetchAsyncRecentAlbums',async()=>{
@@ -83,6 +88,12 @@ const AlbumSlice = createSlice({
                 albums:action.payload
             }
         },
+        [fetchAsyncTopAlbums.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                topalbums:action.payload
+            }
+        },
         [fetchAsyncRecentAlbums.fulfilled]:(state,action)=>{
             console.log("Fetching albums successfully");
             return{
@@ -151,5 +162,6 @@ const AlbumSlice = createSlice({
 })
 export const getListAlbums = (state) =>state.album.albums;
 export const getAlbum = (state) =>state.album.album;
+export const getTopAlbums = (state) => state.album.topalbums;
 export const getRecentAlbums = (state) => state.album.recentalbums;
 export default AlbumSlice.reducer;

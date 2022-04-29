@@ -20,7 +20,7 @@ const useStyle = makeStyles({
         overflow: 'hidden',
     }
 })
-const CardSong = (props) => {
+const CardSong = (song) => {
     const classes = useStyle();
     const [option,setOption] = useState(false)
     return (
@@ -34,7 +34,7 @@ const CardSong = (props) => {
 
                         component="img"
                         className='cardimg'
-                        image='https://i.ytimg.com/vi/BOyO8sZOaOQ/maxresdefault.jpg'
+                        image={song.song.image}
                         alt="song img"
                         sx={{
                             objectFit: 'cover',
@@ -46,15 +46,15 @@ const CardSong = (props) => {
                     />
                     
                 </Box>
-                <Link to='/song/123'>
+                <Link to={`/song/${song.song._id}`}>
                     <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
                         <Typography className={classes.nameofsong} sx={{
                             fontWeight: 600, fontSize: 16,
                         }}>
-                            This is what falling in love feels like
+                            {song.song.name}
                         </Typography>
                         <Typography variant='body4' sx={{ fontSize: 15 }}>
-                            JVKE
+                            Song
                         </Typography>
                     </CardContent>
                 </Link>

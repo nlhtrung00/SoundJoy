@@ -4,6 +4,7 @@ import Axios from "../Axios";
 const initialState={
     musicians:[],
     musician:{},
+    topmusicians:[],
     recentmusicians:[],
     updateresult:{},
     createresult:{},
@@ -11,6 +12,10 @@ const initialState={
 }
 export const fetchAsyncMusicians = createAsyncThunk('musician/fetchAsyncMusicians',async()=>{
     const response = await Axios.get('musicians');
+    return response.data;
+})
+export const fetchAsyncTopMusicians = createAsyncThunk('musician/fetchAsyncTopMusicians',async()=>{
+    const response = await Axios.get('musicians/top');
     return response.data;
 })
 export const fetchAsyncRecentMusicians = createAsyncThunk('musician/fetchAsyncRecentMusicians',async()=>{
@@ -73,6 +78,12 @@ const MusicianSlice = createSlice({
                 musicians:action.payload
             }
         },
+        [fetchAsyncTopMusicians.fulfilled]:(state, action)=>{
+            return{
+                ...state,
+                musicians:action.payload
+            }
+        },
         [fetchAsyncRecentMusicians.fulfilled]:(state, action)=>{
             return{
                 ...state,
@@ -124,5 +135,6 @@ const MusicianSlice = createSlice({
 })
 export const getListMusicians = (state) => state.musician.musicians;
 export const getMusician = (state) => state.musician.musician;
+export const getTopMusicians = (state) => state.musician.topmusicians;
 export const getRecentMusicians = (state) => state.musician.recentmusicians;
 export default MusicianSlice.reducer;

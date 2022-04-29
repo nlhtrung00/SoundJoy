@@ -1,21 +1,17 @@
 import { Grid } from '@mui/material';
 import CardMusician from '../Card/CardMusician';
 
-const TopMusician = () => {
+const TopMusician = ({topMusicians}) => {
     
     return (
         <Grid container spacing={3}>
-            {/* tương tự top song */}
-            <Grid item md={2.4}>
-                <CardMusician />
-            </Grid>
-            <Grid item md={2.4}>
-                <CardMusician />
-            </Grid>
-            <Grid item md={2.4}>
-                <CardMusician />
-            </Grid>
-            
+            {topMusicians && topMusicians.map((musician) => {
+                return (
+                    <Grid item md={2.4} key={musician._id}>
+                        <CardMusician musician={musician}/>
+                    </Grid>
+                )
+            })}
             
         </Grid>
     );

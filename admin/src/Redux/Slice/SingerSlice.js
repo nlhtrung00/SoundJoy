@@ -4,6 +4,7 @@ import Axios from "../Axios";
 const initialState = {
     singers: [],
     singer: {},
+    topsingers:[],
     recentsingers:[],
     updateresult:{},
     createresult:{},
@@ -13,6 +14,10 @@ const initialState = {
 export const fetchAsyncSingers = createAsyncThunk('singer/fetchAsyncSingers', async () => {
     const response = await Axios.get('singers');
     console.log(response)
+    return response.data;
+})
+export const fetchAsyncTopSingers = createAsyncThunk('singer/fetchAsyncTopSingers', async () => {
+    const response = await Axios.get('singers/top');
     return response.data;
 })
 export const fetchAsyncRecentSingers = createAsyncThunk('singer/fetchAsyncRecentSingers', async () => {
@@ -80,6 +85,12 @@ const SingerSlice = createSlice({
             return {
                 ...state,
                 singers: action.payload
+            }
+        },
+        [fetchAsyncTopSingers.fulfilled]: (state, action) => {
+            return {
+                ...state,
+                topsingers: action.payload
             }
         },
         [fetchAsyncRecentSingers.fulfilled]: (state, action) => {
@@ -150,5 +161,6 @@ const SingerSlice = createSlice({
 })
 export const getListSingers = (state) => state.singer.singers;
 export const getSinger = (state) => state.singer.singer;
+export const getTopSingers = (state) => state.singer.topsingers;
 export const getRecentSingers = (state) => state.singer.recentsingers;
 export default SingerSlice.reducer;

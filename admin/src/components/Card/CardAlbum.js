@@ -20,7 +20,7 @@ const useStyle = makeStyles({
         overflow: 'hidden',
     }
 })
-const CardAlbum = (props) => {
+const CardAlbum = (album) => {
     const classes = useStyle();
     const [option,setOption] = useState(false)
     return (
@@ -34,8 +34,8 @@ const CardAlbum = (props) => {
 
                         component="img"
                         className='cardimg'
-                        image='https://vtv1.mediacdn.vn/thumb_w/640/2021/9/21/den-4-16321852520351304653177.jpg'
-                        alt="singer img"
+                        image={album.album.image}
+                        alt="album img"
                         sx={{
                             objectFit: 'cover',
                             objectPosition: 'center',
@@ -45,12 +45,12 @@ const CardAlbum = (props) => {
 
                     />
                 </Box>
-                <Link to='/albums/123'>
+                <Link to={`/albums/${album.album._id}`}>
                     <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
                         <Typography className={classes.nameofalbum} sx={{
                             fontWeight: 600, fontSize: 16,
                         }}>
-                            Show cua Den
+                            {album.album.name}
                         </Typography>
                         <Typography variant='body4' sx={{ fontSize: 15 }}>
                             Album
