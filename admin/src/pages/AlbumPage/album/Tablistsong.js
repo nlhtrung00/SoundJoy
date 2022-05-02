@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchAsyncSingers, getListSingers } from '../../../Redux/Slice/SingerSlice';
 import { fetchAsyncGenres, getListGenres } from '../../../Redux/Slice/GenreSlice';
 import * as moment from "moment"
-
+import {Link} from 'react-router-dom'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -53,7 +53,7 @@ const Tablistsong = ({ listSongs }) => {
                         <TableBody>
                             {listSongs.map((song, index) => {
                                 return (
-                                    <StyledTableRow key={song._id}>
+                                    <StyledTableRow key={song._id} component={Link} to={`/song/${song._id}`}>
                                         <StyledTableCell>
                                             {index + 1}
                                         </StyledTableCell>

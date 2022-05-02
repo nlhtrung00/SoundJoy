@@ -86,13 +86,13 @@ function App() {
 
           <Layout page={ListSong} />
         </Route>
+        <Route path='/song/:songId'>
+          <Layout page={SongDetail} />
+        </Route>
         <Route exact path='/songs/add'>
           <Layout page={NewSong} />
         </Route>
-        <Route path='/songs/:songId'>
-          <SongDetail />
-          <Layout page={NewSong} />
-        </Route>
+
 
         {/* route for genres */}
         <Route exact path='/genres'>

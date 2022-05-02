@@ -4,6 +4,9 @@ import Axios from "../../Common/Axios";
 const initialState={
     songs:[],
     song:{},
+    songbysinger:[],
+    songbymusician:[],
+    songbygenre:[],
     recentsongs:[],
 }
 export const fetchAsyncSongs =createAsyncThunk('song/fetchAsyncSongs',async()=>{
@@ -17,6 +20,14 @@ export const fetchAsyncSongById =createAsyncThunk('song/fetchAsyncSongById',asyn
 })
 export const fetchAsyncSongByAlbum =createAsyncThunk('song/fetchAsyncSongByAlbum',async(albumId)=>{
     const response = await Axios.get(`songs/album/${albumId}`);
+    return response.data;
+})
+export const fetchAsyncSongBySinger =createAsyncThunk('song/fetchAsyncSongBySinger',async(singerId)=>{
+    const response = await Axios.get(`songs/singer/${singerId}`);
+    return response.data;
+})
+export const fetchAsyncSongByMusician =createAsyncThunk('song/fetchAsyncSongByMusician',async(musicianId)=>{
+    const response = await Axios.get(`songs/musician/${musicianId}`);
     return response.data;
 })
 export const fetchAsyncRecentSongs =createAsyncThunk('song/fetchAsyncRecentSongs',async()=>{
@@ -59,9 +70,26 @@ const SongSlice = createSlice({
                 songs:action.payload
             }
         },
+        // song by singer
+        [fetchAsyncSongBySinger.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                songbysinger:action.payload
+            }
+        },
+        // song by musician
+        [fetchAsyncSongByMusician.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                songbymusician:action.payload
+            }
+        }
     }
 });
 export const getListSongs = (state)=>state.song.songs;
+export const getSongsBySinger = (state)=>state.song.songbysinger;
+export const getSongsByMusician = (state)=>state.song.songbymusician;
+export const getSongsByGenre = (state)=>state.song.songbygenre;
 export const getSong = (state)=>state.song.song;
 export const getRecentSongs = (state) => state.song.recentsongs;
 export default SongSlice.reducer;

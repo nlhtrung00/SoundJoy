@@ -68,7 +68,7 @@ export const getSongByAlbum = async (req, res) => {
 
 export const getSongByMusician = async (req, res) => {
     try {
-        const songs = await SongModel.find({ musician: req.params._id });
+        const songs = await SongModel.find({ musician: req.params.id });
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -77,7 +77,7 @@ export const getSongByMusician = async (req, res) => {
 
 export const getSongBySinger = async (req, res) => {
     try {
-        const songs = await SongModel.find({ singer: req.params._id });
+        const songs = await SongModel.find({ singer: req.params.id });
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });

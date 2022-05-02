@@ -81,7 +81,7 @@ const MusicianSlice = createSlice({
         [fetchAsyncTopMusicians.fulfilled]:(state, action)=>{
             return{
                 ...state,
-                musicians:action.payload
+                topmusicians:action.payload
             }
         },
         [fetchAsyncRecentMusicians.fulfilled]:(state, action)=>{

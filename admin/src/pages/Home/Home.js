@@ -13,13 +13,31 @@ import { fetchAsyncGenres, fetchAsyncRecentGenres, getListGenres, getRecentGenre
 import { fetchAsyncAlbums, fetchAsyncRecentAlbums, fetchAsyncTopAlbums, getListAlbums, getRecentAlbums, getTopAlbums } from '../../Redux/Slice/AlbumSlice';
 import { fetchAsyncBadSongs, fetchAsyncRecentSongs, fetchAsyncSongs, fetchAsyncTopSongs, getBadSongs, getListSongs, getRecentSongs, getTopSongs } from '../../Redux/Slice/SongSlice';
 import { fetchAsyncRecentSingers, fetchAsyncSingers, fetchAsyncTopSingers, getListSingers, getRecentSingers, getTopSingers } from '../../Redux/Slice/SingerSlice';
-import { fetchAsyncMusicians, fetchAsyncRecentMusicians, fetchAsyncTopMusicians, getListMusicians, getRecentMusicians, getTopMusicians} from '../../Redux/Slice/MusicianSlice';
+import { fetchAsyncMusicians, fetchAsyncRecentMusicians, fetchAsyncTopMusicians, getListMusicians, getRecentMusicians, getTopMusicians } from '../../Redux/Slice/MusicianSlice';
 import { fetchAsyncRecentUsers, fetchAsyncUsers, getListUsers, getRecentUsers } from '../../Redux/Slice/UserSlice';
 
 const Home = () => {
     const dispatch = useDispatch();
-  
-    useEffect(()=>{
+    const songs = useSelector(getListSongs);
+    const albums = useSelector(getListAlbums);
+    const genres = useSelector(getListGenres);
+    const singers = useSelector(getListSingers);
+    const musicians = useSelector(getListMusicians);
+    const users = useSelector(getListUsers);
+
+    const recentSongs = useSelector(getRecentSongs);
+    const recentAlbums = useSelector(getRecentAlbums);
+    const recentGenres = useSelector(getRecentGenres);
+    const recentSingers = useSelector(getRecentSingers);
+    const recentMusicians = useSelector(getRecentMusicians);
+    const recentUsers = useSelector(getRecentUsers);
+
+    const topsong = useSelector(getTopSongs);
+    const badsong = useSelector(getBadSongs);
+    const topAlbums = useSelector(getTopAlbums);
+    const topSingers = useSelector(getTopSingers);
+    const topMusicians = useSelector(getTopMusicians);
+    useEffect(() => {
         dispatch(fetchAsyncSongs());
         dispatch(fetchAsyncAlbums());
         dispatch(fetchAsyncGenres());
@@ -32,40 +50,23 @@ const Home = () => {
         dispatch(fetchAsyncRecentGenres());
         dispatch(fetchAsyncRecentSingers());
         dispatch(fetchAsyncRecentMusicians());
+        console.log('fetch recent user')
         dispatch(fetchAsyncRecentUsers());
-
+        console.log('after fetch recent user')
         dispatch(fetchAsyncTopSongs());
         dispatch(fetchAsyncBadSongs());
         dispatch(fetchAsyncTopAlbums());
         dispatch(fetchAsyncTopSingers());
         dispatch(fetchAsyncTopMusicians());
-    },[])
+    }, [])
     const [statistic, setStatistic] = useState('topsong');
-    
-    const songs = useSelector(getListSongs);
-    const albums = useSelector(getListAlbums);
-    const genres = useSelector(getListGenres);
-    const singers = useSelector(getListSingers);
-    const musicians = useSelector(getListMusicians);
-    const users = useSelector(getListUsers);
-    
-    const recentSongs = useSelector(getRecentSongs);
-    const recentAlbums = useSelector(getRecentAlbums);
-    const recentGenres = useSelector(getRecentGenres);
-    const recentSingers = useSelector(getRecentSingers);
-    const recentMusicians = useSelector(getRecentMusicians);
-    const recentUsers = useSelector(getRecentUsers);
 
-    const top = useSelector(getTopSongs);
-    const bad = useSelector(getBadSongs);
-    const topAlbums = useSelector(getTopAlbums);
-    const topSingers = useSelector(getTopSingers);
-    const topMusicians = useSelector(getTopMusicians);
-    
-    console.log(topMusicians);
+
+
+    console.log(recentUsers);
     const handleChangeChart = (event, newValue) => {
         setStatistic(newValue);
-      };
+    };
     return (
         <Container maxWidth='xl' sx={{ p: 1 }}>
             <Typography sx={{ fontWeight: 500, fontSize: 19, mb: 3 }}>
@@ -190,8 +191,8 @@ const Home = () => {
                     </Box>
                 </Grid>
             </Grid>
-            <Box sx={{height:600}}>
-                <Typography sx={{ fontWeight: 600, fontSize: 21, mt: 2,mb:1 }}>
+            <Box sx={{ height: 600 }}>
+                <Typography sx={{ fontWeight: 600, fontSize: 21, mt: 2, mb: 1 }}>
                     Ranking statistic
                 </Typography>
                 <Box sx={{ borderColor: 'divider' }}>
@@ -205,19 +206,19 @@ const Home = () => {
 
                         </TabList>
                         <TabPanel value='topsong'>
-                            <TopSong top={top}/>
+                            <TopSong topsong={topsong} />    
                         </TabPanel>
                         <TabPanel value='topalbum'>
-                            <TopAlbum topAlbums={topAlbums}/>
+                            <TopAlbum topAlbums={topAlbums} />    
                         </TabPanel>
                         <TabPanel value='topsinger'>
-                            <TopSinger topSingers={topSingers}/>
+                            <TopSinger topSingers={topSingers} />
                         </TabPanel>
                         <TabPanel value='topmusician'>
-                            <TopMusician />
+                            <TopMusician topMusicians={topMusicians}/>
                         </TabPanel>
                         <TabPanel value='badsong'>
-                            <BadSong bad={bad}/>
+                            <BadSong badsong={badsong} />
                         </TabPanel>
 
                     </TabContext>

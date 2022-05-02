@@ -12,26 +12,34 @@ import EditIcon from '@mui/icons-material/Edit';
 import { unwrapResult } from "@reduxjs/toolkit";
 import AddIcon from '@mui/icons-material/Add';
 import { fetchAsyncMusicianById, getMusician } from "../../Redux/Slices/MusicianSlice";
+import Tablistsong from "../TabListSongs/Tablistsong";
+import { fetchAsyncSongByMusician, fetchAsyncSongs, getListSongs, getSongsByMusician } from "../../Redux/Slices/SongSlice";
 const useStyle = makeStyles({
-
+    home_container: {
+        backgroundColor: 'white',
+        minHeight: '100%',
+        borderRadius: '20px',
+        padding: '15px 20px',
+    },
 })
 const  MusicianDetail = () => {
     const [valueTab, setValueTab] = useState('1');
     const classes = useStyle();
     const { musicianId } = useParams();
     const data = useSelector(getMusician);
-    console.log(data)
+    const songsbymusician = useSelector(getSongsByMusician);
     const dispatch = useDispatch();
     useEffect(() => {
-        const action = dispatch(fetchAsyncMusicianById(musicianId));
-    }, [])
+        dispatch(fetchAsyncMusicianById(musicianId));
+        dispatch(fetchAsyncSongByMusician(musicianId));
+    }, [musicianId,dispatch])
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
-    console.log(data !== undefined);
+    console.log(songsbymusician);
     return (
 
-        <Container sx={{ p: 1 }}>
+        <Container sx={{ p: 1 }} className={classes.home_container}>
             {data!==undefined && Object.keys(data).length === 0 ? <div>Loading...</div>
                 :
                 <>{console.log(data)}
@@ -89,14 +97,18 @@ const  MusicianDetail = () => {
                                         <Tab label="Albums" value="2" />
                                     </TabList>
                                     <TabPanel value="1" sx={{
-                                        p: 0
+                                        p:0,
+                                        minHeight:350,
+                                        bgcolor:'#eeeeee'
                                     }}>
-                                        Songs
+                                        <Tablistsong listSongs={songsbymusician}/>
                                     </TabPanel>
                                     <TabPanel value="2" sx={{
-                                        p: 0
+                                        p:0,
+                                        minHeight:350,
+                                        bgcolor:'#eeeeee'
                                     }}>
-                                        Album
+                                        <Tablistsong listSongs={songsbymusician}/>
                                     </TabPanel>
                                 </TabContext>
 

@@ -33,9 +33,10 @@ const SongDetail = () => {
    const musicians = useSelector(getListMusicians);
    const albums = useSelector(getListAlbums);
    const song = useSelector(getSong);
+   console.log(song)
    const [time, setTime] = useState(0)
    useEffect(() => {
-      dispatch(fetchAsyncSongById(song._id));
+      dispatch(fetchAsyncSongById(songId));
       dispatch(fetchAsyncGenres());
       dispatch(fetchAsyncSingers());
       dispatch(fetchAsyncMusicians());
@@ -116,7 +117,7 @@ const SongDetail = () => {
 
                </Grid>
             </Grid>
-            <Box className='audio player' sx={{ my: 2, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>
+            {/* <Box className='audio player' sx={{ my: 2, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>
                <Box className='info-song' sx={{ display: 'flex', alignItems: 'center' }}>
                   <Avatar src={song.image} sx={{ width: 60, height: 60, borderRadius: 3 }} />
                   <Box sx={{ ml: 1 }}>
@@ -144,8 +145,8 @@ const SongDetail = () => {
           <Box className='option' sx={{ width: 100 }}>
             <SkipPreviousIcon sx={{ color: 'white', fontSize: 28, mr: 2 }} />
             <SkipNextIcon sx={{ color: 'white', fontSize: 28 }} />
-          </Box> */}
-            </Box>
+          </Box> 
+            </Box> */}
             <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
                Comment
             </Typography>

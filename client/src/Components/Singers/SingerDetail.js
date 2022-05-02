@@ -12,51 +12,59 @@ import TabPanel from '@mui/lab/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
 import { unwrapResult } from "@reduxjs/toolkit";
 import AddIcon from '@mui/icons-material/Add';
+import { fetchAsyncSongBySinger, getSongsBySinger } from "../../Redux/Slices/SongSlice";
+import Tablistsong from "../TabListSongs/Tablistsong";
 const useStyle = makeStyles({
-
+    home_container: {
+        backgroundColor: 'white',
+        minHeight: '100%',
+        borderRadius: '20px',
+        padding: '15px 20px',
+    },
 })
 const SingerDetail = () => {
     const [valueTab, setValueTab] = useState('1');
     const classes = useStyle();
     const { singerId } = useParams();
     const data = useSelector(getSinger);
-    console.log(data)
+    const songsbysinger = useSelector(getSongsBySinger);
     const dispatch = useDispatch();
     useEffect(() => {
-
-        const action = dispatch(fetchAsyncSingerById(singerId));
-    }, [])
+        dispatch(fetchAsyncSingerById(singerId));
+        dispatch(fetchAsyncSongBySinger(singerId))
+    }, [singerId,dispatch])
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
+    console.log(songsbysinger )
     return (
 
-        <Container sx={{ p: 1 }}>
-            {data!==undefined && Object.keys(data).length === 0 ? <div>Loading...</div>
+        <Container sx={{ p: 1 }} className={classes.home_container}>
+            {data !== undefined && Object.keys(data).length === 0 ? <div>Loading...</div>
                 :
                 <>
                     <Box className={classes.info}>
                         <Box>
-                            <Box className={classes.avatar} sx={{ display: 'flex',alignItems:'flex-end',mb:2 }}>
+                            <Box className={classes.avatar} sx={{ display: 'flex', alignItems: 'flex-end', mb: 2 }}>
                                 <Avatar alt="avatar singer" src={data.image} sx={{
                                     width: '200px',
                                     height: '200px'
                                 }} />
 
-                                <Box sx={{ml:2,}}>
-                                    <Typography sx={{fontWeight:500,fontSize:18}}>
+                                <Box sx={{ ml: 2, }}>
+                                    <Typography sx={{ fontWeight: 500, fontSize: 18 }}>
                                         Artist
                                     </Typography>
                                     <Typography variant='body2' sx={{
                                         fontWeight: 700,
                                         fontSize: '90px',
-                                        lineHeight:1,
-                                        mb:0,
+                                        lineHeight: 1,
+                                        mb: 0,
                                         my: 0
                                     }}>
                                         {data.name}
                                     </Typography>
-                                    <Typography sx={{fontSize:'20px',fontWeight:500}}>
+                                    <Typography sx={{ fontSize: '20px', fontWeight: 500 }}>
                                         {data.followers} followers
                                     </Typography>
 
@@ -64,7 +72,7 @@ const SingerDetail = () => {
 
                             </Box>
                             <Button variant="contained" size="small" sx={{ mb: 1 }}>
-                                Follow <AddIcon sx={{color:'white',fontSize:'18px',fontWeight:600}}/>
+                                Follow <AddIcon sx={{ color: 'white', fontSize: '18px', fontWeight: 600 }} />
                             </Button>
                         </Box>
                         <Box className="introduction" sx={{ mb: 1 }}>
@@ -89,14 +97,18 @@ const SingerDetail = () => {
                                         <Tab label="Albums" value="2" />
                                     </TabList>
                                     <TabPanel value="1" sx={{
-                                        p: 0
+                                        p: 0,
+                                        minHeight: 350,
+                                        bgcolor: '#eeeeee'
                                     }}>
-                                        Songs
+                                        {songsbysinger && <Tablistsong listSongs={songsbysinger} />}
                                     </TabPanel>
                                     <TabPanel value="2" sx={{
-                                        p: 0
+                                        p: 0,
+                                        minHeight: 350,
+                                        bgcolor: '#eeeeee'
                                     }}>
-                                        Album
+                                        {songsbysinger && <Tablistsong listSongs={songsbysinger} />}
                                     </TabPanel>
                                 </TabContext>
 

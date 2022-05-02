@@ -6,15 +6,15 @@ const initialState = {
     user:{},
     recentusers:[]
 };
-export const fetchAsyncUsers = createAsyncThunk('users/fetchAsyncUsers',async()=>{
+export const fetchAsyncUsers = createAsyncThunk('user/fetchAsyncUsers',async()=>{
     const response = await Axios.get('users');
     return response.data;
 })
-export const fetchAsyncRecentUsers = createAsyncThunk('users/fetchAsyncRecentUsers',async()=>{
+export const fetchAsyncRecentUsers = createAsyncThunk('user/fetchAsyncRecentUsers',async()=>{
     const response = await Axios.get('users/recent/recent');
     return response.data;
 })
-export const fetchAsyncUserById = createAsyncThunk('users/fetchAsyncUserById',async(userId)=>{
+export const fetchAsyncUserById = createAsyncThunk('user/fetchAsyncUserById',async(userId)=>{
     const response = await Axios.get(`users/${userId}`);
     return response.data;
 })
@@ -41,6 +41,7 @@ const UserSlice = createSlice({
             }
         },
         [fetchAsyncRecentUsers.fulfilled]:(state, {payload})=>{
+            console.log("fetch recent user" + payload)
             return {
                 ...state,
                 recentusers:payload

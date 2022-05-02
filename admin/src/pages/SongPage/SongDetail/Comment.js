@@ -22,62 +22,70 @@ const useStyle = makeStyles({
         overflow: 'auto'
     }
 })
-const Comment = ({song}) => {
+const Comment = ({ song }) => {
     const [content, setContent] = useState("");
     const [actionComment, setActionComment] = useState(false);
     const classes = useStyle();
     const dispatch = useDispatch(getListMusicians)
     const listUsers = useSelector(getListUsers)
     const listCmt = useSelector(getListComments);
-    console.log(listUsers)
+    console.log(listCmt)
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchAsyncCommentsBySong(song._id))
-    },[dispatch,song._id])
-    
+    }, [dispatch, song._id])
+
     return (
         <Box className='comment' sx={{ bgcolor: '#cacaca', p: 2 }}>
             <Box sx={{ bgcolor: 'white', borderRadius: 2, height: '400px', overflow: 'auto', p: 1.5 }}>
-                
+
                 <Divider variant="inset" />
                 <Box component="div" className={classes.comment}>
                     <List className={classes.list_comment}>
-                        {listCmt && listCmt.map((comment) => {
-                            return (
-                                <Box key={comment._id}>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar src={listUsers.find(user => user._id === comment.user).image} />
-                                        </ListItemAvatar>
-                                        <ListItemText
-                                            primary={
-                                                <React.Fragment>
-                                                    <Typography component={'span'} sx={{ fontWeight: 500 }}>
-                                                        {listUsers.find(user => user._id === comment.user).name+" "}
-                                                        <span style={{fontSize:'13px',fontWeight:300,ml:2}}>
-                                                             {moment(comment.commented_date).format('DD/MM/YYYY')}
-                                                        </span>
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography component={'span'} sx={{
-                                                        display: 'inline'
-                                                    }}>
-                                                        {comment.content}
-                                                    </Typography>
-                                                </React.Fragment>
-                                            }
+                        {listCmt.length > 0 ?
+
+                            listCmt.map((comment) => {
+                                return (
+                                    <Box key={comment._id}>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar src={listUsers.find(user => user._id === comment.user).image} />
+                                            </ListItemAvatar>
+                                            <ListItemText
+                                                primary={
+                                                    <React.Fragment>
+                                                        <Typography component={'span'} sx={{ fontWeight: 500 }}>
+                                                            {listUsers.find(user => user._id === comment.user).name + " "}
+                                                            <span style={{ fontSize: '13px', fontWeight: 300, ml: 2 }}>
+                                                                {moment(comment.commented_date).format('DD/MM/YYYY')}
+                                                            </span>
+                                                        </Typography>
+                                                    </React.Fragment>
+                                                }
+                                                secondary={
+                                                    <React.Fragment>
+                                                        <Typography component={'span'} sx={{
+                                                            display: 'inline'
+                                                        }}>
+                                                            {comment.content}
+                                                        </Typography>
+                                                    </React.Fragment>
+                                                }
 
 
-                                        />
+                                            />
 
-                                    </ListItem>
-                                    <Divider variant="inset" component="li" />
-                                </Box>
-                            )
-                        })
+                                        </ListItem>
+                                        <Divider variant="inset" component="li" />
+                                    </Box>
+                                )
+                            })
+                            :
+                            <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
+                                <Typography sx={{ fontWeight: 500, fontSize: 20, color: '#5f5f5f' }}>
+                                    No Comments Found
+                                </Typography>
+                            </Box>
                         }
                     </List>
                 </Box>

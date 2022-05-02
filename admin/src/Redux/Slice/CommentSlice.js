@@ -3,7 +3,6 @@ import Axios from "../Axios";
 
 const initialState={
     comments:[],
-    resultcreate:{}
 }
 export const fetchAsyncCommentsBySong = createAsyncThunk('comment/fetchAsyncCommentsBySong',async(songId)=>{
     const response = await Axios.get(`comments/song/${songId}`);
