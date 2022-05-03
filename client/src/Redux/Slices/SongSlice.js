@@ -26,6 +26,10 @@ export const fetchAsyncSongBySinger =createAsyncThunk('song/fetchAsyncSongBySing
     const response = await Axios.get(`songs/singer/${singerId}`);
     return response.data;
 })
+export const fetchAsyncSongByGenre =createAsyncThunk('song/fetchAsyncSongByGenre',async(genreId)=>{
+    const response = await Axios.get(`songs/genre/${genreId}`);
+    return response.data;
+})
 export const fetchAsyncSongByMusician =createAsyncThunk('song/fetchAsyncSongByMusician',async(musicianId)=>{
     const response = await Axios.get(`songs/musician/${musicianId}`);
     return response.data;
@@ -83,7 +87,20 @@ const SongSlice = createSlice({
                 ...state,
                 songbymusician:action.payload
             }
-        }
+        },
+        // song by genre
+        [fetchAsyncSongByGenre.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                songbygenre:action.payload
+            }
+        },
+        [fetchAsyncSongByGenre.rejected]:(state,action)=>{
+            return{
+                ...state,
+                songbygenre:[]
+            }
+        },
     }
 });
 export const getListSongs = (state)=>state.song.songs;

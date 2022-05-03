@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Card, CardActionArea, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ImgSongdemo from '../../Images/demosong.jpg';
@@ -6,6 +6,8 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAsyncSingers, getSingers } from '../../Redux/Slices/SingerSlice';
 const useStyle = makeStyles({
     actionarea: {
         '&:hover': {
@@ -17,16 +19,23 @@ const useStyle = makeStyles({
 
         }
     },
-    nameofsong: {
+    overflow_text: {
         display: 'box',
         lineClamp: 1,
         boxOrient: 'vertical',
         overflow: 'hidden',
-    }
+    },
+
 })
-const CardSong = (props) => {
+const CardSong = ({song}) => {
     const classes = useStyle();
     const [option, setOption] = useState(false)
+    const singers = useSelector(getSingers);
+    const dispatch =useDispatch();
+    useEffect(()=>{
+        dispatch(fetchAsyncSingers());
+    },[dispatch])
+
     return (
         <Card elevation={0} sx={{ borderRadius: '10px' }}>
             <CardActionArea
@@ -38,7 +47,7 @@ const CardSong = (props) => {
 
                         component="img"
                         className='cardimg'
-                        image={ImgSongdemo}
+                        image={song.image}
                         alt="song img"
                         sx={{
                             objectFit: 'cover',
@@ -61,7 +70,7 @@ const CardSong = (props) => {
                                     },
                                     transitionDuration: '0.4s'
                                 }} />
-                                <Link to='/song/123'>
+                                <Link to={`/song/${song._id}`}>
                                     <PlayCircleOutlineIcon sx={{
                                         color: 'white', fontSize: '40px',
                                         '&:hover': {
@@ -85,15 +94,15 @@ const CardSong = (props) => {
                         </Box>}
 
                 </Box>
-                <Link to='/song/123'>
+                <Link to={`/song/${song._id}`}>
                     <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
-                        <Typography className={classes.nameofsong} sx={{
+                        <Typography className={classes.overflow_text} sx={{
                             fontWeight: 600, fontSize: 16,
                         }}>
-                            Co hen voi thanh xuan
+                            {song.name}
                         </Typography>
-                        <Typography variant='body4' sx={{ fontSize: 15 }}>
-                            Monstar
+                        <Typography className={classes.overflow_text} variant='body4' sx={{ fontSize: 15 }}>
+                            {song.singer.map((item) => singers.find(singer=>singer._id===item).name+" ")}
                         </Typography>
                     </CardContent>
                 </Link>

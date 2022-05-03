@@ -8,6 +8,14 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { fetchAsyncGenreById, getGenre } from "../../Redux/Slices/GenreSlice";
 import CardSong from "../Song/CardSong";
 import CardAlbum from "../Album/CardAlbum";
+import { fetchAsyncSongByGenre, getSongsByGenre } from "../../Redux/Slices/SongSlice";
+import { fetchAsyncAlbumsByGenre, getListAlbumsByGenre } from "../../Redux/Slices/AlbumSlice";
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import SongsByGenre from "../ListCard/SongsByGenre";
+import AlbumsByGenre from "../ListCard/AlbumsByGenre";
 
 const useStyle = makeStyles({
     home_container: {
@@ -19,30 +27,42 @@ const useStyle = makeStyles({
 })
 const GenreDetail = () => {
     const classes = useStyle();
+    const [valueTab, setValueTab] = useState('1');
     const { genreId } = useParams();
-    const data = useSelector(getGenre);
-    console.log(data)
+    const genre = useSelector(getGenre);
+    const songs = useSelector(getSongsByGenre);
+    const albums = useSelector(getListAlbumsByGenre);
     const dispatch = useDispatch();
     useEffect(() => {
-        const action = dispatch(fetchAsyncGenreById(genreId));
-    }, [])
-    console.log(data !== undefined);
+        dispatch(fetchAsyncGenreById(genreId));
+        dispatch(fetchAsyncSongByGenre(genreId));
+        dispatch(fetchAsyncAlbumsByGenre(genreId));
+    }, [genreId, dispatch])
+
+    const handleChangeTab = (e, value) => {
+        setValueTab(value);
+    }
     return (
 
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
-            {data !== undefined && Object.keys(data).length === 0 ? <div>Loading...</div>
+            {genre !== undefined && Object.keys(genre).length === 0 ? <div>Loading...</div>
                 :
-                <>{console.log(data)}
+                <>
                     <Box className={classes.info}>
                         <Box>
                             <Box className={classes.avatar} sx={{ display: 'flex', alignItems: 'flex-end', mb: 2 }}>
-                                <Avatar alt="avatar singer" src={data.image ? data.image : ''} sx={{
+                                <Avatar alt="avatar genre" src={genre.image ? genre.image : ''} sx={{
                                     width: '200px',
                                     height: '200px'
                                 }} />
 
                                 <Box sx={{ ml: 2, }}>
-
+                                    <Typography sx={{
+                                        fontSize:30,
+                                        fontWeight:500
+                                    }}>
+                                        Genre
+                                    </Typography>
                                     <Typography variant='body2' sx={{
                                         fontWeight: 700,
                                         fontSize: '90px',
@@ -50,7 +70,7 @@ const GenreDetail = () => {
                                         mb: 0,
                                         my: 0
                                     }}>
-                                        {data.name}
+                                        {genre.name}
                                     </Typography>
 
 
@@ -59,57 +79,36 @@ const GenreDetail = () => {
                             </Box>
                         </Box>
 
-
                         <Box className="content">
-                            <Box className='hotsong' sx={{my:1}}>
-                                <Typography variant="h6">
-                                    Hot songs
-                                </Typography>
-                                <Grid container spacing={2}>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardSong />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardSong />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardSong />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardSong />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardSong />
-                                    </Grid>
-                                </Grid>
+                            <Box sx={{
+                                borderBottom: 1, borderColor: 'divider'
+                            }}>
+                                <TabContext value={valueTab}>
+                                    <TabList onChange={handleChangeTab} aria-label="tab for content">
+                                        <Tab label="Songs by genre" value="1" />
+                                        <Tab label="Albums by genre" value="2" />
+                                    </TabList>
+                                    <TabPanel value="1" sx={{
+                                        p: 1,
+                                        minHeight: 450,
+                                        bgcolor: '#eeeeee',
+                                        overflow:'auto',
+
+                                    }}>
+                                        <SongsByGenre songs={songs}/>
+                                    </TabPanel>
+                                    <TabPanel value="2" sx={{
+                                        p: 1,
+                                        minHeight: 450,
+                                        bgcolor: '#eeeeee',
+                                        
+                                    }}>
+                                        <AlbumsByGenre albums={albums}/>
+                                    </TabPanel>
+                                </TabContext>
 
                             </Box>
-                            <Box className='hotsong' sx={{my:1}}>
-                                <Typography variant="h6">
-                                    Hot Albums
-                                </Typography>
-                                <Grid container spacing={2}>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardAlbum />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardAlbum />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardAlbum />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardAlbum />
-                                    </Grid>
-                                    <Grid item lg={2.4} md={4} xs={6}>
-                                        <CardAlbum />
-                                    </Grid>
-                                </Grid>
-
-                            </Box>
-
                         </Box>
-
                     </Box>
                 </>
             }

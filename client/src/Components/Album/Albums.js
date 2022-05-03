@@ -19,9 +19,9 @@ const Albums = () => {
     const classes = useStyle();
     const dispatch = useDispatch();
     const albums = useSelector(getListAlbums);
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchAsyncAlbums());
-    },[])
+    }, [])
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
             <Typography variant="h6" sx={{
@@ -33,9 +33,7 @@ const Albums = () => {
                 {albums && albums.map((album) => {
                     return (
                         <Grid item lg={2} md={3} xs={6} key={album._id}>
-                            <Link to={`/albums/${album._id}`}>
-                                <CardAlbum album={album} />
-                            </Link>
+                            <CardAlbum album={album} />
                         </Grid>
                     )
                 })}

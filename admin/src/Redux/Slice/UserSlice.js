@@ -55,12 +55,27 @@ const UserSlice = createSlice({
             }
         },
         // 
-        [fetchAsyncUsers.rejected]:()=>{
+        [fetchAsyncUsers.rejected]:(state)=>{
             console.log("rejected fetching users")
+            return{
+                ...state,
+                users:[]
+            }
         },
-        [fetchAsyncUserById.rejected]:()=>{
+        [fetchAsyncUserById.rejected]:(state)=>{
             console.log("rejected fetching user")
-        }
+            return{
+                ...state,
+                user:{}
+            }
+        },
+        [fetchAsyncRecentUsers.rejected]:(state)=>{
+            console.log("rejected fetching recent user")
+            return{
+                ...state,
+                recentusers:[]
+            }
+        },
     }
 });
 export const getListUsers = (state) => state.user.users;

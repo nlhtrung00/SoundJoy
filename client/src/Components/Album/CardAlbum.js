@@ -7,6 +7,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAsyncSingers, getSingers } from '../../Redux/Slices/SingerSlice';
+import { Link } from 'react-router-dom';
 const useStyle = makeStyles({
     actionarea: {
         '&:hover': {
@@ -21,18 +22,18 @@ const useStyle = makeStyles({
     nameofsong: {
         display: 'box',
         lineClamp: 1,
-        boxOrient: 'vertical',  
+        boxOrient: 'vertical',
         overflow: 'hidden',
-      }
+    }
 })
-const CardAlbum = ({album}) => {
+const CardAlbum = ({ album }) => {
     const classes = useStyle();
     const dispatch = useDispatch();
     const [option, setOption] = useState(false);
     const singers = useSelector(getSingers);
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchAsyncSingers());
-    },[])
+    }, [])
     console.log(album)
     return (
         <Card elevation={0} sx={{ borderRadius: '10px' }}>
@@ -50,7 +51,7 @@ const CardAlbum = ({album}) => {
                         sx={{
                             objectFit: 'cover',
                             objectPosition: 'center',
-                            height: '200px',
+                            height: '210px',
                             transitionDuration: '0.6s'
                         }}
 
@@ -68,15 +69,18 @@ const CardAlbum = ({album}) => {
                                     },
                                     transitionDuration: '0.4s'
                                 }} />
-                                <PlayCircleOutlineIcon sx={{
-                                    color: 'white', fontSize: '40px',
-                                    '&:hover': {
-                                        transform: 'scale(1.15)',
-                                        transition: 'ease-in-out',
+                                <Link to={`/albums/${album._id}`}>
+                                    <PlayCircleOutlineIcon sx={{
+                                        color: 'white', fontSize: '40px',
+                                        '&:hover': {
+                                            transform: 'scale(1.15)',
+                                            transition: 'ease-in-out',
+                                            transitionDuration: '0.4s'
+                                        },
                                         transitionDuration: '0.4s'
-                                    },
-                                    transitionDuration: '0.4s'
-                                }} />
+                                    }} />
+                                </Link>
+
 
                                 <FileDownloadIcon sx={{
                                     color: 'white', fontSize: '40px',
@@ -92,12 +96,15 @@ const CardAlbum = ({album}) => {
 
                 </Box>
 
-                <CardContent className={classes.cardcontent} sx={{ bgcolor: '#571212' }}>
-                    <Typography className={classes.nameofsong}  sx={{
-                        fontWeight: 600, fontSize: 16,color:'white'
-                    }}>
-                        {album.name}
-                    </Typography>
+                <CardContent className={classes.cardcontent} sx={{ bgcolor: '#571212', height: 60 }}>
+                    <Link to={`/albums/${album._id}`}>
+                        <Typography className={classes.nameofsong} sx={{
+                            fontWeight: 600, fontSize: 16, color: 'white'
+                        }}>
+                            {album.name}
+                        </Typography>
+                    </Link>
+
                     {/* <Typography variant='body4' sx={{fontSize:15,color:'white'}}>
                         {album.singer.map((item,index)=>{
                             return(
