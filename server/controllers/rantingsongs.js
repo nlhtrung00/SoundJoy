@@ -19,7 +19,7 @@ export const getRatingsBySong = async (req, res) => {
 };
 export const getRatingsBySongOfUser = async (req, res) => {
     try {
-        const ratingSongs = await RatingSongModel.find({song:req.params.songId,user:req.params.userId});
+        const ratingSongs = await RatingSongModel.findOne({song:req.params.songId,user:req.params.userId});
         res.status(200).json(ratingSongs);
     } catch (err) {
         res.status(500).json({ error: err });

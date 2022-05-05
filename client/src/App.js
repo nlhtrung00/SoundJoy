@@ -30,6 +30,7 @@ function App() {
    const dispatch = useDispatch();
    console.log(logged)
    useEffect(()=>{
+      if(Object.keys(logged).length>0)
       dispatch(fetchAsyncUserByAccount(logged.accountId))
    },[logged,dispatch])
    return (

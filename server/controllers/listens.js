@@ -13,7 +13,15 @@ export const getListens = async (req, res) => {
 export const getListen = async (req, res) => {
     try {
         const listen = await ListenModel.findOne({ _id: req.params.id });
-        res.status(200).json(user);        
+        res.status(200).json(listen);        
+    } catch (err) {
+        res.status(500).json({ error: err});
+    }
+};
+export const getListenBySongWithUser = async (req, res) => {
+    try {
+        const listen = await ListenModel.findOne({ song: req.params.songId,user:req.params.userId });
+        res.status(200).json(listen);        
     } catch (err) {
         res.status(500).json({ error: err});
     }

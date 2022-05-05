@@ -30,6 +30,8 @@ import { asyncUpdateLikeList, fetchAsyncLikeListById, fetchAsyncLikeListsByUser,
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getOpenBar, OpenBar } from '../../Redux/Slices/SongBarSlice';
 import RatingSong from './Rating';
+import { fetchAsyncRatingsBySong, getRatingsBySong } from '../../Redux/Slices/RatingSongSlice';
+import { asyncCreateListen, asyncUpdateListen, fetchAsyncListenBySongAndUser, getListenBySongAndUser } from '../../Redux/Slices/ListenSlice';
 
 const useStyle = makeStyles((theme) => ({
     home_container: {
@@ -57,6 +59,9 @@ const SongDetail = () => {
     const user = useSelector(getUser);
     const likelists = useSelector(getListLikelists);
     const openBarSong = useSelector(getOpenBar);
+    const ratingsbysong = useSelector(getRatingsBySong);
+    const listenedbyuser = useSelector(getListenBySongAndUser)
+
     const [time, setTime] = useState(0)
     const [TotalSeconds,setTotalSeconds] = useState(0);
     const [listened,setListened] = useState(false);
@@ -64,17 +69,17 @@ const SongDetail = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [resultAddtolist, setResultAddtolist] = useState('');
     const [openBar, setOpenBar] = useState(openBarSong);
-    
+    const [actionRating,setActionRating] = useState(false);
     const player = useRef();
     useEffect(() => {
-
+        let userId = user._id;
         dispatch(fetchAsyncSongById(songId));
-
         dispatch(fetchAsyncGenres());
         dispatch(fetchAsyncSingers());
         dispatch(fetchAsyncMusicians());
         dispatch(fetchAsyncAlbums());
         dispatch(fetchAsyncLikeListsByUser(user._id))
+        dispatch(fetchAsyncListenBySongAndUser({songId,userId}))
 
     }, [songId, dispatch, user._id])
 
@@ -87,13 +92,38 @@ const SongDetail = () => {
         setOpenBar(openBarSong)
     }, [openBarSong])
 
+    // after rating - update rating song
+    useEffect(()=>{
+        if(actionRating){
+            const updateRating =async()=>{
+                const formdata = new FormData();
+                let sum = ratingsbysong.reduce((accumulator,object)=>{
+                    return accumulator + object.rating
+                }).rating
+                console.log((sum/ratingsbysong.length).toFixed())
+                let avgRating = (sum/ratingsbysong.length).toFixed();
+                formdata.append('rating',avgRating)
+                try{
+                    const action =await dispatch(asyncUpdateSong({formdata,songId}))
+                    unwrapResult(action)
+                }catch(err){
+                    console.log(err)
+                }
+                
+            }
+            updateRating();
+            setActionRating(false);
+        }
+    },[actionRating])
+    
     const handleLoadMetadata = (meta) => {
         const { duration } = meta.target;
         const timee = moment.duration(duration, "seconds");
         setTotalSeconds(duration)
         setTime(timee.minutes() + " min " + (timee.seconds() < 10 ? '0' + timee.seconds() : timee.seconds()) + " sec")
     }
-
+    
+    // chọn likelist để add bai hat vao
     const handleChooseLikelist = async (list) => {
         console.log(list)
         const checkExist = list.songs.find(item => item === song._id);
@@ -127,18 +157,40 @@ const SongDetail = () => {
     const DisplaySongBar = async () => {
         await dispatch(OpenBar())
     }
-    console.log()
+
+    // tính lượt nghe
     const setListensOfSong = async(seconds)=>{
-        let time = (seconds/TotalSeconds)*100
+        const time = (seconds/TotalSeconds)*100
+        
         if(time>=60 && !listened){
             try{
                 let formdata = new FormData();
                 let listens = song.listens + 1;
                 formdata.append('listens',listens);
                 console.log('set listen begin' + listens)
-                const action = await dispatch(asyncUpdateSong({formdata,songId}))
+                let action = await dispatch(asyncUpdateSong({formdata,songId}))
                 unwrapResult(action);
                 setListened(true);
+                if(listenedbyuser){
+                    let userId = user._id;
+                    let songId = user._id;
+                    let listenId = listenedbyuser._id
+                    let data ={
+                        weight:time,
+                    }
+                    let action = await dispatch(asyncUpdateListen({data,listenId}))
+                    unwrapResult(action)
+                }else{
+                    let userId = user._id;
+                    let songId = user._id;
+                    let data ={
+                        weight:time,
+                        user:userId,
+                        song:songId
+                    }
+                    let action = await dispatch(asyncCreateListen(data))
+                    unwrapResult(action)
+                }
                 await dispatch(fetchAsyncSongById(songId))
             }catch(err){
                 console.log(err);
@@ -213,7 +265,7 @@ const SongDetail = () => {
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                     <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
                                     <Typography>
-                                        {song.rating ? song.rating : '0/10'}
+                                        {song.rating >=0 ? song.rating+"/5" : '0/5'}
                                     </Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', alignItems: 'center',mx:2 }}>
@@ -302,7 +354,7 @@ const SongDetail = () => {
                 <Typography  sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
                     Rating for Song
                 </Typography>
-                <RatingSong song={song} />
+                <RatingSong song={song} setActionRating={setActionRating}/>
 
                 <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
                     Comment
