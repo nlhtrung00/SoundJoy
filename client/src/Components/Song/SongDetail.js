@@ -29,6 +29,7 @@ import { getUser } from '../../Redux/Slices/UserSlice';
 import { asyncUpdateLikeList, fetchAsyncLikeListById, fetchAsyncLikeListsByUser, getListLikelists } from '../../Redux/Slices/LikelistSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 import { getOpenBar, OpenBar } from '../../Redux/Slices/SongBarSlice';
+import RatingSong from './Rating';
 
 const useStyle = makeStyles((theme) => ({
     home_container: {
@@ -298,6 +299,10 @@ const SongDetail = () => {
                         </Box>
                     </Box>
                 }
+                <Typography  sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
+                    Rating for Song
+                </Typography>
+                <RatingSong song={song} />
 
                 <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
                     Comment

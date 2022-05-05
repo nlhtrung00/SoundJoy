@@ -9,6 +9,23 @@ export const getRatingSongs = async (req, res) => {
     }
 };
 
+export const getRatingsBySong = async (req, res) => {
+    try {
+        const ratingSongs = await RatingSongModel.find({song:req.params.id});
+        res.status(200).json(ratingSongs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+export const getRatingsBySongOfUser = async (req, res) => {
+    try {
+        const ratingSongs = await RatingSongModel.find({song:req.params.songId,user:req.params.userId});
+        res.status(200).json(ratingSongs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
 export const getRatingSong = async (req, res) => {
     try {
         const ratingSong = await RatingSongModel.findOne({ _id: req.params.id });
