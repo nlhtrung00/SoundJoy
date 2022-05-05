@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import React from 'react';
 import LeftBar from './Components/LeftBar/LeftBar';
+import PlaysongBar from './Components/PlaysongBar/PlaysongBar';
 const Layout = (props) => {
     return (
         <>
@@ -15,6 +16,7 @@ const Layout = (props) => {
                     {<props.page />}
                </Grid>
         </Grid>
+        
         </>
     );
 };

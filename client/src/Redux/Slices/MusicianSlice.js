@@ -21,21 +21,16 @@ const MusicianSlice = createSlice({
         
     },
     extraReducers:{
-        [fetchAsyncMusicians.pending]:()=>{
-            console.log("Pending Musicians");
-        },
-        [fetchAsyncMusicianById.pending]:()=>{
-            console.log("Pending Musician by id")
-        },
+       
         [fetchAsyncMusicians.fulfilled]:(state, { payload })=>{
-            console.log("Fetch Musicians Successfully");
+            
             return{
                 ...state,
                 musicians:payload
             }
         },
         [fetchAsyncMusicianById.fulfilled]:(state,action)=>{
-            console.log("Fetch Musician by id successfully");
+          
             return{
                 ...state,
                 musician:action.payload

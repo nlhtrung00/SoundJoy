@@ -14,7 +14,7 @@ import GradeIcon from '@mui/icons-material/Grade';
 import * as moment from 'moment'
 import { fetchAsyncAlbumById, getAlbum } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncGenres, getGenres } from "../../Redux/Slices/GenreSlice";
-import { fetchAsyncSongByAlbum, getListSongs } from "../../Redux/Slices/SongSlice";
+import { fetchAsyncSongByAlbum,  getSongsByAlbum } from "../../Redux/Slices/SongSlice";
 import Tablistsong from "../TabListSongs/Tablistsong";
 
 const useStyle = makeStyles({
@@ -32,20 +32,23 @@ const AlbumDetail = () => {
     const { albumId } = useParams();
     const album = useSelector(getAlbum);
     const genres = useSelector(getGenres)
-    const songsbyalbum = useSelector(getListSongs);
+    const songsbyalbum = useSelector(getSongsByAlbum);
+    const [loading,setLoading] = useState(false);
     console.log(songsbyalbum);
     useEffect(() => {
+        setLoading(true);
         dispatch(fetchAsyncSongByAlbum(albumId));
         dispatch(fetchAsyncAlbumById(albumId))
         dispatch(fetchAsyncGenres());
+        setLoading(false);
     }, [albumId, dispatch])
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
-    console.log(album)
+    
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
-            {album && Object.keys(album).length === 0 ? <div>Loading...</div>
+            {loading ? <div>Loading...</div>
                 :
                 <>
                     <Box className={classes.info}>

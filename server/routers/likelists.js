@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { getLikelists, postLikelist, updateLikelist, deleteLikelist, getLikelist } from '../controllers/likelists.js';
+import { getLikelists, postLikelist, updateLikelist, deleteLikelist, getLikelist,getLikelistsByUser } from '../controllers/likelists.js';
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
@@ -13,6 +13,7 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get('/', getLikelists);
+router.get('/user/:id', getLikelistsByUser);
 router.get('/:id', getLikelist);
 router.post('/', upload.single('image'), postLikelist);
 router.put('/:id', upload.single('image'), updateLikelist);

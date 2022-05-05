@@ -1,22 +1,35 @@
-import { Avatar, Box, Container, Grid, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Avatar, Box, Button, AlertTitle, Container, DialogActions, DialogContent, DialogContentText, Grid, Typography } from '@mui/material';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import React, { useEffect, useRef, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAsyncSongById, getSong } from '../../Redux/Slices/SongSlice';
+import { asyncUpdateSong, fetchAsyncSongById, getSong, setPlaylist } from '../../Redux/Slices/SongSlice';
 import { fetchAsyncGenres, getGenres } from '../../Redux/Slices/GenreSlice';
 import { fetchAsyncSingers, getSingers } from '../../Redux/Slices/SingerSlice';
 import { fetchAsyncMusicians, getMusicians } from '../../Redux/Slices/MusicianSlice';
 import { fetchAsyncAlbums, getListAlbums } from '../../Redux/Slices/AlbumSlice';
 import GradeIcon from '@mui/icons-material/Grade';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ShareIcon from '@mui/icons-material/Share';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import ReactAudioPlayer from 'react-audio-player';
-import moment, { duration } from 'moment';
+import moment from 'moment';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import HeadphonesIcon from '@mui/icons-material/Headphones';
+import ExpandIcon from '@mui/icons-material/Expand';
+import { Dialog, DialogTitle } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import Comment from './Comment';
+import { getUser } from '../../Redux/Slices/UserSlice';
+import { asyncUpdateLikeList, fetchAsyncLikeListById, fetchAsyncLikeListsByUser, getListLikelists } from '../../Redux/Slices/LikelistSlice';
+import { unwrapResult } from '@reduxjs/toolkit';
+import { getOpenBar, OpenBar } from '../../Redux/Slices/SongBarSlice';
+
 const useStyle = makeStyles((theme) => ({
     home_container: {
         backgroundColor: 'white',
@@ -26,8 +39,13 @@ const useStyle = makeStyles((theme) => ({
     },
 
 }));
+
+
 const SongDetail = () => {
     const classes = useStyle();
+    const [openDial, setOpenDial] = useState(false);
+    const handleOpenDial = () => setOpenDial(true);
+    const handleCloseDial = () => setOpenDial(false);
     const { songId } = useParams();
     const dispatch = useDispatch();
     const genres = useSelector(getGenres);
@@ -35,21 +53,110 @@ const SongDetail = () => {
     const musicians = useSelector(getMusicians);
     const albums = useSelector(getListAlbums);
     const song = useSelector(getSong);
+    const user = useSelector(getUser);
+    const likelists = useSelector(getListLikelists);
+    const openBarSong = useSelector(getOpenBar);
     const [time, setTime] = useState(0)
+    const [TotalSeconds,setTotalSeconds] = useState(0);
+    const [listened,setListened] = useState(false);
+    const [openToast, setOpenToast] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
+    const [resultAddtolist, setResultAddtolist] = useState('');
+    const [openBar, setOpenBar] = useState(openBarSong);
+    
+    const player = useRef();
     useEffect(() => {
+
         dispatch(fetchAsyncSongById(songId));
+
         dispatch(fetchAsyncGenres());
         dispatch(fetchAsyncSingers());
         dispatch(fetchAsyncMusicians());
-        dispatch(fetchAsyncAlbums())
-    }, [songId, dispatch])
+        dispatch(fetchAsyncAlbums());
+        dispatch(fetchAsyncLikeListsByUser(user._id))
+
+    }, [songId, dispatch, user._id])
+
+    useEffect(() => {
+        let songs = [song];
+        dispatch(setPlaylist(songs));
+    }, [song])
+
+    useEffect(() => {
+        setOpenBar(openBarSong)
+    }, [openBarSong])
+
     const handleLoadMetadata = (meta) => {
         const { duration } = meta.target;
-        console.log(duration);
         const timee = moment.duration(duration, "seconds");
+        setTotalSeconds(duration)
         setTime(timee.minutes() + " min " + (timee.seconds() < 10 ? '0' + timee.seconds() : timee.seconds()) + " sec")
     }
-    console.log(time)
+
+    const handleChooseLikelist = async (list) => {
+        console.log(list)
+        const checkExist = list.songs.find(item => item === song._id);
+        if (!checkExist) {
+            const formdata = new FormData();
+            let arrSongs = list.songs;
+            arrSongs = [...arrSongs, song._id]
+            arrSongs.map(song => {
+                formdata.append('songs', song)
+            })
+
+            try {
+                const action = await dispatch(asyncUpdateLikeList({ formdata: formdata, id: list._id }))
+                await dispatch(fetchAsyncLikeListById(list._id));
+                unwrapResult(action)
+                setResultAddtolist('success')
+                setOpenToast(true);
+            } catch (err) {
+                setResultAddtolist(`Adding to ${list.name} failure`)
+                setOpenToast(true);
+            }
+        }
+        else {
+            setResultAddtolist(`Song is exist in ${list.name}`)
+            setOpenToast(true);
+        }
+
+
+
+    }
+    const DisplaySongBar = async () => {
+        await dispatch(OpenBar())
+    }
+    console.log()
+    const setListensOfSong = async(seconds)=>{
+        let time = (seconds/TotalSeconds)*100
+        if(time>=60 && !listened){
+            try{
+                let formdata = new FormData();
+                let listens = song.listens + 1;
+                formdata.append('listens',listens);
+                console.log('set listen begin' + listens)
+                const action = await dispatch(asyncUpdateSong({formdata,songId}))
+                unwrapResult(action);
+                setListened(true);
+                await dispatch(fetchAsyncSongById(songId))
+            }catch(err){
+                console.log(err);
+            }
+        }
+    }
+
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const handleCloseToast = () => {
+        setOpenToast(false);
+    }
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
 
@@ -108,54 +215,151 @@ const SongDetail = () => {
                                         {song.rating ? song.rating : '0/10'}
                                     </Typography>
                                 </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center',mx:2 }}>
+                                    <HeadphonesIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }}/>
+                                    <Typography>
+                                        {song.listens ? song.listens : '0'}
+                                    </Typography>
+                                </Box>
                             </Box>
 
                         </Box>
                     </Grid>
-                    <Grid item md={1}>
-                        <Box>
-                            <MoreHorizIcon sx={{ fontSize: 30 }} />
-                        </Box>
+
+
+                    <Grid item md={1} sx={{ position: 'relative' }}>
+
+                        <SpeedDial
+                            ariaLabel="SpeedDial controlled"
+                            sx={{ position: 'absolute', top: 0, right: 0 }}
+                            icon={<MoreHorizIcon openicon={<MoreHorizIcon />} />}
+                            direction='left'
+                            onClose={handleCloseDial}
+                            onOpen={handleOpenDial}
+                            open={openDial}
+                        >
+
+                            <SpeedDialAction
+                                icon={<ShareIcon />}
+                                tooltipTitle='Share'
+                            />
+                            <SpeedDialAction
+                                icon={<PlaylistAddIcon />}
+                                tooltipTitle="Add to your Likelist"
+                                onClick={handleClickOpenDialog}
+                            />
+
+                        </SpeedDial>
+
 
                     </Grid>
                 </Grid>
-                <Box className='audio player' sx={{ my: 2, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>
-                    <Box className='info-song' sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Avatar src={song.image} sx={{ width: 60, height: 60, borderRadius: 3 }} />
-                        <Box sx={{ ml: 1 }}>
-                            <Typography sx={{ fontWeight: 500, color: 'white' }}>
-                                {song.name}
-                            </Typography>
-                            <Typography sx={{ fontSize: '15px', color: 'white' }}>
+                {
+                    !openBar &&
+                    <Box className='audio player' sx={{ my: 2, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>
+                        <Box className='info-song' sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Avatar src={song.image} sx={{ width: 60, height: 60, borderRadius: 3 }} />
+                            <Box sx={{ ml: 1 }}>
+                                <Typography sx={{ fontWeight: 500, color: 'white' }}>
+                                    {song.name}
+                                </Typography>
                                 {
-                                    song.singer && song.singer.map(item => (
-                                        singers.find(singer => singer._id === item).name
-                                    ))
-
+                                    song.singer.length < 2 ?
+                                        <Typography sx={{ fontSize: '15px', color: 'white' }}>
+                                            {singers.find(singer => singer._id === song.singer[0]).name}
+                                        </Typography>
+                                        :
+                                        <Typography sx={{ fontSize: '15px', color: 'white' }}>
+                                            {singers.find(singer => singer._id === song.singer[0]).name}
+                                            <span style={{ fontSize: 13 }}>...</span>
+                                        </Typography>
                                 }
-                            </Typography>
-                        </Box>
+                            </Box>
 
+                        </Box>
+                        <ReactAudioPlayer
+                            src={song.link_mp3}
+                            autoPlay
+                            controls
+                            loop
+                            ref={player}
+                            style={{ width: '700px' }}
+                            onListen={(seconds)=>setListensOfSong(seconds)}
+                            onLoadedMetadata={handleLoadMetadata}
+                        />
+
+                        <Box className='option' sx={{ width: 100, display: 'flex', justifyContent: 'space-around', alignContent: 'center' }}>
+                            <SkipPreviousIcon sx={{ color: 'white', cursor: 'pointer', fontSize: 28 }} />
+                            <ExpandIcon
+                                onClick={DisplaySongBar}
+                                sx={{ color: 'white', cursor: 'pointer', fontSize: 25, mx: 1 }} />
+                            <SkipNextIcon sx={{ color: 'white', cursor: 'pointer', fontSize: 28 }} />
+
+                        </Box>
                     </Box>
-                    <ReactAudioPlayer
-                        src={song.link_mp3}
-                        autoPlay
-                        controls
-                        style={{ width: '700px' }}
-                        onLoadedMetadata={handleLoadMetadata}
-                    />
-                    <Box className='option' sx={{ width: 100 }}>
-                        <SkipPreviousIcon sx={{ color: 'white', fontSize: 28, mr: 2 }} />
-                        <SkipNextIcon sx={{ color: 'white', fontSize: 28 }} />
-                    </Box>
-                </Box>
+                }
+
                 <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
                     Comment
                 </Typography>
-                <Comment song={song}/>
-        
+                <Comment song={song} />
+
             </Box>
 
+            {/* likelist add  to dialog */}
+
+            <Box className='dialog-likelist'>
+                <Dialog open={openDialog} onClose={handleCloseDialog}>
+                    <DialogTitle>
+                        Choose Likelist
+                    </DialogTitle>
+                    <DialogContent sx={{ minWidth: 300 }}>
+                        {likelists.map(list => {
+                            return (
+                                <Typography key={list._id} onClick={(e) => handleChooseLikelist(list)}
+                                    sx={{ cursor: 'pointer', p: 1, '&:hover': { bgcolor: '#eeeeee' } }}>
+                                    {list.name}
+                                </Typography>
+
+                            )
+                        })}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseDialog}>Cancel</Button>
+                    </DialogActions>
+                </Dialog>
+            </Box>
+
+            {resultAddtolist === 'success' ?
+                <Box>
+                    <Snackbar
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        open={openToast}
+                        autoHideDuration={2000}
+                        onClose={handleCloseToast}
+                    >
+                        <MuiAlert elevation={6} severity="success" variant="filled" >
+                            <AlertTitle>Success</AlertTitle>
+                            Adding to likelist successfully
+                        </MuiAlert>
+                    </Snackbar>
+                </Box>
+                :
+                <Box>
+                    <Snackbar
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        open={openToast}
+                        autoHideDuration={2000}
+                        onClose={handleCloseToast}
+                    >
+                        <MuiAlert elevation={6} severity="error" variant="filled" >
+                            <AlertTitle>Error</AlertTitle>
+                            {resultAddtolist}
+                        </MuiAlert>
+                    </Snackbar>
+                </Box>
+
+            }
 
 
         </Container>

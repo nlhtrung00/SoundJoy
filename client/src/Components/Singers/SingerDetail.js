@@ -36,7 +36,7 @@ const SingerDetail = () => {
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
-    console.log(songsbysinger )
+   
     return (
 
         <Container sx={{ p: 1 }} className={classes.home_container}>

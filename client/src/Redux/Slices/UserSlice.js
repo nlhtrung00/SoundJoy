@@ -26,13 +26,9 @@ const UserSlice = createSlice({
         }
     },
     extraReducers:{
-        [fetchAsyncUserByAccount.pending]:()=>{
-            console.log("Pending User Fetching");
-        },
+        
         
         [fetchAsyncUserByAccount.fulfilled]:(state,{payload})=>{
-            console.log("Fetched User Succesfully");
-            console.log(payload);
             return {
                 ...state,
                 user: payload

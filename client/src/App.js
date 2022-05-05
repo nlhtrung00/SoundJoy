@@ -21,27 +21,28 @@ import GenreDetail from "./Components/Genres/GenreDetail";
 import SongDetail from "./Components/Song/SongDetail";
 import Albums from "./Components/Album/Albums";
 import AlbumDetail from "./Components/Album/AlbumDetail";
-
+import Profile from "./Components/User/Profile";
+import DetailList from "./Components/Likelist/DetailList";
+import PlaysongBar from './Components/PlaysongBar/PlaysongBar';
 
 function App() {
    const logged = useSelector(getIsLoggedin);
    const dispatch = useDispatch();
-   const listUsers = useSelector(getListUsers)
-   console.log(listUsers)
-   useEffect(() => {
-      dispatch(fetchAsyncUsers())
-   }, [])
+   console.log(logged)
+   useEffect(()=>{
+      dispatch(fetchAsyncUserByAccount(logged.accountId))
+   },[logged,dispatch])
    return (
       <BrowserRouter>
          <ScrollToTop />
          <Routes>
-            {!logged &&
+            {Object.keys(logged).length===0 &&
                <>
                   <Route path="/welcome" element={<LandingPage />} />
                </>
             }
             {
-               logged &&
+               Object.keys(logged).length!==0 &&
                <>
                   <Route exact path="/" element={<Layout page={Home} />} />
                   <Route exact path="/search" element={<Layout page={Search} />} />
@@ -67,19 +68,28 @@ function App() {
                   <Route path="/musician" >
                      <Route path=":musicianId" element={<Layout page={MusicianDetail} />} />
                   </Route>
-
+                  {/* song */}
                   <Route path="/song" >
                      <Route path=":songId" element={<Layout page={SongDetail} />} />
+                  </Route>
+                  {/* user */}
+                  <Route path="/user" >
+                     <Route path=":userId" element={<Layout page={Profile} />} />
+                  </Route>
+
+                  {/* likelist */}
+                  <Route path="/likelist" >
+                     <Route path=":likelistId" element={<Layout page={DetailList} />} />
                   </Route>
                </>
             }
 
-            <Route path='*' element={<Navigate to={!logged ? "/welcome" : "/"} />} />
+            <Route path='*' element={<Navigate to={Object.keys(logged).length===0 ? "/welcome" : "/"} />} />
 
 
 
          </Routes>
-
+         {Object.keys(logged).length!==0 &&<PlaysongBar />}
       </BrowserRouter >
 
    )

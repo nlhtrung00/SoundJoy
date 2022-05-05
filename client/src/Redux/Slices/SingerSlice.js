@@ -20,16 +20,9 @@ const SingerSlice = createSlice({
 
     },
     extraReducers:{
-        [fetchAsyncSingers.pending]:()=>{
-            console.log("Pending Singers");
-        },
-
-        [fetchAsyncSingerById.pending]:()=>{
-            console.log("Pending singer by id")
-        },
-
+       
         [fetchAsyncSingers.fulfilled]:(state, { payload })=>{
-            console.log("Fetch Singers Successfully");
+            
             
             return{
                 ...state,
@@ -37,7 +30,7 @@ const SingerSlice = createSlice({
             }
         },
         [fetchAsyncSingerById.fulfilled]:(state,action)=>{
-            console.log("Fetch singer by id successfully");
+            
             return{
                 ...state,
                 singer:action.payload

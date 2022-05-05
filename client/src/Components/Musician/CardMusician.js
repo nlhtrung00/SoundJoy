@@ -29,7 +29,6 @@ const useStyle= makeStyles((theme)=>({
 }));
 const CardMusician = (props) => {
     const classes = useStyle();
-    console.log(props.musician.name)
     return (
         <Card className={classes.card}>
                     <CardActionArea>

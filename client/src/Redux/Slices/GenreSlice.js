@@ -23,11 +23,8 @@ const GenreSlice = createSlice({
     extraReducers:{
 
         // list genres
-        [fetchAsyncGenres.pending]:()=>{
-            console.log('Pending Genres');
-        },
+        
         [fetchAsyncGenres.fulfilled]:(state,{payload})=>{
-            console.log('Fetch Genres Successfully');
             return{
                 ...state,
                 genres:payload
@@ -38,12 +35,7 @@ const GenreSlice = createSlice({
         },
 
         // genre
-
-        [fetchAsyncGenreById.pending]:()=>{
-            console.log('Pending Genre by Id');
-        },
         [fetchAsyncGenreById.fulfilled]:(state,{payload})=>{
-            console.log('Fetch Genre by Id Successfully');
             return{
                 ...state,
                 genre:payload

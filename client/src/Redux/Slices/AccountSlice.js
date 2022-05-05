@@ -36,26 +36,22 @@ const AccountSlice = createSlice({
     initialState,
     reducers: {
         Logout: (state) => {
-            state.loginprocess = {}
+            state.loginresult = {}
         },
         refreshSignup: (state)=>{
-            state.signupprocess={}
+            state.signupresult={}
         }
     },
     extraReducers: {
-        [fetchAsyncAccount.pending]: () => {
-            console.log("Pending");
-        },
-
         [fetchAsyncAccount.fulfilled]: (state, { payload }) => {
-            console.log("Fetched Succesfully");
+            // console.log("Fetched Succesfully");
             return {
                 ...state,
                 loginresult: payload
             }
         },
         [AsyncRegisterAccount.fulfilled]: (state, { payload }) => {
-            console.log("Fetched Register Succesfully");
+            // console.log("Fetched Register Succesfully");
             console.log(payload);
             return {
                 ...state,

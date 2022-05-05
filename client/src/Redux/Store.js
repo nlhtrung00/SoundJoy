@@ -6,8 +6,9 @@ import UserReducer from './Slices/UserSlice';
 import GenreReducer from './Slices/GenreSlice';
 import AlbumReducer from './Slices/AlbumSlice';
 import SongReducer from './Slices/SongSlice';
+import LikelistReducer from './Slices/LikelistSlice';
 import CommentReducer from './Slices/CommentSlice';
-
+import SongBarReducer from './Slices/SongBarSlice';
 import { combineReducers } from 'redux';
 import {
     persistReducer,
@@ -38,18 +39,21 @@ const migrations = {
 const persistConfig = {
     key: 'root',
     storage,
-    version:1,
+    version: 1,
     migrate: createMigrate(migrations, { debug: false })
 }
+
 const rootReducer = combineReducers({
     account: AccountReducer,
     user: UserReducer,
     singer: SingerReducer,
     musician: MusicianReducer,
     genre: GenreReducer,
-    album:AlbumReducer,
-    song:SongReducer,
-    comment:CommentReducer,
+    album: AlbumReducer,
+    song: SongReducer,
+    comment: CommentReducer,
+    likelist: LikelistReducer,
+    songbar:SongBarReducer
 })
 // const persistedAccount = persistReducer(persistConfig, AccountReducer);
 // const persistedUser = persistReducer(persistConfig, UserReducer);

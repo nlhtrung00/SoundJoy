@@ -30,7 +30,6 @@ const Comment = ({song}) => {
     const user = useSelector(getUser);
     const listUsers = useSelector( getListUsers)
     const listCmt = useSelector(getListComments);
-    console.log(listUsers)
 
     useEffect(()=>{
         dispatch(fetchAsyncCommentsBySong(song._id))

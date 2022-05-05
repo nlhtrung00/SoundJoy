@@ -19,7 +19,7 @@ router.get('/top', getTopSongs);
 router.get('/bad', getBadSongs);
 router.get('/:id', getSong);
 router.post('/', multipleUpload, postSong);
-router.put('/:id', updateSong);
+router.put('/:id',multipleUpload, updateSong);
 router.delete('/:id', deleteSong);
 router.get('/genre/:id', getSongByGenre);
 router.get('/album/:id', getSongByAlbum);

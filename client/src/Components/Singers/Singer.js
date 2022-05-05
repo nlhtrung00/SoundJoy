@@ -17,7 +17,6 @@ const useStyle = makeStyles((theme) => ({
 const Singer = () => {
     const classes = useStyle();
     const singers = useSelector(getSingers);
-    console.log(singers);
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
             <Typography variant="h6" sx={{

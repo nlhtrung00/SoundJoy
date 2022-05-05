@@ -1,4 +1,4 @@
-import  cloudinary  from "../cloudinary.js";
+import cloudinary from "../cloudinary.js";
 import { SongModel } from "../models/SongModel.js";
 
 export const getSongs = async (req, res) => {
@@ -7,7 +7,7 @@ export const getSongs = async (req, res) => {
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
-    }    
+    }
 };
 
 export const getSong = async (req, res) => {
@@ -16,18 +16,18 @@ export const getSong = async (req, res) => {
         res.status(200).json(song);
     } catch (err) {
         res.status(500).json({ error: err });
-    }    
+    }
 };
 
 export const getRecentSongs = async (req, res) => {
     try {
         const today = new Date();
-        const tomorrow = new Date(today - 24*60*60*1000);
-        const songs = await SongModel.find({ createdAt :{ $gt: tomorrow, $lte: today } });
+        const tomorrow = new Date(today - 24 * 60 * 60 * 1000);
+        const songs = await SongModel.find({ createdAt: { $gt: tomorrow, $lte: today } });
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
-    }    
+    }
 };
 
 export const getTopSongs = async (req, res) => {
@@ -36,7 +36,7 @@ export const getTopSongs = async (req, res) => {
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
-    }    
+    }
 };
 
 export const getBadSongs = async (req, res) => {
@@ -45,7 +45,7 @@ export const getBadSongs = async (req, res) => {
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
-    }    
+    }
 };
 
 export const getSongByGenre = async (req, res) => {
@@ -87,9 +87,9 @@ export const getSongBySinger = async (req, res) => {
 export const postSong = async (req, res) => {
     try {
         // cloudinary.v2.uploader.upload(file, options, callback);
-        const resultImage = await cloudinary.uploader.upload(req.files.image[0].path, { folder : 'SoundJoy/Images', resource_type: 'auto' });
-        const resultAudio = await cloudinary.uploader.upload(req.files.mp3[0].path, { folder : 'SoundJoy/Audios', resource_type: 'auto' });
-       
+        const resultImage = await cloudinary.uploader.upload(req.files.image[0].path, { folder: 'SoundJoy/Images', resource_type: 'auto' });
+        const resultAudio = await cloudinary.uploader.upload(req.files.mp3[0].path, { folder: 'SoundJoy/Audios', resource_type: 'auto' });
+
         // console.log(resultImage);
         // console.log(resultAudio);
         const newSong = req.body;
@@ -106,17 +106,32 @@ export const postSong = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err });
         // console.log(err);
-    }    
+    }
 };
 
 export const updateSong = async (req, res) => {
     try {
+        const song = await SongModel.findById(req.params.id);
         const updateSong = req.body;
-        const song = await SongModel.findOneAndUpdate({ _id: req.params.id }, updateSong, { new: true });
-        res.status(200).json(song);
+        
+        if (req.file !== undefined) {
+            await cloudinary.uploader.destroy(song.cloudinary_image_id);
+            await cloudinary.uploader.destroy(song.cloudinary_mp3_id);
+            const resultImage = await cloudinary.uploader.upload(req.files.image[0].path, { folder: 'SoundJoy/Images', resource_type: 'auto' });
+
+            const resultAudio = await cloudinary.uploader.upload(req.files.mp3[0].path, { folder: 'SoundJoy/Audios', resource_type: 'auto' });
+            
+            song.image = resultImage.secure_url;
+            song.link_mp3 = resultAudio.secure_url;
+            song.cloudinary_image_id = resultImage.public_id;
+            song.cloudinary_mp3_id = resultAudio.public_id;
+            
+        }
+        const newsong = await SongModel.findOneAndUpdate({ _id: req.params.id }, updateSong, { new: true });
+        res.status(200).json(newsong);
     } catch (err) {
         res.status(500).json({ error: err });
-    }    
+    }
 };
 
 export const deleteSong = async (req, res) => {
@@ -127,5 +142,5 @@ export const deleteSong = async (req, res) => {
         res.status(200).json(song);
     } catch (err) {
         res.status(500).json({ error: err });
-    }    
+    }
 };
