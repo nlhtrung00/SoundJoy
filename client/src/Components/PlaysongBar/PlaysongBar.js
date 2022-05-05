@@ -12,7 +12,7 @@ import { fetchAsyncSingers, getSingers } from '../../Redux/Slices/SingerSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
 const useStyle = makeStyles({
     playsongbar: {
-        position: 'fixed',
+        position: 'sticky',
         bottom: 0,
         left: 0,
 
