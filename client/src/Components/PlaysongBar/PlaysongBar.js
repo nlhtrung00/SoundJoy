@@ -26,12 +26,17 @@ const PlaysongBar = () => {
     const dispatch = useDispatch();
     const [TotalSeconds, setTotalSeconds] = useState(0);
     const [listened, setListened] = useState(false);
+    const [lengthTracks, setLengthTracks] = useState(playlist.length)
+    const [indexTrack, setIndexTrack] = useState(0);
     const [currentTrackSrc, setCurrentTrackSrc] = useState(playlist[0])
     useEffect(() => {
-        console.log('render again playlist')
         setCurrentTrackSrc(playlist[0]);
     }, [playlist])
 
+    // when change song in playlist
+    useEffect(()=>{
+        setCurrentTrackSrc(playlist[indexTrack]);
+    },[indexTrack])
     const handleLoadMetadata = (meta) => {
         const { duration } = meta.target;
         setTotalSeconds(duration)
@@ -45,7 +50,7 @@ const PlaysongBar = () => {
                 formdata.append('listens', listens);
                 console.log('set listen begin' + listens)
                 let songId = currentTrackSrc._id
-                const action = await dispatch(asyncUpdateSong({ formdata,songId }))
+                const action = await dispatch(asyncUpdateSong({ formdata, songId }))
                 unwrapResult(action);
                 setListened(true);
                 await dispatch(fetchAsyncSongById(currentTrackSrc._id))
@@ -59,15 +64,12 @@ const PlaysongBar = () => {
         await dispatch(CloseBar())
     }
     const changeNextSong = () => {
-        // setCurrentTrackSrc(newSong);
-        // setAudioSrc({
-        //     sources: [
-        //         {
-        //             src: newSong.link_mp3,
-        //         }
-        //     ]
-        // })
+        console.log(lengthTracks)
+        setIndexTrack((prev) =>
+            prev + 1 > lengthTracks - 1 ? 0 : prev + 1
+        );
     }
+    console.log(indexTrack)
     const changePrevSong = () => {
         // setCurrentTrackSrc(newSong);
         // setAudioSrc({

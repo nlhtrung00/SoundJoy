@@ -1,4 +1,5 @@
-import { Avatar, Container, Box, Typography } from "@mui/material";
+import { Avatar, Container, Box, Typography, IconButton } from "@mui/material";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,10 +16,11 @@ import { makeStyles } from '@mui/styles';
 import { getUser } from "../../Redux/Slices/UserSlice";
 import { fetchAsyncLikeListById, getLikelist } from "../../Redux/Slices/LikelistSlice";
 import moment from 'moment';
-import { fetchAsyncSongs, getListSongs } from "../../Redux/Slices/SongSlice";
+import { fetchAsyncSongs, getListSongs, setPlaylist } from "../../Redux/Slices/SongSlice";
 import { fetchAsyncSingers, getSingers } from "../../Redux/Slices/SingerSlice";
 import { fetchAsyncAlbums, getListAlbums } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncMusicians, getMusicians } from "../../Redux/Slices/MusicianSlice";
+import { getOpenBar, OpenBar } from "../../Redux/Slices/SongBarSlice";
 
 
 const useStyle = makeStyles({
@@ -26,8 +28,16 @@ const useStyle = makeStyles({
         backgroundColor: 'white',
         minHeight: '100%',
         borderRadius: '20px',
-        overflow:'hidden',
+        overflow: 'hidden',
     },
+    activeRow: {
+        backgroundColor: '#5341A9',
+        transition: 'ease-in-out',
+        transitionDuration: '0.2s'
+    },
+    activeCell: {
+        color: 'white'
+    }
 })
 
 const columns = [
@@ -70,15 +80,18 @@ const DetailList = () => {
     const singers = useSelector(getSingers);
     const musicians = useSelector(getMusicians);
     const albums = useSelector(getListAlbums);
+    const openBarSong = useSelector(getOpenBar);
     const [time, setTime] = useState([])
+    const [openBar, setOpenBar] = useState(openBarSong);
+    const [selectedSong, setSelectedSong] = useState();
+
     useEffect(() => {
         dispatch(fetchAsyncSongs());
         dispatch(fetchAsyncSingers());
         dispatch(fetchAsyncMusicians());
         dispatch(fetchAsyncAlbums());
-        dispatch(fetchAsyncLikeListById(likelistId));    
+        dispatch(fetchAsyncLikeListById(likelistId));
     }, [dispatch, likelistId])
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -88,21 +101,41 @@ const DetailList = () => {
         setPage(0);
     };
 
-    const handleLoadMetadata = (meta,songId) => {
+    const handleLoadMetadata = (meta, songId) => {
         const { duration } = meta.target;
         const timee = moment.duration(duration, "seconds");
         let song = `${songId}`;
         let minutes = `${timee.minutes() + " min " + (timee.seconds() < 10 ? '0' + timee.seconds() : timee.seconds()) + " sec"}`
         console.log(song)
-        setTime((prev)=>(
+        setTime((prev) => (
             {
-               ...prev,
-               [song]:minutes
-            }  
+                ...prev,
+                [song]: minutes
+            }
         ))
-        
+
     }
-    console.log(time)
+    const PlaySongInList = async (songId, index) => {
+        setSelectedSong(index);
+        const song = songs.find(item => item._id === songId)
+        let playlist = [song]
+        await dispatch(setPlaylist(playlist));
+        await dispatch(OpenBar())
+    }
+    const PlayListSong = async()=>{
+        let playlist =[];
+        setSelectedSong();
+        likelist.songs.map((item)=>{
+            playlist = [...playlist,songs.find(song=>song._id === item)]
+        })
+        await dispatch(setPlaylist(playlist));
+        await dispatch(OpenBar())
+    }
+
+
+
+
+
     return (
         <Container disableGutters className={classes.home_container}>
             {
@@ -135,6 +168,20 @@ const DetailList = () => {
                                             {likelist.name}
                                         </Typography>
 
+                                        <IconButton 
+                                            onClick={()=>PlayListSong()}
+                                            sx={{ display: 'flex', alignItems: 'center' }}>
+                                            <PlayCircleOutlineIcon
+                                             sx={{
+                                                mx: 1, fontSize: 30, color: 'white', '&:hover': {
+                                                    transform: 'scale(1.05)',
+                                                    transition: 'ease-in-out',
+                                                    transitionDuration: '0.4s'
+                                                }
+                                                , transitionDuration: '0.8s'
+                                            }} />
+                                            <Typography sx={{ color: 'white', fontWeight: 500, fontSize: 18 }}>Play</Typography>
+                                        </IconButton>
                                     </Box>
 
                                 </Box>
@@ -142,7 +189,7 @@ const DetailList = () => {
                             </Box>
 
                         </Box>
-                                      
+
                         <Box className='content'>
                             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                                 <TableContainer sx={{ height: 440 }}>
@@ -168,41 +215,45 @@ const DetailList = () => {
                                                 likelist.songs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                                     .map((row, index) => {
                                                         return (
-                                                            <TableRow key={row}>
-                                                                
-                                                                <TableCell>{index+1}</TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }}>
-                                                                    
+                                                            <TableRow
+                                                                className={selectedSong === index ? classes.activeRow : ""}
+                                                                key={row}
+                                                                onClick={() => PlaySongInList(row, index)}
+                                                                sx={{ cursor: 'pointer' }}>
+
+                                                                <TableCell className={selectedSong === index ? classes.activeCell : ""}>{index + 1}</TableCell>
+                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
+
                                                                     {songs.find(song => song._id === row).name}
                                                                 </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }}>
+                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
                                                                     {
                                                                         singers.find(singer => singer._id === songs.find(song => song._id === row).singer[0]) ?
-                                                                        singers.find(singer => singer._id === songs.find(song => song._id === row).singer[0]).name : "noname"
+                                                                            singers.find(singer => singer._id === songs.find(song => song._id === row).singer[0]).name : "noname"
                                                                     }
-                                                                    
+
 
                                                                 </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }}>
+                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
                                                                     {
                                                                         musicians.find(musician => musician._id === songs.find(song => song._id === row).musician[0]) ?
                                                                             musicians.find(musician => musician._id === songs.find(song => song._id === row).musician[0]).name
                                                                             : "noname"
                                                                     }
                                                                 </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }}>
+                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
 
                                                                     <audio
                                                                         controls
-                                                                        onLoadedMetadata={(e)=>handleLoadMetadata(e,row)}
+                                                                        onLoadedMetadata={(e) => handleLoadMetadata(e, row)}
                                                                         style={{ display: 'none' }}>
                                                                         <source src={songs.find(song => song._id === row).link_mp3} type="audio/mpeg" />
                                                                     </audio>
                                                                     {time[row]}
-                                                                    
+
 
                                                                 </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }}>
+                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
                                                                     {
                                                                         albums.find(album => album._id === songs.find(song => song._id === row).album) ?
                                                                             albums.find(album => album._id === songs.find(song => song._id === row).album).name
