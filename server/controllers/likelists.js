@@ -47,7 +47,7 @@ export const updateLikelist = async (req, res) => {
     try {
         let likelist = await LikelistModel.findById(req.params.id);
         const updateLikelist = req.body;
-        console.log(req.file !== undefined)
+        // console.log(req.file !== undefined)
         if (req.file !== undefined) {
             await cloudinary.uploader.destroy(likelist.cloudinary_id);
             const result = await cloudinary.uploader.upload(req.file.path, { folder: 'SoundJoy/Likelists', resource_type: 'auto' });

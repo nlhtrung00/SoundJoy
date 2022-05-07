@@ -1,6 +1,8 @@
 import cloudinary from "../cloudinary.js";
+import { ListenModel } from "../models/ListenModel.js";
 import { SongModel } from "../models/SongModel.js";
-
+import ContentBasedRecommender from 'content-based-recommender';
+import { LikelistModel } from "../models/LikelistModel.js";
 export const getSongs = async (req, res) => {
     try {
         const songs = await SongModel.find();
@@ -32,7 +34,7 @@ export const getRecentSongs = async (req, res) => {
 
 export const getTopSongs = async (req, res) => {
     try {
-        const songs = await SongModel.find().limit(10).sort('-rating createdAt');
+        const songs = await SongModel.find().limit(10).sort('-rating -listens');
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -41,7 +43,7 @@ export const getTopSongs = async (req, res) => {
 
 export const getBadSongs = async (req, res) => {
     try {
-        const songs = await SongModel.find().limit(10).sort('rating createdAt');
+        const songs = await SongModel.find().limit(10).sort('rating listens');
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -141,6 +143,104 @@ export const deleteSong = async (req, res) => {
         await cloudinary.uploader.destroy(song.cloudinary_mp3_id);
         res.status(200).json(song);
     } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
+export const getRecommendSongs = async (req, res) => {
+    try {
+        let songs = await SongModel.find();
+        let listens = await ListenModel.find({ user: req.params.id }).select('song');
+        let notListens= songs.slice();
+        let listened = []
+        for (let i=0; i<listens.length; i++){
+            notListens = notListens.filter(song => song._id.toString() !== listens[i].song.toString());
+            let listenSong = songs.filter(song => song._id.toString() === listens[i].song.toString());
+            listened.push(...listenSong);
+        }
+
+        const recommender = new ContentBasedRecommender({
+            minScore: 0.01,
+            maxSimilarDocuments: 100
+        });
+
+        const documents = songs.map(item => {
+            return {
+                    ...item,
+                    id: item._id.toString(),
+                    content: item.name,
+                };
+        });
+
+        const documentsListened = listened.map((item) => {
+            return {
+                ...item,
+                id: item._id.toString(),
+                content: item.name,
+            };
+        });
+
+        recommender.train(documents);
+        
+        let idSimilar = [];
+        for (let i=0; i<documentsListened.length; i++){
+            let similarDocuments = recommender.getSimilarDocuments(documentsListened[i].id, 0, 5);
+            idSimilar = [...idSimilar, ...similarDocuments];
+        }
+        
+        
+        // console.log(recommenderSong);
+
+        let likelists = await LikelistModel.find({ user: req.params.id }).select('songs');
+        let likelistsSong = []
+        for (let i=0; i<likelists.length; i++){
+            likelistsSong.push(...likelists[i].songs);
+        }
+        likelistsSong = likelistsSong.map((song) => {
+            return { id: song.toString()};
+        });
+
+        for (let i=0;i<listens.length;i++){
+            likelistsSong = likelistsSong.filter(song => song.id !== listens[i].song.toString());
+        }
+        for (let i=0; i<likelistsSong.length; i++){
+            let similarDocuments = recommender.getSimilarDocuments(likelistsSong[i].id, 0, 5);
+            idSimilar = [...idSimilar, ...similarDocuments];
+        }
+        let recommenderSong = []
+        for (let i=0; i<idSimilar.length; i++){
+            let Song = songs.filter(song => song._id.toString() === idSimilar[i].id);
+            recommenderSong.push(...Song);
+        }
+
+        let topSong = await SongModel.find().sort('-rating -listens');
+
+        //remove songs in listens
+        for (let i=0;i<listens.length;i++){
+            topSong = topSong.filter(song => song._id.toString() !== listens[i].song.toString());
+        }
+
+        //remove songs in likelists
+        for (let i=0;i<likelistsSong.length;i++){
+            topSong = topSong.filter(song => song.id !== likelistsSong[i].id);
+        }
+
+        //remove  songs recommender
+        for (let i=0; i<idSimilar.length; i++){
+            topSong = topSong.filter(song => song._id.toString() !== idSimilar[i].id);
+        }
+
+        let limit = 10;
+        if (recommenderSong.length<limit){
+            for (let i=0; i<topSong.length; i++){
+                recommenderSong.push(topSong[i]);
+                if (recommenderSong.length === limit)  break;
+            }
+        }
+
+        res.status(200).json({ recommend: recommenderSong});
+    } catch (err) {
+        console.log(err);
         res.status(500).json({ error: err });
     }
 };
