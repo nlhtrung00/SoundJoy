@@ -15,7 +15,7 @@ import * as moment from 'moment'
 import { fetchAsyncAlbumById, getAlbum } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncGenres, getGenres } from "../../Redux/Slices/GenreSlice";
 import { fetchAsyncSongByAlbum, getSongsByAlbum } from "../../Redux/Slices/SongSlice";
-import Tablistsong from "../TabListSongs/Tablistsong";
+import Tablistsong from "../TabList/Tablistsong";
 
 const useStyle = makeStyles({
     home_container: {

@@ -339,7 +339,7 @@ const SongDetail = () => {
                                                 {song.name}
                                             </Typography>
                                             {
-                                                song.singer.length < 2 ?
+                                                song.singer && song.singer.length < 2 ?
                                                     <Typography sx={{ fontSize: '15px', color: 'white' }}>
                                                         {singers.find(singer => singer._id === song.singer[0]).name}
                                                     </Typography>
