@@ -24,6 +24,14 @@ const schema = new mongoose.Schema({
         ref: 'Genre',
         // required: true,
     }],
+    musician: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Musician'
+    }],
+    singer: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Singer'
+    }],
     cloudinary_id: {
         type: String
     },

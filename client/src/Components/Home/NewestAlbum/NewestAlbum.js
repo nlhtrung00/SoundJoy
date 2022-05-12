@@ -36,7 +36,7 @@ const NewestAlbum = () => {
                     <Grid container spacing={3}>
                         {
                             newestalbum.map(album => (
-                                <Grid item lg={2} md={3} xs={6}>
+                                <Grid item lg={2} md={3} xs={6} key={album._id}>
                                     <AlbumCard album={album}/>
                                 </Grid>
                             ))

@@ -28,22 +28,23 @@ import PlaysongBar from './Components/PlaysongBar/PlaysongBar';
 function App() {
    const logged = useSelector(getIsLoggedin);
    const dispatch = useDispatch();
-   console.log(logged===undefined)
+   console.log(logged!==undefined)
+   console.log(logged)
    useEffect(()=>{
       if(logged && Object.keys(logged).length>0)
       dispatch(fetchAsyncUserByAccount(logged.accountId))
-   },[logged,dispatch])
+   },[logged])
    return (
       <BrowserRouter>
          <ScrollToTop />
          <Routes>
-            {!logged &&
+            {logged && Object.keys(logged).length===0 && 
                <>
                   <Route path="/welcome" element={<LandingPage />} />
                </>
             }
             {
-               logged!==undefined && Object.keys(logged).length!==0 &&
+               logged && Object.keys(logged).length!==0 &&
                <>
                   <Route exact path="/" element={<Layout page={Home} />} />
                   <Route exact path="/search" element={<Layout page={Search} />} />
@@ -85,7 +86,8 @@ function App() {
                </>
             }
 
-            <Route path='*' element={<Navigate to={logged!==undefined && Object.keys(logged).length===0 ? "/welcome" : "/"} />} />
+            <Route path='*' element={<Navigate to={(logged && Object.keys(logged).length!==0) ? "/" : "/welcome"} />} />
+
 
 
 
