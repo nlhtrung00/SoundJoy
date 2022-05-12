@@ -37,16 +37,22 @@ const PlaysongBar = () => {
 
     console.log(playlist)
     useEffect(() => {
-
         const action = async () => {
             if (playlist) {
-                const userId = user._id;
-                const songId = playlist[0]._id
+                setLoading(true)
+                await setCurrentTrackSrc(playlist[0]);
+                await setLengthTracks(playlist.length)
+            }
+        }
+        action()
+    }, [playlist])
+    useEffect(() => {
+
+        const action = async () => {
+            if (currentTrackSrc) {
                 setLoading(true);
-
-                setCurrentTrackSrc(playlist[0]);
-                setLengthTracks(playlist.length)
-
+                const userId = user._id;
+                const songId = currentTrackSrc._id
                 await dispatch(fetchAsyncListenBySongAndUser({ songId, userId }))
             }
         }
