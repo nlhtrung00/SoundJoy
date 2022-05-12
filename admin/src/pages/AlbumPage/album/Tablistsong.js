@@ -93,7 +93,7 @@ const Tablistsong = ({ listSongs }) => {
                                             }
                                         </StyledTableCell>
                                         <StyledTableCell>
-                                            6.7/10
+                                            {song.rating >=0 ? song.rating+"/5" : "0/5"}
                                         </StyledTableCell>
                                         <StyledTableCell>
                                             {moment(song.debuted_date).format("DD/MM/YYYY")}

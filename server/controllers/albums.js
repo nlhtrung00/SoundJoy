@@ -10,6 +10,15 @@ export const getAlbums = async (req, res) => {
     }
 };
 
+export const getNewestAlbum = async (req, res) => {
+    try {
+        const albums = await AlbumModel.find().sort("-createdAt").limit(6);
+        res.status(200).json(albums);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
 export const getAlbum = async (req, res) => {
     try {
         const album = await AlbumModel.findOne({ _id: req.params.id });

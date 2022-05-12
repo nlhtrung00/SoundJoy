@@ -1,4 +1,4 @@
-import { Avatar, Container, Box, Typography, Button, Grid } from "@mui/material";
+import { Avatar, Container, Box, Typography, Button, Grid, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -28,16 +28,22 @@ const useStyle = makeStyles({
 const GenreDetail = () => {
     const classes = useStyle();
     const [valueTab, setValueTab] = useState('1');
+    const [loading, setLoading] = useState(true);
     const { genreId } = useParams();
     const genre = useSelector(getGenre);
     const songs = useSelector(getSongsByGenre);
     const albums = useSelector(getListAlbumsByGenre);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchAsyncGenreById(genreId));
-        dispatch(fetchAsyncSongByGenre(genreId));
-        dispatch(fetchAsyncAlbumsByGenre(genreId));
-    }, [genreId, dispatch])
+        const action = async () => {
+            setLoading(true)
+            await dispatch(fetchAsyncGenreById(genreId));
+            await dispatch(fetchAsyncSongByGenre(genreId));
+            await dispatch(fetchAsyncAlbumsByGenre(genreId));
+        }
+        action()
+        setLoading(false)
+    }, [genreId, dispatch, loading])
 
     const handleChangeTab = (e, value) => {
         setValueTab(value);
@@ -45,7 +51,10 @@ const GenreDetail = () => {
     return (
 
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
-            {genre !== undefined && Object.keys(genre).length === 0 ? <div>Loading...</div>
+            {loading ? 
+            <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+            </Box>
                 :
                 <>
                     <Box className={classes.info}>
@@ -58,8 +67,8 @@ const GenreDetail = () => {
 
                                 <Box sx={{ ml: 2, }}>
                                     <Typography sx={{
-                                        fontSize:30,
-                                        fontWeight:500
+                                        fontSize: 30,
+                                        fontWeight: 500
                                     }}>
                                         Genre
                                     </Typography>
@@ -92,18 +101,18 @@ const GenreDetail = () => {
                                         p: 1,
                                         minHeight: 450,
                                         bgcolor: '#eeeeee',
-                                        overflow:'auto',
+                                        overflow: 'auto',
 
                                     }}>
-                                        <SongsByGenre songs={songs}/>
+                                        <SongsByGenre songs={songs} />
                                     </TabPanel>
                                     <TabPanel value="2" sx={{
                                         p: 1,
                                         minHeight: 450,
                                         bgcolor: '#eeeeee',
-                                        
+
                                     }}>
-                                        <AlbumsByGenre albums={albums}/>
+                                        <AlbumsByGenre albums={albums} />
                                     </TabPanel>
                                 </TabContext>
 

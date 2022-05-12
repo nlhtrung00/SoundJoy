@@ -10,6 +10,7 @@ const RatingSong = ({song,setActionRating}) => {
     const ratingbyuser = useSelector(getRating);
     const ratingsbysong = useSelector(getRatingsBySong);
     const [ratingValue, setRatingValue] = useState(0);
+    console.log(ratingValue)
     useEffect(()=>{
         let songId = song._id;
         let userId = user._id
@@ -19,22 +20,25 @@ const RatingSong = ({song,setActionRating}) => {
     
     useEffect(()=>{
         if(ratingbyuser){
+            
             setRatingValue(ratingbyuser.rating)
         }
     },[ratingbyuser])
     // set state of rating after fetchching
+    console.log(ratingbyuser)
+    
     const handleRating=async (newValue)=>{
-        
+        const newrating = newValue;
         if(!ratingbyuser){
             try{
                 let songId = song._id
                 let userId =user._id
                 let data ={
-                    rating:newValue,
+                    rating:newrating,
                     song:songId,
                     user:userId
                 }
-
+                console.log(data)
                 const action = await dispatch(asyncCreateRating(data))
                 unwrapResult(action)
                 await dispatch(fetchAsyncRatingsOfUserBySong({songId,userId}))
@@ -47,7 +51,7 @@ const RatingSong = ({song,setActionRating}) => {
                 let songId = song._id
                 let userId =user._id
                 let data ={
-                    rating:newValue,    
+                    rating:newrating,    
                 }
                 let ratingId = ratingbyuser._id
                 const action = await dispatch(asyncUpdateRating({data,ratingId}))
@@ -58,7 +62,7 @@ const RatingSong = ({song,setActionRating}) => {
                 console.log(err);
             }
         }
-        setRatingValue(newValue)
+        
         setActionRating(true);
     }
     return (

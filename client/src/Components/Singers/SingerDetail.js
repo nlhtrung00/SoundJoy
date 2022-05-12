@@ -1,4 +1,4 @@
-import { Avatar, Container, Box, Typography, Button } from "@mui/material";
+import { Avatar, Container, Box, Typography, Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,7 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { unwrapResult } from "@reduxjs/toolkit";
 import AddIcon from '@mui/icons-material/Add';
 import { fetchAsyncSongBySinger, getSongsBySinger } from "../../Redux/Slices/SongSlice";
-import Tablistsong from "../TabListSongs/Tablistsong";
+import Tablistsong from "../TabList/Tablistsong";
 const useStyle = makeStyles({
     home_container: {
         backgroundColor: 'white',
@@ -28,19 +28,28 @@ const SingerDetail = () => {
     const { singerId } = useParams();
     const data = useSelector(getSinger);
     const songsbysinger = useSelector(getSongsBySinger);
+    const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchAsyncSingerById(singerId));
-        dispatch(fetchAsyncSongBySinger(singerId))
-    }, [singerId,dispatch])
+        const action = async () => {
+            setLoading(true);
+            await dispatch(fetchAsyncSingerById(singerId));
+            await dispatch(fetchAsyncSongBySinger(singerId))
+        }
+        action();
+        setLoading(false);
+    }, [singerId, dispatch])
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
-   
+
     return (
 
         <Container sx={{ p: 1 }} className={classes.home_container}>
-            {data !== undefined && Object.keys(data).length === 0 ? <div>Loading...</div>
+            {loading ?
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                </Box>
                 :
                 <>
                     <Box className={classes.info}>

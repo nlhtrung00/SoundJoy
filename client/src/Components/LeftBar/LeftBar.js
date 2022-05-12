@@ -105,7 +105,7 @@ const LeftBar = () => {
                         <Typography className={classes.text} variant="p">Homepage</Typography>
                     </Box>
                 </Link>
-
+{/* 
                 <Link to="/search">
                     <Box className={classes.item} sx={{
                         borderRadius: '20px',
@@ -122,7 +122,7 @@ const LeftBar = () => {
                         <ManageSearchIcon className={classes.icon} />
                         <Typography className={classes.text} variant="p">Search</Typography>
                     </Box>
-                </Link>
+                </Link> */}
 
                 <Link to="/genres">
                     <Box className={classes.item} sx={{
@@ -196,7 +196,7 @@ const LeftBar = () => {
                 </Link>
 
             </div>
-            <div className='library'>
+            {/* <div className='library'>
 
                 <Typography className={classes.titlelist}>
                     Library
@@ -219,7 +219,7 @@ const LeftBar = () => {
                     </Box>
                 </Link>
 
-            </div>
+            </div> */}
             <div className='redirect'>
                 <Typography className={classes.titlelist}>
                     Redirect

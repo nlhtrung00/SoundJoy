@@ -19,10 +19,12 @@ const useStyle = makeStyles((theme) => ({
 
     },
     namealbum: {
-        color: 'white',
-        fontWeight: 500,
-        fontSize: "16px",
-        textAlign: 'center',
+        display: 'box',
+        lineClamp: 1,
+        boxOrient: 'vertical',
+        overflow: 'hidden',
+        color:'white',
+        fontWeight:500
 
     },
 }));

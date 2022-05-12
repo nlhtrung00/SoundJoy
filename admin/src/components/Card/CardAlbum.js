@@ -48,7 +48,7 @@ const CardAlbum = (album) => {
                 <Link to={`/albums/${album.album._id}`}>
                     <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
                         <Typography className={classes.nameofalbum} sx={{
-                            fontWeight: 600, fontSize: 16,
+                            fontWeight: 600, fontSize: 16
                         }}>
                             {album.album.name}
                         </Typography>

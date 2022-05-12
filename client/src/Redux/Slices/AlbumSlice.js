@@ -15,10 +15,10 @@ export const fetchAsyncAlbums = createAsyncThunk("album/fetchAsyncAlbums",async(
     return response.data;
 });
 export const fetchAsyncNewAlbums = createAsyncThunk("album/fetchAsyncNewAlbums",async()=>{
-    const response = await Axios.get("albums/recent/recent");
+    const response = await Axios.get("albums/newest");
     return response.data;
 });
-export const fetchAsyncHotAlbums = createAsyncThunk("album/fetchAsyncNewAlbums",async()=>{
+export const fetchAsyncHotAlbums = createAsyncThunk("album/fetchAsyncHotAlbums",async()=>{
     const response = await Axios.get("albums/top");
     return response.data;
 });
@@ -49,12 +49,21 @@ const AlbumSlice = createSlice({
                 albums:action.payload
             }
         },
+        // new album
+        [fetchAsyncNewAlbums.pending]:()=>{
+            console.log("start to fetch new album")
+        },
         [fetchAsyncNewAlbums.fulfilled]:(state,action)=>{
+            console.log('fetch new album sucess')
+            console.log(action)
             return{
                 ...state,
                 new_albums:action.payload
             }
         },
+        
+
+
         [fetchAsyncHotAlbums.fulfilled]:(state,action)=>{
             return{
                 ...state,

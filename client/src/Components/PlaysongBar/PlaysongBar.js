@@ -10,6 +10,8 @@ import { CloseBar, getOpenBar } from '../../Redux/Slices/SongBarSlice';
 import { asyncUpdateSong, fetchAsyncSongById, getPlaylist } from '../../Redux/Slices/SongSlice';
 import { fetchAsyncSingers, getSingers } from '../../Redux/Slices/SingerSlice';
 import { unwrapResult } from '@reduxjs/toolkit';
+import { asyncCreateListen, asyncUpdateListen, fetchAsyncListenBySongAndUser, getListenBySongAndUser } from '../../Redux/Slices/ListenSlice';
+import { getUser } from '../../Redux/Slices/UserSlice';
 const useStyle = makeStyles({
     playsongbar: {
         position: 'sticky',
@@ -23,7 +25,10 @@ const PlaysongBar = () => {
     const playlist = useSelector(getPlaylist);
     const open = useSelector(getOpenBar);
     const singers = useSelector(getSingers);
+    const user = useSelector(getUser)
     const dispatch = useDispatch();
+    const [loading,setLoading] = useState(true)
+    const listenedbyuser = useSelector(getListenBySongAndUser)
     const [TotalSeconds, setTotalSeconds] = useState(0);
     const [listened, setListened] = useState(false);
     const [lengthTracks, setLengthTracks] = useState(playlist.length)
@@ -31,7 +36,22 @@ const PlaysongBar = () => {
     const [currentTrackSrc, setCurrentTrackSrc] = useState(playlist[0])
     useEffect(() => {
         setCurrentTrackSrc(playlist[0]);
+        setLengthTracks(playlist.length)
     }, [playlist])
+
+    useEffect(() => {
+
+        const action = async () => {
+            let userId = user._id;
+            let songId = currentTrackSrc._id
+            setLoading(true);
+            await dispatch(fetchAsyncListenBySongAndUser({ songId, userId }))
+        }
+        action();
+        setLoading(false);
+
+
+    }, [currentTrackSrc,user])
 
     // when change song in playlist
     useEffect(()=>{
@@ -42,7 +62,7 @@ const PlaysongBar = () => {
         setTotalSeconds(duration)
     }
     const setListensOfSong = async (seconds) => {
-        let time = (seconds / TotalSeconds) * 100
+        const time = (seconds / TotalSeconds) * 100
         if (time >= 60 && !listened) {
             try {
                 let formdata = new FormData();
@@ -53,6 +73,26 @@ const PlaysongBar = () => {
                 const action = await dispatch(asyncUpdateSong({ formdata, songId }))
                 unwrapResult(action);
                 setListened(true);
+                // cap nhat - tao listens by user
+                if (listenedbyuser) {
+
+                    let listenId = listenedbyuser._id
+                    let data = {
+                        weight: time,
+                    }
+                    let action = await dispatch(asyncUpdateListen({ data, listenId }))
+                    unwrapResult(action)
+                } else {
+                    let userId = user._id;
+                    let songId = currentTrackSrc._id;
+                    let data = {
+                        weight: time,
+                        user: userId,
+                        song: songId
+                    }
+                    let action = await dispatch(asyncCreateListen(data))
+                    unwrapResult(action)
+                }
                 await dispatch(fetchAsyncSongById(currentTrackSrc._id))
             } catch (err) {
                 console.log(err);
@@ -65,20 +105,15 @@ const PlaysongBar = () => {
     }
     const changeNextSong = () => {
         console.log(lengthTracks)
+        console.log(playlist)
         setIndexTrack((prev) =>
             prev + 1 > lengthTracks - 1 ? 0 : prev + 1
         );
     }
-    console.log(indexTrack)
     const changePrevSong = () => {
-        // setCurrentTrackSrc(newSong);
-        // setAudioSrc({
-        //     sources: [
-        //         {
-        //             src: newSong.link_mp3,
-        //         }
-        //     ]
-        // })
+        setIndexTrack((prev) =>
+            prev === 0 ? lengthTracks - 1 : prev -1
+        );
     }
     return (
         <React.Fragment>
@@ -86,7 +121,7 @@ const PlaysongBar = () => {
                 <Container className={classes.playsongbar} maxWidth='xl' component={Paper} disableGutters>
                     <Box sx={{ bgcolor: '#5C2F9D' }}>
                         <Box className='audio player' sx={{ marginTop: 0, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>
-                            <Box className='info-song' sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Box className='info-song' sx={{ display: 'flex', alignItems: 'center',width:400 }}>
                                 <Avatar src={currentTrackSrc.image}
                                     sx={{ width: 60, height: 60, borderRadius: 3 }} />
                                 <Box sx={{ ml: 1 }}>

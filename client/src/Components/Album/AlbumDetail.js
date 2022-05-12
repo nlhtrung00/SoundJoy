@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Box, Typography, Button, Paper, Grid } from "@mui/material";
+import { Container, Box, Typography, Button, Paper, Grid, CircularProgress } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -14,7 +14,7 @@ import GradeIcon from '@mui/icons-material/Grade';
 import * as moment from 'moment'
 import { fetchAsyncAlbumById, getAlbum } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncGenres, getGenres } from "../../Redux/Slices/GenreSlice";
-import { fetchAsyncSongByAlbum,  getSongsByAlbum } from "../../Redux/Slices/SongSlice";
+import { fetchAsyncSongByAlbum, getSongsByAlbum } from "../../Redux/Slices/SongSlice";
 import Tablistsong from "../TabListSongs/Tablistsong";
 
 const useStyle = makeStyles({
@@ -33,22 +33,29 @@ const AlbumDetail = () => {
     const album = useSelector(getAlbum);
     const genres = useSelector(getGenres)
     const songsbyalbum = useSelector(getSongsByAlbum);
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     console.log(songsbyalbum);
     useEffect(() => {
         setLoading(true);
-        dispatch(fetchAsyncSongByAlbum(albumId));
-        dispatch(fetchAsyncAlbumById(albumId))
-        dispatch(fetchAsyncGenres());
+        const action = async () => {
+            await dispatch(fetchAsyncSongByAlbum(albumId));
+            await dispatch(fetchAsyncAlbumById(albumId))
+            await dispatch(fetchAsyncGenres());
+
+        }
+        action();
         setLoading(false);
     }, [albumId, dispatch])
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
-    
+
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
-            {loading ? <div>Loading...</div>
+            {loading ?
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                </Box>
                 :
                 <>
                     <Box className={classes.info}>
@@ -56,7 +63,7 @@ const AlbumDetail = () => {
                             <Grid container>
                                 <Grid item md={2}>
                                     <Box>
-                                        <img src={album.image} style={{ width: '100%', height:200,objectFit: 'cover' }} />
+                                        <img src={album.image} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
                                     </Box>
 
                                 </Grid>
@@ -88,19 +95,19 @@ const AlbumDetail = () => {
                                                 songsbyalbum.length
                                             }
                                         </Typography>
-                                        <Box sx={{display:'flex'}}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center',mr:2 }}>
+                                        <Box sx={{ display: 'flex' }}>
+                                            {/* <Box sx={{ display: 'flex', alignItems: 'center',mr:2 }}>
                                                 <ThumbUpIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
                                                 <Typography>
                                                     {album.reactions}
                                                 </Typography>
-                                            </Box>
-                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                            </Box> */}
+                                            {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                 <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
                                                 <Typography>
                                                     {album.rating >=0 ? album.rating+"/5" : '0/5'}
                                                 </Typography>
-                                            </Box>
+                                            </Box> */}
                                         </Box>
 
                                     </Box>
@@ -120,10 +127,10 @@ const AlbumDetail = () => {
                                     </TabList>
                                     <TabPanel value="1" sx={{
                                         p: 1,
-                                        minHeight:350,
-                                        bgcolor:'#eeeeee'
+                                        minHeight: 350,
+                                        bgcolor: '#eeeeee'
                                     }}>
-                                        <Tablistsong listSongs={songsbyalbum}/>
+                                        <Tablistsong listSongs={songsbyalbum} />
                                     </TabPanel>
                                 </TabContext>
 

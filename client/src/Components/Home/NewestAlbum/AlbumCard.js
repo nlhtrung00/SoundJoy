@@ -5,6 +5,7 @@ import ImgAlbumdemo from '../../../Images/demoalbum.jpg';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useDispatch } from 'react-redux';
 const useStyle = makeStyles({
     actionarea: {
         '&:hover': {
@@ -24,9 +25,10 @@ const useStyle = makeStyles({
     }
 })
 
-const AlbumCard = () => {
+const AlbumCard = ({album}) => {
     const classes = useStyle();
     const [option, setOption] = useState(false)
+
     return (
         <Card elevation={0} sx={{ borderRadius: '10px' }}>
             <CardActionArea
@@ -38,12 +40,13 @@ const AlbumCard = () => {
 
                         component="img"
                         className='cardimg'
-                        image={ImgAlbumdemo}
+                        image={album.image}
                         alt="album img"
                         sx={{
                             objectFit: 'cover',
                             objectPosition: 'center',
-                            
+                            height:'180px',
+                            objectFit:'cover',
                             transitionDuration: '0.6s'
                         }}
 
@@ -85,15 +88,15 @@ const AlbumCard = () => {
 
                 </Box>
 
-                <CardContent className={classes.cardcontent} sx={{ bgcolor: '#571212',p:'10px' }}>
+                <CardContent className={classes.cardcontent} sx={{ bgcolor: '#571212',p:'20px' }}>
                     <Typography className={classes.nameofsong} sx={{
                         fontWeight: 500, fontSize: 16, color: 'white'
                     }}>
-                        Show cua Den
+                        {album.name}
                     </Typography>
-                    <Typography variant='body4' sx={{ fontSize: 15, color: 'white' }}>
-                        Den
-                    </Typography>
+                    {/* <Typography variant='body4' sx={{ fontSize: 15, color: 'white' }}>
+                        
+                    </Typography> */}
                 </CardContent>
             </CardActionArea>
         </Card>

@@ -1,4 +1,4 @@
-import { Avatar, Container, Box, Typography, Button } from "@mui/material";
+import { Avatar, Container, Box, Typography, Button, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -22,17 +22,25 @@ const useStyle = makeStyles({
         padding: '15px 20px',
     },
 })
-const  MusicianDetail = () => {
+const MusicianDetail = () => {
     const [valueTab, setValueTab] = useState('1');
+    const [loading, setLoading] = useState(true);
     const classes = useStyle();
     const { musicianId } = useParams();
     const data = useSelector(getMusician);
     const songsbymusician = useSelector(getSongsByMusician);
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchAsyncMusicianById(musicianId));
-        dispatch(fetchAsyncSongByMusician(musicianId));
-    }, [musicianId,dispatch])
+        const action = async () => {
+            setLoading(true);
+            await dispatch(fetchAsyncMusicianById(musicianId));
+            await dispatch(fetchAsyncSongByMusician(musicianId));
+
+        }
+        action();
+        setLoading(false)
+
+    }, [musicianId, dispatch])
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
@@ -40,31 +48,34 @@ const  MusicianDetail = () => {
     return (
 
         <Container sx={{ p: 1 }} className={classes.home_container}>
-            {data!==undefined && Object.keys(data).length === 0 ? <div>Loading...</div>
+            {loading ?
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                </Box>
                 :
-                <>{console.log(data)}
+                <>
                     <Box className={classes.info}>
                         <Box>
-                            <Box className={classes.avatar} sx={{ display: 'flex',alignItems:'flex-end',mb:2 }}>
+                            <Box className={classes.avatar} sx={{ display: 'flex', alignItems: 'flex-end', mb: 2 }}>
                                 <Avatar alt="avatar singer" src={data.image ? data.image : ''} sx={{
                                     width: '200px',
                                     height: '200px'
                                 }} />
 
-                                <Box sx={{ml:2,}}>
-                                    <Typography sx={{fontWeight:500,fontSize:18}}>
+                                <Box sx={{ ml: 2, }}>
+                                    <Typography sx={{ fontWeight: 500, fontSize: 18 }}>
                                         Musician
                                     </Typography>
                                     <Typography variant='body2' sx={{
                                         fontWeight: 700,
                                         fontSize: '90px',
-                                        lineHeight:1,
-                                        mb:0,
+                                        lineHeight: 1,
+                                        mb: 0,
                                         my: 0
                                     }}>
                                         {data.name}
                                     </Typography>
-                                    <Typography sx={{fontSize:'20px',fontWeight:500}}>
+                                    <Typography sx={{ fontSize: '20px', fontWeight: 500 }}>
                                         {data.followers} followers
                                     </Typography>
 
@@ -72,7 +83,7 @@ const  MusicianDetail = () => {
 
                             </Box>
                             <Button variant="contained" size="small" sx={{ mb: 1 }}>
-                                Follow <AddIcon sx={{color:'white',fontSize:'18px',fontWeight:600}}/>
+                                Follow <AddIcon sx={{ color: 'white', fontSize: '18px', fontWeight: 600 }} />
                             </Button>
                         </Box>
                         <Box className="introduction" sx={{ mb: 1 }}>
@@ -97,18 +108,18 @@ const  MusicianDetail = () => {
                                         <Tab label="Albums" value="2" />
                                     </TabList>
                                     <TabPanel value="1" sx={{
-                                        p:0,
-                                        minHeight:350,
-                                        bgcolor:'#eeeeee'
+                                        p: 0,
+                                        minHeight: 350,
+                                        bgcolor: '#eeeeee'
                                     }}>
-                                        <Tablistsong listSongs={songsbymusician}/>
+                                        <Tablistsong listSongs={songsbymusician} />
                                     </TabPanel>
                                     <TabPanel value="2" sx={{
-                                        p:0,
-                                        minHeight:350,
-                                        bgcolor:'#eeeeee'
+                                        p: 0,
+                                        minHeight: 350,
+                                        bgcolor: '#eeeeee'
                                     }}>
-                                        <Tablistsong listSongs={songsbymusician}/>
+                                        <Tablistsong listSongs={songsbymusician} />
                                     </TabPanel>
                                 </TabContext>
 

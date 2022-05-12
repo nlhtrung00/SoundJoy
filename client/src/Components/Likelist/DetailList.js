@@ -1,4 +1,4 @@
-import { Avatar, Container, Box, Typography, IconButton } from "@mui/material";
+import { Avatar, Container, Box, Typography, IconButton, CircularProgress } from "@mui/material";
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -20,7 +20,7 @@ import { fetchAsyncSongs, getListSongs, setPlaylist } from "../../Redux/Slices/S
 import { fetchAsyncSingers, getSingers } from "../../Redux/Slices/SingerSlice";
 import { fetchAsyncAlbums, getListAlbums } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncMusicians, getMusicians } from "../../Redux/Slices/MusicianSlice";
-import { getOpenBar, OpenBar } from "../../Redux/Slices/SongBarSlice";
+import { CloseBar, getOpenBar, OpenBar } from "../../Redux/Slices/SongBarSlice";
 
 
 const useStyle = makeStyles({
@@ -84,13 +84,18 @@ const DetailList = () => {
     const [time, setTime] = useState([])
     const [openBar, setOpenBar] = useState(openBarSong);
     const [selectedSong, setSelectedSong] = useState();
-
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-        dispatch(fetchAsyncSongs());
-        dispatch(fetchAsyncSingers());
-        dispatch(fetchAsyncMusicians());
-        dispatch(fetchAsyncAlbums());
-        dispatch(fetchAsyncLikeListById(likelistId));
+        const action = async () => {
+            setLoading(true);
+            await dispatch(fetchAsyncSongs());
+            await dispatch(fetchAsyncSingers());
+            await dispatch(fetchAsyncMusicians());
+            await dispatch(fetchAsyncAlbums());
+            await dispatch(fetchAsyncLikeListById(likelistId));
+        }
+        action();
+        setLoading(false)
     }, [dispatch, likelistId])
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -122,13 +127,14 @@ const DetailList = () => {
         await dispatch(setPlaylist(playlist));
         await dispatch(OpenBar())
     }
-    const PlayListSong = async()=>{
-        let playlist =[];
+    const PlayListSong = async () => {
+        let playlist = [];
         setSelectedSong();
-        likelist.songs.map((item)=>{
-            playlist = [...playlist,songs.find(song=>song._id === item)]
+        likelist.songs.map((item) => {
+            playlist = [...playlist, songs.find(song => song._id === item)]
         })
         await dispatch(setPlaylist(playlist));
+        await dispatch(CloseBar())
         await dispatch(OpenBar())
     }
 
@@ -139,152 +145,161 @@ const DetailList = () => {
     return (
         <Container disableGutters className={classes.home_container}>
             {
-                likelist !== undefined ?
-                    <React.Fragment>
-                        <Box className={classes.info}>
-                            <Box sx={{
-                                background: 'linear-gradient(196deg, rgba(195,34,175,1) 0%, rgba(253,117,45,1) 100%)',
-                                p: 1,
-                                borderRadius: '20px',
-                            }}>
-                                <Box className={classes.avatar} sx={{ display: 'flex', alignItems: 'flex-end', mb: 2 }}>
-                                    <Avatar alt="avatar singer" src={likelist.image} sx={{
-                                        width: '200px',
-                                        height: '200px'
-                                    }} />
-
-                                    <Box sx={{ ml: 2, }}>
-                                        <Typography sx={{ fontWeight: 500, fontSize: 25, color: 'white' }}>
-                                            Your Likelist
-                                        </Typography>
-                                        <Typography variant='body2' sx={{
-                                            fontWeight: 700,
-                                            fontSize: '70px',
-                                            lineHeight: 1,
-                                            mb: 0,
-                                            my: 0,
-                                            color: 'white'
+                loading ?
+                    <Box sx={{ display: 'flex' }}>
+                        <CircularProgress />
+                    </Box> :
+                    <>
+                        {
+                            likelist !== undefined ?
+                                <React.Fragment>
+                                    <Box className={classes.info}>
+                                        <Box sx={{
+                                            background: 'linear-gradient(196deg, rgba(195,34,175,1) 0%, rgba(253,117,45,1) 100%)',
+                                            p: 1,
+                                            borderRadius: '20px',
                                         }}>
-                                            {likelist.name}
-                                        </Typography>
+                                            <Box className={classes.avatar} sx={{ display: 'flex', alignItems: 'flex-end', mb: 2 }}>
+                                                <Avatar alt="avatar singer" src={likelist.image} sx={{
+                                                    width: '200px',
+                                                    height: '200px'
+                                                }} />
 
-                                        <IconButton 
-                                            onClick={()=>PlayListSong()}
-                                            sx={{ display: 'flex', alignItems: 'center' }}>
-                                            <PlayCircleOutlineIcon
-                                             sx={{
-                                                mx: 1, fontSize: 30, color: 'white', '&:hover': {
-                                                    transform: 'scale(1.05)',
-                                                    transition: 'ease-in-out',
-                                                    transitionDuration: '0.4s'
-                                                }
-                                                , transitionDuration: '0.8s'
-                                            }} />
-                                            <Typography sx={{ color: 'white', fontWeight: 500, fontSize: 18 }}>Play</Typography>
-                                        </IconButton>
+                                                <Box sx={{ ml: 2, }}>
+                                                    <Typography sx={{ fontWeight: 500, fontSize: 25, color: 'white' }}>
+                                                        Your Likelist
+                                                    </Typography>
+                                                    <Typography variant='body2' sx={{
+                                                        fontWeight: 700,
+                                                        fontSize: '70px',
+                                                        lineHeight: 1,
+                                                        mb: 0,
+                                                        my: 0,
+                                                        color: 'white'
+                                                    }}>
+                                                        {likelist.name}
+                                                    </Typography>
+
+                                                    <IconButton
+                                                        onClick={() => PlayListSong()}
+                                                        sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        <PlayCircleOutlineIcon
+                                                            sx={{
+                                                                mx: 1, fontSize: 30, color: 'white', '&:hover': {
+                                                                    transform: 'scale(1.05)',
+                                                                    transition: 'ease-in-out',
+                                                                    transitionDuration: '0.4s'
+                                                                }
+                                                                , transitionDuration: '0.8s'
+                                                            }} />
+                                                        <Typography sx={{ color: 'white', fontWeight: 500, fontSize: 18 }}>Play</Typography>
+                                                    </IconButton>
+                                                </Box>
+
+                                            </Box>
+
+                                        </Box>
+
                                     </Box>
 
-                                </Box>
+                                    <Box className='content'>
+                                        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                                            <TableContainer sx={{ height: 440 }}>
+                                                <Table stickyHeader aria-label="sticky table">
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            {columns.map(column => {
+                                                                return (
+                                                                    <TableCell
+                                                                        key={column.id}
+                                                                        align={column.align}
+                                                                        style={{ minWidth: column.minWidth }}
+                                                                    >
+                                                                        {column.label}
 
-                            </Box>
+                                                                    </TableCell>
+                                                                )
+                                                            })}
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
+                                                        {
+                                                            likelist.songs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                                .map((row, index) => {
+                                                                    return (
+                                                                        <TableRow
+                                                                            className={selectedSong === index ? classes.activeRow : ""}
+                                                                            key={row}
+                                                                            onClick={() => PlaySongInList(row, index)}
+                                                                            sx={{ cursor: 'pointer' }}>
 
-                        </Box>
+                                                                            <TableCell className={selectedSong === index ? classes.activeCell : ""}>{index + 1}</TableCell>
+                                                                            <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
 
-                        <Box className='content'>
-                            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                <TableContainer sx={{ height: 440 }}>
-                                    <Table stickyHeader aria-label="sticky table">
-                                        <TableHead>
-                                            <TableRow>
-                                                {columns.map(column => {
-                                                    return (
-                                                        <TableCell
-                                                            key={column.id}
-                                                            align={column.align}
-                                                            style={{ minWidth: column.minWidth }}
-                                                        >
-                                                            {column.label}
-
-                                                        </TableCell>
-                                                    )
-                                                })}
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {
-                                                likelist.songs.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                                    .map((row, index) => {
-                                                        return (
-                                                            <TableRow
-                                                                className={selectedSong === index ? classes.activeRow : ""}
-                                                                key={row}
-                                                                onClick={() => PlaySongInList(row, index)}
-                                                                sx={{ cursor: 'pointer' }}>
-
-                                                                <TableCell className={selectedSong === index ? classes.activeCell : ""}>{index + 1}</TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
-
-                                                                    {songs.find(song => song._id === row).name}
-                                                                </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
-                                                                    {
-                                                                        singers.find(singer => singer._id === songs.find(song => song._id === row).singer[0]) ?
-                                                                            singers.find(singer => singer._id === songs.find(song => song._id === row).singer[0]).name : "noname"
-                                                                    }
+                                                                                {songs.find(song => song._id === row).name}
+                                                                            </TableCell>
+                                                                            <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
+                                                                                {
+                                                                                    singers.find(singer => singer._id === songs.find(song => song._id === row).singer[0]) ?
+                                                                                        singers.find(singer => singer._id === songs.find(song => song._id === row).singer[0]).name : "noname"
+                                                                                }
 
 
-                                                                </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
-                                                                    {
-                                                                        musicians.find(musician => musician._id === songs.find(song => song._id === row).musician[0]) ?
-                                                                            musicians.find(musician => musician._id === songs.find(song => song._id === row).musician[0]).name
-                                                                            : "noname"
-                                                                    }
-                                                                </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
+                                                                            </TableCell>
+                                                                            <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
+                                                                                {
+                                                                                    musicians.find(musician => musician._id === songs.find(song => song._id === row).musician[0]) ?
+                                                                                        musicians.find(musician => musician._id === songs.find(song => song._id === row).musician[0]).name
+                                                                                        : "noname"
+                                                                                }
+                                                                            </TableCell>
+                                                                            <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
 
-                                                                    <audio
-                                                                        controls
-                                                                        onLoadedMetadata={(e) => handleLoadMetadata(e, row)}
-                                                                        style={{ display: 'none' }}>
-                                                                        <source src={songs.find(song => song._id === row).link_mp3} type="audio/mpeg" />
-                                                                    </audio>
-                                                                    {time[row]}
-
-
-                                                                </TableCell>
-                                                                <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
-                                                                    {
-                                                                        albums.find(album => album._id === songs.find(song => song._id === row).album) ?
-                                                                            albums.find(album => album._id === songs.find(song => song._id === row).album).name
-                                                                            : "no album"
-                                                                    }
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        )
-                                                    })
-                                            }
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                                <TablePagination
-                                    rowsPerPageOptions={[10, 25, 100]}
-                                    component="div"
-                                    count={likelist.songs.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
-                            </Paper>
-                        </Box>
+                                                                                <audio
+                                                                                    controls
+                                                                                    onLoadedMetadata={(e) => handleLoadMetadata(e, row)}
+                                                                                    style={{ display: 'none' }}>
+                                                                                    <source src={songs.find(song => song._id === row).link_mp3} type="audio/mpeg" />
+                                                                                </audio>
+                                                                                {time[row]}
 
 
-                    </React.Fragment>
-                    :
-                    <React.Fragment>
+                                                                            </TableCell>
+                                                                            <TableCell sx={{ fontWeight: 500, fontSize: 15 }} className={selectedSong === index ? classes.activeCell : ""}>
+                                                                                {
+                                                                                    albums.find(album => album._id === songs.find(song => song._id === row).album) ?
+                                                                                        albums.find(album => album._id === songs.find(song => song._id === row).album).name
+                                                                                        : "no album"
+                                                                                }
+                                                                            </TableCell>
+                                                                        </TableRow>
+                                                                    )
+                                                                })
+                                                        }
+                                                    </TableBody>
+                                                </Table>
+                                            </TableContainer>
+                                            <TablePagination
+                                                rowsPerPageOptions={[10, 25, 100]}
+                                                component="div"
+                                                count={likelist.songs.length}
+                                                rowsPerPage={rowsPerPage}
+                                                page={page}
+                                                onPageChange={handleChangePage}
+                                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                            />
+                                        </Paper>
+                                    </Box>
 
-                    </React.Fragment>
+
+                                </React.Fragment>
+                                :
+                                <React.Fragment>
+
+                                </React.Fragment>
+                        }
+                    </>
+
             }
         </Container>
     );

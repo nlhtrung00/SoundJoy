@@ -103,7 +103,7 @@ const SongDetail = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
                            <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
                            <Typography>
-                              {song.rating ? song.rating : '0/10'}
+                              {song.rating >=0 ? song.rating+"/5" : '0/5'}
                            </Typography>
                         </Box>
                      </Box>

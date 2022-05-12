@@ -5,6 +5,9 @@ const schema = new mongoose.Schema({
         type: String,
         // required: true
     },
+    // commentChild:[{
+    //     type:Object
+    // }],
     commented_date: {
         type: Date,
         default: Date.now,
