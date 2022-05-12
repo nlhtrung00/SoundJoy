@@ -1,4 +1,4 @@
-import { Avatar, Box, Container, IconButton, Paper, Typography } from '@mui/material';
+import { Avatar, Box, CircularProgress, Container, IconButton, Paper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactAudioPlayer from 'react-audio-player';
@@ -27,36 +27,39 @@ const PlaysongBar = () => {
     const singers = useSelector(getSingers);
     const user = useSelector(getUser)
     const dispatch = useDispatch();
-    const [loading,setLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
     const listenedbyuser = useSelector(getListenBySongAndUser)
     const [TotalSeconds, setTotalSeconds] = useState(0);
     const [listened, setListened] = useState(false);
     const [lengthTracks, setLengthTracks] = useState(playlist.length)
     const [indexTrack, setIndexTrack] = useState(0);
-    const [currentTrackSrc, setCurrentTrackSrc] = useState(playlist[0])
-    useEffect(() => {
-        setCurrentTrackSrc(playlist[0]);
-        setLengthTracks(playlist.length)
-    }, [playlist])
+    const [currentTrackSrc, setCurrentTrackSrc] = useState()
 
+    console.log(playlist)
     useEffect(() => {
 
         const action = async () => {
-            let userId = user._id;
-            let songId = currentTrackSrc._id
-            setLoading(true);
-            await dispatch(fetchAsyncListenBySongAndUser({ songId, userId }))
+            if (playlist) {
+                const userId = user._id;
+                const songId = playlist[0]._id
+                setLoading(true);
+
+                setCurrentTrackSrc(playlist[0]);
+                setLengthTracks(playlist.length)
+
+                await dispatch(fetchAsyncListenBySongAndUser({ songId, userId }))
+            }
         }
         action();
         setLoading(false);
 
 
-    }, [currentTrackSrc,user])
+    }, [currentTrackSrc, user, playlist])
 
     // when change song in playlist
-    useEffect(()=>{
+    useEffect(() => {
         setCurrentTrackSrc(playlist[indexTrack]);
-    },[indexTrack])
+    }, [indexTrack])
     const handleLoadMetadata = (meta) => {
         const { duration } = meta.target;
         setTotalSeconds(duration)
@@ -112,71 +115,81 @@ const PlaysongBar = () => {
     }
     const changePrevSong = () => {
         setIndexTrack((prev) =>
-            prev === 0 ? lengthTracks - 1 : prev -1
+            prev === 0 ? lengthTracks - 1 : prev - 1
         );
     }
     return (
         <React.Fragment>
-            {open ?
-                <Container className={classes.playsongbar} maxWidth='xl' component={Paper} disableGutters>
-                    <Box sx={{ bgcolor: '#5C2F9D' }}>
-                        <Box className='audio player' sx={{ marginTop: 0, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>
-                            <Box className='info-song' sx={{ display: 'flex', alignItems: 'center',width:400 }}>
-                                <Avatar src={currentTrackSrc.image}
-                                    sx={{ width: 60, height: 60, borderRadius: 3 }} />
-                                <Box sx={{ ml: 1 }}>
-                                    <Typography sx={{ fontWeight: 500, color: 'white' }}>
-                                        {currentTrackSrc.name}
-                                    </Typography>
-                                    {
-                                        currentTrackSrc.singer.length < 2 ?
-                                            <Typography sx={{ fontSize: '15px', color: 'white' }}>
-                                                {singers.find(singer => singer._id === currentTrackSrc.singer[0]).name}
-                                            </Typography>
-                                            :
-                                            <Typography sx={{ fontSize: '15px', color: 'white' }}>
-                                                {singers.find(singer => singer._id === currentTrackSrc.singer[0]).name}
-                                                ...
-                                            </Typography>
-                                    }
-
-
-                                </Box>
-
-                            </Box>
-                            <ReactAudioPlayer
-                                src={currentTrackSrc.link_mp3}
-                                autoPlay
-                                controls
-                                style={{ width: '700px' }}
-                                onListen={(seconds) => setListensOfSong(seconds)}
-                                onLoadedMetadata={handleLoadMetadata}
-
-                            />
-                            <Box className='option' sx={{ width: 150, display: 'flex' }}>
-                                <IconButton onClick={changePrevSong}>
-                                    <SkipPreviousIcon
-
-                                        sx={{ color: 'white', fontSize: 28 }} />
-                                </IconButton>
-                                <IconButton onClick={handleCloseBar}>
-                                    <CloseFullscreenIcon sx={{ color: 'white', fontSize: 25, mx: 1 }} />
-                                </IconButton>
-                                <IconButton onClick={changeNextSong}>
-                                    <SkipNextIcon
-
-                                        sx={{ color: 'white', fontSize: 28 }} />
-                                </IconButton>
-
-
-                            </Box>
-                        </Box>
+            {
+                loading ?
+                    <Box sx={{ display: 'flex' }}>
+                        <CircularProgress />
                     </Box>
-                </Container>
-                :
-                ""
+                    :
+                    <React.Fragment>
+                        {open ?
+                            <Container className={classes.playsongbar} maxWidth='xl' component={Paper} disableGutters>
+                                <Box sx={{ bgcolor: '#5C2F9D' }}>
+                                    <Box className='audio player' sx={{ marginTop: 0, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>
+                                        <Box className='info-song' sx={{ display: 'flex', alignItems: 'center', width: 400 }}>
+                                            <Avatar src={currentTrackSrc.image}
+                                                sx={{ width: 60, height: 60, borderRadius: 3 }} />
+                                            <Box sx={{ ml: 1 }}>
+                                                <Typography sx={{ fontWeight: 500, color: 'white' }}>
+                                                    {currentTrackSrc.name}
+                                                </Typography>
+                                                {
+                                                    currentTrackSrc.singer.length < 2 ?
+                                                        <Typography sx={{ fontSize: '15px', color: 'white' }}>
+                                                            {singers.find(singer => singer._id === currentTrackSrc.singer[0]).name}
+                                                        </Typography>
+                                                        :
+                                                        <Typography sx={{ fontSize: '15px', color: 'white' }}>
+                                                            {singers.find(singer => singer._id === currentTrackSrc.singer[0]).name}
+                                                            ...
+                                                        </Typography>
+                                                }
 
+
+                                            </Box>
+
+                                        </Box>
+                                        <ReactAudioPlayer
+                                            src={currentTrackSrc.link_mp3}
+                                            autoPlay
+                                            controls
+                                            style={{ width: '700px' }}
+                                            onListen={(seconds) => setListensOfSong(seconds)}
+                                            onLoadedMetadata={handleLoadMetadata}
+
+                                        />
+                                        <Box className='option' sx={{ width: 150, display: 'flex' }}>
+                                            <IconButton onClick={changePrevSong}>
+                                                <SkipPreviousIcon
+
+                                                    sx={{ color: 'white', fontSize: 28 }} />
+                                            </IconButton>
+                                            <IconButton onClick={handleCloseBar}>
+                                                <CloseFullscreenIcon sx={{ color: 'white', fontSize: 25, mx: 1 }} />
+                                            </IconButton>
+                                            <IconButton onClick={changeNextSong}>
+                                                <SkipNextIcon
+
+                                                    sx={{ color: 'white', fontSize: 28 }} />
+                                            </IconButton>
+
+
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Container>
+                            :
+                            ""
+
+                        }
+                    </React.Fragment>
             }
+
         </React.Fragment>
 
 
