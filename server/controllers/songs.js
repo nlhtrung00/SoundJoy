@@ -3,6 +3,7 @@ import { ListenModel } from "../models/ListenModel.js";
 import { SongModel } from "../models/SongModel.js";
 import ContentBasedRecommender from 'content-based-recommender';
 import { LikelistModel } from "../models/LikelistModel.js";
+import { CommentModel } from "../models/CommentModel.js";
 export const getSongs = async (req, res) => {
     try {
         const songs = await SongModel.find();
@@ -141,6 +142,20 @@ export const deleteSong = async (req, res) => {
         const song = await SongModel.findOneAndDelete({ _id: req.params.id });
         await cloudinary.uploader.destroy(song.cloudinary_image_id);
         await cloudinary.uploader.destroy(song.cloudinary_mp3_id);
+        await ListenModel.deleteMany({ song: req.params.id });
+        await CommentModel.deleteMany({ song: req.params.id });
+        
+        const likelists = await LikelistModel.find({ songs: req.params.id }).select('songs');
+        likelists.forEach(likelist => {
+            likelist.songs = likelist.songs.filter(song => song.toString() !== req.params.id);
+        });
+
+        likelists.forEach(async (likelist) => {
+            const updateLikelist = likelist;
+            delete  updateLikelist._id;
+            await LikelistModel.findOneAndUpdate({ _id: likelist._id }, updateLikelist);
+        });
+
         res.status(200).json(song);
     } catch (err) {
         res.status(500).json({ error: err });
