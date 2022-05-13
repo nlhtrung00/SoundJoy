@@ -46,7 +46,7 @@ const CardSong = (song) => {
                     />
                     
                 </Box>
-                <Link to={`/song/${song.song._id}`}>
+                <Link to={`/songs/${song.song._id}`}>
                     <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
                         <Typography className={classes.nameofsong} sx={{
                             fontWeight: 600, fontSize: 16,

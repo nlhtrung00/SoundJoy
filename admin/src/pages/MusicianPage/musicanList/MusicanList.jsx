@@ -45,7 +45,7 @@ export default function MusicianList() {
     }
     action();
     setLoading(false);
-  })
+  },[])
   const handleDeleteMusician = async (id) => {
 
     try {

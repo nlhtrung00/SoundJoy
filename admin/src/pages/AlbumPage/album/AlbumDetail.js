@@ -36,8 +36,8 @@ const AlbumDetail = () => {
 
         const action = async () => {
             setLoading(true);
-            dispatch(fetchAsyncGenres());
-            dispatch(fetchAsyncSongByAlbum(albumId));
+            await dispatch(fetchAsyncGenres());
+            await dispatch(fetchAsyncSongByAlbum(albumId));
             await dispatch(fetchAsyncAlbumById(albumId))
 
 

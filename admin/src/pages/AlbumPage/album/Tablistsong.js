@@ -93,8 +93,12 @@ const Tablistsong = ({ listSongs }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '250px' }}>
                                                         {
-                                                            (singers && singers.length> 0) ? song.singer.map(item => (
-                                                                singers.find(singer => singer._id === item).name + ", "
+                                                            (singers && singers.length> 0) ? song.singer.map((item,index) => (
+                                                                singers.find(singer => singer._id === item) ? 
+                                                                ((index < song.singer.length - 1) ?
+                                                                singers.find(singer => singer._id === item).name +", " : singers.find(singer => singer._id === item).name )
+                                                                
+                                                                : "none"
                                                             )) : "none"
                                                             // console.log(singers)
                                                         }

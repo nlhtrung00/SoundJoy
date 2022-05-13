@@ -25,11 +25,13 @@ export default function SingerDetail() {
    const data = useSelector(getSinger);
    const dispatch = useDispatch();
    const classes = useStyle();
+   console.log(data)
    useEffect(() => {
       const action = async () => {
          setLoading(true);
          await dispatch(fetchAsyncSingerById(singerId));
       }
+      action()
       setLoading(false)
    }, [singerId, dispatch])
 
