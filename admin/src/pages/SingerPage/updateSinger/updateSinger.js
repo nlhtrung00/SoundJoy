@@ -1,9 +1,9 @@
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAsyncSingerById,fetchAsyncSingers, AsyncUpdateSinger, getSinger } from "../../../Redux/Slice/SingerSlice";
+import { fetchAsyncSingerById, fetchAsyncSingers, AsyncUpdateSinger, getSinger } from "../../../Redux/Slice/SingerSlice";
 import { useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
-import { Avatar, Button, Container, Grid,AlertTitle, TextField, Typography, Paper, Input, Box } from '@mui/material';
+import { Avatar, Button, Container, Grid, AlertTitle, TextField, Typography, Paper, Input, Box, CircularProgress } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import React, { useState, useEffect, createRef } from 'react';
@@ -17,20 +17,21 @@ const UpdateSinger = () => {
     const [edited, setEdited] = useState(false);
     const [error, setError] = useState('');
     const [createResult, setResult] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [openToast, setOpen] = useState(false);
     const [info, setInfo] = useState((
         data ? {
-            id:singerId,
+            id: singerId,
             name: data.name,
             information: data.information,
             followers: data.followers,
             image: data.image
         } : {
-            id:singerId,
+            id: singerId,
             name: '',
             information: '',
             followers: '',
-            image:''
+            image: ''
         }
     ))
     const [image, setImage] = useState(null);
@@ -41,17 +42,22 @@ const UpdateSinger = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(fetchAsyncSingerById(singerId));
+        const action = async () => {
+            setLoading(true)
+            await dispatch(fetchAsyncSingerById(singerId));
+        }
+        action();
+        setLoading(false)
     }, [singerId]);
     useEffect(() => {
         dispatch(fetchAsyncSingers());
-     }, [createResult])
+    }, [createResult])
     const handleInput = (e) => {
         setEdited(true);
         const newdata = { ...info };
         newdata[e.target.id] = e.target.value;
         setInfo(newdata);
-        
+
     }
     const handleUpload = (e) => {
         const newImage = e.target.files[0];
@@ -61,55 +67,58 @@ const UpdateSinger = () => {
             setEdited(true)
         }
     }
-    const handleUpdate = async(e) => {
+    const handleUpdate = async (e) => {
         e.preventDefault();
-        if(image){
+        if (image) {
             const form = {
-                id:singerId,
-                name:info.name,
-                information:info.information,
-                followers:info.followers,
+                id: singerId,
+                name: info.name,
+                information: info.information,
+                followers: info.followers,
                 image: image
-            } 
+            }
             try {
                 let actionresult = await dispatch(AsyncUpdateSinger(form))
                 let result = unwrapResult(actionresult);
                 setResult(true);
-                setTimeout(()=>{
+                setTimeout(() => {
                     history.goBack()
-                },1000)
-                
+                }, 1000)
+
             } catch (error) {
                 setError(error.message);
                 setResult(true);
                 setOpen(true);
             }
-            
+
         }
-        else{
+        else {
             try {
                 let actionresult = await dispatch(AsyncUpdateSinger(info));
                 let result = unwrapResult(actionresult);
                 setResult(true);
-                setTimeout(()=>{
+                setTimeout(() => {
                     history.goBack()
-                },1000)
+                }, 1000)
             } catch (error) {
                 setError(error.message);
                 setResult(true);
                 setOpen(true);
             }
-            
+
         }
-        
+
     }
     console.log(image)
     return (
-        <Container component={Paper} maxWidth='xl'  sx={{height:'100%',pt:1}}>
+        <Container component={Paper} maxWidth='xl' sx={{ height: '100%', pt: 1 }}>
             <Typography variant='h6'>
                 Update Information
             </Typography>
-            {Object.keys(data).length === 0 ? <div>Loading...</div>
+            {loading ?
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                </Box>
                 :
                 <>
                     <Grid container justifyContent="center" sx={{ p: 2 }}
@@ -171,7 +180,7 @@ const UpdateSinger = () => {
                     {createResult && error &&
                         <Box>
                             <Snackbar
-                                anchorOrigin={{ vertical:'bottom', horizontal:'right' }}
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                 open={openToast}
                                 autoHideDuration={6000}
                             >

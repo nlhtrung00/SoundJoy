@@ -64,3 +64,11 @@ export const deleteRatingSong = async (req, res) => {
         res.status(500).json({ error: err });
     }
 };
+export const deleteRatingSongBySong = async (req, res) => {
+    try {
+        const result = await RatingSongModel.deleteMany({ song: req.params.songId });
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};

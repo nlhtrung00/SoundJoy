@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle } from '@mui/material';
+import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle, CircularProgress } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { fetchAsyncGenreById, refreshGenre, AsyncUpdateGenre, getGenre, fetchAsyncGenres } from "../../../Redux/Slice/GenreSlice";
@@ -17,7 +17,7 @@ const GenreUpdate = () => {
 	const [previewImg, setPreviewImg] = useState();
 	const dispatch = useDispatch();
 	const history = useHistory();
-
+	const [loading, setLoading] = useState(true);
 	const [imagefile, setImageFile] = useState();
 	const [info, setInfo] = useState((
 		{
@@ -28,7 +28,12 @@ const GenreUpdate = () => {
 	console.log(info);
 	// fetch genre by id when render UI
 	useEffect(() => {
-		dispatch(fetchAsyncGenreById(genreId));
+		const action = async () => {
+			setLoading(true);
+			await dispatch(fetchAsyncGenreById(genreId));
+		}
+		action();
+		setLoading(false)
 
 	}, [genreId])
 	useEffect(() => {
@@ -96,85 +101,95 @@ const GenreUpdate = () => {
 
 	return (
 		<Container component={Paper} elevation={4} sx={{ p: 1 }}>
-			<Typography variant='h6'>
-				Update information of Genre
-			</Typography>
-			{genre && Object.keys(genre).length === 0 ? <div>Loading...</div>
-				:
-				<>
-					<Grid container justifyContent="center" sx={{ p: 2 }}
-					// alignItems="center"
-					>
-						<Grid item md={3} align='center'>
-							<Avatar src={previewImg ? previewImg : info.image} alt='avtar of genre' sx={{ width: 150, height: 150, my: 0.5, mx: "auto" }} />
-							<label htmlFor="image">
-								<Input accept="image/*" id="image" multiple type="file" sx={{ display: 'none', }} onChange={handleUpload} />
-								<Button variant="contained" component="span" size='small' sx={{ bgcolor: '#8a8a8a', '&:hover': { bgcolor: '#5c5c5c' } }}>
-									Upload Image
-								</Button>
+			{
+				loading ?
+					<Box sx={{ display: 'flex' }}>
+						<CircularProgress />
+					</Box>
+					:
+					<>
+						<Typography variant='h6'>
+							Update information of Genre
+						</Typography>
+						{genre && Object.keys(genre).length === 0 ? <div>Loading...</div>
+							:
+							<>
+								<Grid container justifyContent="center" sx={{ p: 2 }}
+								// alignItems="center"
+								>
+									<Grid item md={3} align='center'>
+										<Avatar src={previewImg ? previewImg : info.image} alt='avtar of genre' sx={{ width: 150, height: 150, my: 0.5, mx: "auto" }} />
+										<label htmlFor="image">
+											<Input accept="image/*" id="image" multiple type="file" sx={{ display: 'none', }} onChange={handleUpload} />
+											<Button variant="contained" component="span" size='small' sx={{ bgcolor: '#8a8a8a', '&:hover': { bgcolor: '#5c5c5c' } }}>
+												Upload Image
+											</Button>
 
 
-							</label>
-						</Grid>
-						<Grid item md={9}>
-							<form onSubmit={handleUpdate} encType="multipart/form-data">
-								<TextField
-									id='name'
-									label='Name of genre'
-									type='text'
-									value={info.name || " "}
-									fullWidth
-									sx={{ my: 0.5 }}
-									onChange={handleInput}
-									required
-								/>
-								{edited &&
-									<Button type='submit' variant='contained' sx={{ my: 0.5 }}>
-										Create
-									</Button>
-								}
-								{!edited &&
-									<Button disabled variant='contained' sx={{ my: 0.5 }}>
-										Create
-									</Button>
-								}
+										</label>
+									</Grid>
+									<Grid item md={9}>
+										<form onSubmit={handleUpdate} encType="multipart/form-data">
+											<TextField
+												id='name'
+												label='Name of genre'
+												type='text'
+												value={info.name || " "}
+												fullWidth
+												sx={{ my: 0.5 }}
+												onChange={handleInput}
+												required
+											/>
+											{edited &&
+												<Button type='submit' variant='contained' sx={{ my: 0.5 }}>
+													Create
+												</Button>
+											}
+											{!edited &&
+												<Button disabled variant='contained' sx={{ my: 0.5 }}>
+													Create
+												</Button>
+											}
 
 
-								<Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
-									Back
-								</Button>
-							</form>
-						</Grid>
-					</Grid>
-					{createResult && !error ?
-						<Box>
-							<Snackbar
-								anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-								open={openToast}
-								autoHideDuration={3000}
-								onClose={handleCloseToast}
-							>
-								<MuiAlert elevation={6} severity="success" variant="filled" >
-									<AlertTitle>Success</AlertTitle>
-									You created successfully.Let's check !
+											<Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+												Back
+											</Button>
+										</form>
+									</Grid>
+								</Grid>
+								{createResult && !error ?
+									<Box>
+										<Snackbar
+											anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+											open={openToast}
+											autoHideDuration={3000}
+											onClose={handleCloseToast}
+										>
+											<MuiAlert elevation={6} severity="success" variant="filled" >
+												<AlertTitle>Success</AlertTitle>
+												You created successfully.Let's check !
 
-								</MuiAlert>
-							</Snackbar>
-						</Box> :
-						<Box>
-							<Snackbar
-								anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-								open={openToast}
-								autoHideDuration={3000}
-								onClose={handleCloseToast}
-							>
-								<MuiAlert elevation={6} severity="error" variant="filled" >
-									<AlertTitle>Error</AlertTitle>
-									{error}
-								</MuiAlert>
-							</Snackbar>
-						</Box>}
-				</>}
+											</MuiAlert>
+										</Snackbar>
+									</Box> :
+									<Box>
+										<Snackbar
+											anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+											open={openToast}
+											autoHideDuration={3000}
+											onClose={handleCloseToast}
+										>
+											<MuiAlert elevation={6} severity="error" variant="filled" >
+												<AlertTitle>Error</AlertTitle>
+												{error}
+											</MuiAlert>
+										</Snackbar>
+									</Box>}
+							</>}
+					</>
+			}
+
 
 		</Container>
 	);

@@ -1,4 +1,4 @@
-import { Avatar, Container, Box, Typography, Button, Paper } from "@mui/material";
+import { Avatar, Container, Box, Typography, Button, Paper, CircularProgress } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,18 +20,26 @@ export default function SingerDetail() {
    const handleChangeTab = (e, value) => {
       setValueTab(value);
    }
+   const [loading, setLoading] = useState(true);
    const { singerId } = useParams();
    const data = useSelector(getSinger);
    const dispatch = useDispatch();
    const classes = useStyle();
    useEffect(() => {
-      dispatch(fetchAsyncSingerById(singerId));
+      const action = async () => {
+         setLoading(true);
+         await dispatch(fetchAsyncSingerById(singerId));
+      }
+      setLoading(false)
    }, [singerId, dispatch])
 
    return (
 
       <Container maxWidth='xl' component={Paper} sx={{ height: '100%' }}>
-         {data && Object.keys(data).length === 0 ? <div>Loading...</div>
+         {loading ?
+            <Box sx={{ display: 'flex' }}>
+               <CircularProgress />
+            </Box>
             :
             <>
                <Box className={classes.info}>
@@ -41,7 +49,7 @@ export default function SingerDetail() {
                            width: '150px',
                            height: '150px'
                         }} />
-                        <Box sx={{ml: 2,}}>
+                        <Box sx={{ ml: 2, }}>
                            <Typography sx={{
                               fontWeight: 600,
                               fontSize: '70px',
@@ -50,7 +58,7 @@ export default function SingerDetail() {
                            }}>
                               {data.name}
                            </Typography>
-                           <Button variant="contained" size="small" sx={{ml:1,cursor: 'default' }}>
+                           <Button variant="contained" size="small" sx={{ ml: 1, cursor: 'default' }}>
                               Follows: {data.followers}
                            </Button>
                         </Box>

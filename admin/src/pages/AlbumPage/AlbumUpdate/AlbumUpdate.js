@@ -1,6 +1,6 @@
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle, FormLabel } from '@mui/material';
+import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle, FormLabel, CircularProgress } from '@mui/material';
 import { makeStyles } from "@material-ui/styles";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -13,8 +13,9 @@ import Select from "react-select";
 import { fetchAsyncGenres, getListGenres } from "../../../Redux/Slice/GenreSlice";
 import MultiSelect from 'react-multiple-select-dropdown-lite'
 import 'react-multiple-select-dropdown-lite/dist/index.css'
-import { fetchAsyncSingers } from "../../../Redux/Slice/SingerSlice";
-import { fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
+import { fetchAsyncSingers, getListSingers } from "../../../Redux/Slice/SingerSlice";
+import { fetchAsyncMusicians, getListMusicians } from "../../../Redux/Slice/MusicianSlice";
+import * as moment from 'moment'
 const useStyles = makeStyles({
 	datetimepicker: {
 		margin: '5px 10px',
@@ -42,8 +43,11 @@ const customStylesSelect = {
 
 const AlbumUpdate = () => {
 	const genres = useSelector(getListGenres);
+	const singers = useSelector(getListSingers)
+	const musicians = useSelector(getListMusicians)
 	const album = useSelector(getAlbum);
 	const { albumId } = useParams();
+	const [loading, setLoading] = useState(true);
 	const [edited, setEdited] = useState(false);
 	const [error, setError] = useState(false);
 	const [createResult, setResult] = useState(false);
@@ -76,17 +80,17 @@ const AlbumUpdate = () => {
 		action();
 		setLoading(false);
 	}, [])
-	const GenresOptions = genres.map((genre) => {
+	const GenresOptions = genres && genres.map((genre) => {
 		return (
 			{ label: genre.name, value: genre._id }
 		)
 	})
-	const SingersOptions = singers.map((singer) => {
+	const SingersOptions = singers && singers.map((singer) => {
 		return (
 			{ label: singer.name, value: singer._id }
 		)
 	})
-	const MusiciansOptions = musicians.map((musician) => {
+	const MusiciansOptions = musicians && musicians.map((musician) => {
 		return (
 			{ label: musician.name, value: musician._id }
 		)
@@ -103,7 +107,7 @@ const AlbumUpdate = () => {
 				name: album.name,
 				image: album.image,
 				reactions: album.reactions,
-				debuted_date: new Date(album.debuted_date),
+				debuted_date: new Date(moment(album.debuted_date).format('YYYY/MMM/DD')),
 				genre: album.genre,
 				rating: album.rating ? album.rating : "",
 			})
@@ -129,6 +133,21 @@ const AlbumUpdate = () => {
 		setInfo(newdata);
 
 	}
+	const handleChangeSelectSinger = (value) => {
+		const newdata = { ...info };
+		const array = value.split(",");
+		newdata['singer'] = array;
+		setInfo(newdata);
+
+	}
+	const handleChangeSelectMusician = (value) => {
+		const newdata = { ...info };
+		const array = value.split(",");
+		newdata['musician'] = array;
+		setInfo(newdata);
+
+	}
+
 	const handleSelectDate = (value) => {
 		const newdata = { ...info };
 		newdata['debuted_date'] = value;
@@ -163,6 +182,12 @@ const AlbumUpdate = () => {
 		Array.from(genre).map((value) => {
 			formdata.append('genre', value);
 		})
+		Array.from(info.musician).map((value) => {
+			formdata.append('musician', value);
+		})
+		Array.from(info.singer).map((value) => {
+			formdata.append('singer', value);
+		})
 		// console.log(formdata.get('id'), formdata.get('name'), formdata.get('image'), formdata.get('reactions'), formdata.get('debuted_date'), formdata.get('genre'));
 		try {
 			let action = await dispatch(AsyncUpdateAlbum({ formdata, id }))
@@ -194,112 +219,143 @@ const AlbumUpdate = () => {
 	console.log(info)
 	return (
 		<Container maxWidth='xl' component={Paper} sx={{ height: '100%', pt: 2 }}>
-			<Typography variant='h6'>
-				Update information of Album
-			</Typography>
-			{album && Object.keys(album).length === 0 ? <div>Loading...</div>
+			{
+				loading ?
+				<Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+               </Box>
 				:
-				<>
-					<Grid container justifyContent="center" sx={{ p: 2 }}
-					// alignItems="center"
-					>
-						<Grid item md={3} align='center'>
-							<Avatar src={previewImg ? previewImg : info.image} alt='avtar of album' sx={{ width: 150, height: 150, my: 0.5, mx: "auto" }} />
-							<label htmlFor="image">
-								<Input accept="image/*" id="image" multiple type="file" sx={{ display: 'none', }} onChange={handleUpload} />
-								<Button variant="contained" component="span" size='small' sx={{ bgcolor: '#8a8a8a', '&:hover': { bgcolor: '#5c5c5c' } }}>
-									Upload Image
-								</Button>
+					<>
+						<Typography variant='h6'>
+							Update information of Album
+						</Typography>
+						{album && Object.keys(album).length === 0 ? <div>Loading...</div>
+							:
+							<>
+								<Grid container justifyContent="center" sx={{ p: 2 }}
+								// alignItems="center"
+								>
+									<Grid item md={3} align='center'>
+										<Avatar src={previewImg ? previewImg : info.image} alt='avtar of album' sx={{ width: 150, height: 150, my: 0.5, mx: "auto" }} />
+										<label htmlFor="image">
+											<Input accept="image/*" id="image" multiple type="file" sx={{ display: 'none', }} onChange={handleUpload} />
+											<Button variant="contained" component="span" size='small' sx={{ bgcolor: '#8a8a8a', '&:hover': { bgcolor: '#5c5c5c' } }}>
+												Upload Image
+											</Button>
 
 
-							</label>
-						</Grid>
-						<Grid item md={9}>
-							<form onSubmit={handleUpdate} encType="multipart/form-data">
-								<TextField
-									id='name'
-									label='Name of album'
-									type='text'
-									value={info.name || " "}
-									fullWidth
-									sx={{ my: 0.5 }}
-									onChange={handleInput}
-									required
-								/>
-								<div >
-									<FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-										Debuted date:
-									</FormLabel>
-									<DatePicker
-										required
-										format="dd/MM/y"
-										id='debuted_Date'
-										value={info.debuted_date}
-										onChange={handleSelectDate}
-										className={classes.datetimepicker}
-									/>
-								</div>
+										</label>
+									</Grid>
+									<Grid item md={9}>
+										<form onSubmit={handleUpdate} encType="multipart/form-data">
+											<TextField
+												id='name'
+												label='Name of album'
+												type='text'
+												value={info.name || " "}
+												fullWidth
+												sx={{ my: 0.5 }}
+												onChange={handleInput}
+												required
+											/>
+											<div >
+												<FormLabel sx={{ fontWeight: 500, color: 'black' }}>
+													Debuted date:
+												</FormLabel>
+												<DatePicker
+													required
+													format="dd/MM/y"
+													id='debuted_Date'
+													value={info.debuted_date}
+													onChange={handleSelectDate}
+													className={classes.datetimepicker}
+												/>
+											</div>
 
-								<div className={classes.marginInput}>
-									<FormLabel sx={{ fontWeight: 500, color: 'black' }}>
-										Genres *:
-									</FormLabel>
-									<MultiSelect
-										required
-										placeholder='select genre'
-										name='genre'
-										onChange={handleChangeSelectGenre}
-										options={GenresOptions}
+											<div className={classes.marginInput}>
+												<FormLabel sx={{ fontWeight: 500, color: 'black' }}>
+													Genres *:
+												</FormLabel>
+												<MultiSelect
+													required
+													placeholder='select genre'
+													name='genre'
+													onChange={handleChangeSelectGenre}
+													options={GenresOptions}
 
-									/>
-								</div>
-								{edited &&
-									<Button type='submit' variant='contained' sx={{ my: 0.5 }}>
-										Create
-									</Button>
-								}
-								{!edited &&
-									<Button disabled variant='contained' sx={{ my: 0.5 }}>
-										Create
-									</Button>
-								}
+												/>
+											</div>
+											<div className={classes.marginInput}>
+												<FormLabel sx={{ fontWeight: 500, color: 'black' }}>
+													Musician *:
+												</FormLabel>
+												<MultiSelect
+													required
+													placeholder='select musician'
+													name='musician'
+													onChange={handleChangeSelectMusician}
+													options={MusiciansOptions}
 
+												/>
+											</div>
+											<div className={classes.marginInput}>
+												<FormLabel sx={{ fontWeight: 500, color: 'black' }}>
+													Singer *:
+												</FormLabel>
+												<MultiSelect
+													required
+													placeholder='select singer'
+													name='singer'
+													onChange={handleChangeSelectSinger}
+													options={SingersOptions}
 
-								<Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
-									Back
-								</Button>
-							</form>
-						</Grid>
-					</Grid>
-					{createResult && !error ?
-						<Box>
-							<Snackbar
-								anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-								open={openToast}
-								autoHideDuration={3000}
-								onClose={handleCloseToast}
-							>
-								<MuiAlert elevation={6} severity="success" variant="filled" >
-									<AlertTitle>Success</AlertTitle>
-									You edited successfully.Let's check !
+												/>
+											</div>
+										
+												<Button type='submit' variant='contained' sx={{ my: 0.5 }}>
+													Create
+												</Button>
+											
+											
 
-								</MuiAlert>
-							</Snackbar>
-						</Box> :
-						<Box>
-							<Snackbar
-								anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-								open={openToast}
-								autoHideDuration={3000}
-								onClose={handleCloseToast}
-							>
-								<MuiAlert elevation={6} severity="error" variant="filled" >
-									<AlertTitle>Error</AlertTitle>
-									{error}
-								</MuiAlert>
-							</Snackbar>
-						</Box>}
-				</>}
+											<Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+												Back
+											</Button>
+										</form>
+									</Grid>
+								</Grid>
+								{createResult && !error ?
+									<Box>
+										<Snackbar
+											anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+											open={openToast}
+											autoHideDuration={3000}
+											onClose={handleCloseToast}
+										>
+											<MuiAlert elevation={6} severity="success" variant="filled" >
+												<AlertTitle>Success</AlertTitle>
+												You edited successfully.Let's check !
+
+											</MuiAlert>
+										</Snackbar>
+									</Box> :
+									<Box>
+										<Snackbar
+											anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+											open={openToast}
+											autoHideDuration={3000}
+											onClose={handleCloseToast}
+										>
+											<MuiAlert elevation={6} severity="error" variant="filled" >
+												<AlertTitle>Error</AlertTitle>
+												{error}
+											</MuiAlert>
+										</Snackbar>
+									</Box>}
+							</>}
+					</>
+			}
+
 
 		</Container>
 	);

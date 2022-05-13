@@ -10,11 +10,12 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
-import { Avatar, Container, Box, Typography, Button } from "@mui/material";
+import { Avatar, Container, Box, Typography, Button, CircularProgress } from "@mui/material";
 const useStyle = makeStyles({
 })
 export default function MusicianDetail() {
    const [valueTab, setValueTab] = useState('1');
+   const [loading, setLoading] = useState(true);
    const handleChangeTab = (e, value) => {
       setValueTab(value);
    }
@@ -23,38 +24,46 @@ export default function MusicianDetail() {
    const dispatch = useDispatch();
    const classes = useStyle();
    useEffect(() => {
-      dispatch(fetchAsyncMusicianById(musicianId));
+      const action = async () => {
+         setLoading(true);
+         await dispatch(fetchAsyncMusicianById(musicianId));
+      }
+      action();
+      setLoading(false)
    }, [musicianId])
    return (
       <Container>
-         {Object.keys(data).length === 0 ? <div>Loading...</div>
+         {loading ?
+            <Box sx={{ display: 'flex' }}>
+               <CircularProgress />
+            </Box>
             :
             <>
                <Box>
                   <Box>
-                     <Box sx={{display:'flex',alignItems:'flex-end',py:1}}>
+                     <Box sx={{ display: 'flex', alignItems: 'flex-end', py: 1 }}>
                         <Avatar alt="avatar singer" src={data.image} sx={{
                            width: '150px',
                            height: '150px'
                         }} />
 
-                        <Box sx={{ml:2,}} >
+                        <Box sx={{ ml: 2, }} >
                            <Typography sx={{
                               fontWeight: 600,
                               fontSize: '70px',
-                              letterSpacing:'8px',
-                              
+                              letterSpacing: '8px',
+
                               my: 0
                            }}>
                               {data.name}
                            </Typography>
-                           <Button variant="contained" size="small" sx={{ml:1,cursor: 'default' }}>
+                           <Button variant="contained" size="small" sx={{ ml: 1, cursor: 'default' }}>
                               Follows: {data.followers}
                            </Button>
                         </Box>
 
                      </Box>
-                     
+
                   </Box>
                   <Box className="introduction" sx={{ mb: 1 }}>
                      <Typography variant="h6">

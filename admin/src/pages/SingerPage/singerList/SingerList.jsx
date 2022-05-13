@@ -1,4 +1,4 @@
-import { Container, Table, TableBody, ButtonGroup, Typography, AlertTitle, Button, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Container, Table, TableBody, ButtonGroup, Typography, AlertTitle, Button, TableContainer, TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
@@ -35,12 +35,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const SingerList = () => {
   const [errorDel, setErrorDel] = useState('');
   const [openToast, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const data = useSelector(getListSingers);
   const dispatch = useDispatch();
   const [actionDel, setActionDel] = useState(false);
-  useEffect(()=>{
-    dispatch(fetchAsyncSingers())
-  },[])
+  useEffect(() => {
+    const action = async () => {
+      setLoading(true)
+      await dispatch(fetchAsyncSingers())
+    }
+    action();
+    setLoading(false)
+  }, [])
   const handleDeleteSinger = async (id) => {
 
     try {
@@ -67,114 +73,124 @@ const SingerList = () => {
   }
   return (
     <Container maxWidth='xl' component={Paper} sx={{ height: '100%' }}>
-      <Typography variant="h6">
-        List Singers
-      </Typography>
-      <Link to='/singers/add'>
-        <Button variant="contained" size="small" sx={{ mt: 0.5, mb: 1.5 }}>
-          Create new
-          <AddIcon />
-        </Button>
-      </Link>
+      {
+        loading ?
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+          :
+          <>
+            <Typography variant="h6">
+              List Singers
+            </Typography>
+            <Link to='/singers/add'>
+              <Button variant="contained" size="small" sx={{ mt: 0.5, mb: 1.5 }}>
+                Create new
+                <AddIcon />
+              </Button>
+            </Link>
 
-      <TableContainer component={Paper}>
-        <Table sx={{}} aria-label="table list user">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>singer</StyledTableCell>
-              <StyledTableCell>Short Information</StyledTableCell>
-              <StyledTableCell>Followers</StyledTableCell>
+            <TableContainer component={Paper}>
+              <Table sx={{}} aria-label="table list user">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>singer</StyledTableCell>
+                    <StyledTableCell>Short Information</StyledTableCell>
+                    <StyledTableCell>Followers</StyledTableCell>
 
-              <StyledTableCell>Actions</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data && data.map(singer => {
-              return (
-                <StyledTableRow key={singer._id}>
-                  <StyledTableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Avatar src={singer.image} />
-                      <Box sx={{ ml: 1 }}>
-                        <Typography sx={{
-                          fontWeight: 500, width: '150px', height: '50px', display: 'box',
-                          lineClamp: 2,
-                          boxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}>
-                          {singer.name}
-                        </Typography>
-                      </Box>
-
-
-                    </Box>
-
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Typography sx={{
-                      maxWidth: '350px',
-                      height: '70px',
-                      display: 'box',
-                      lineClamp: 2,
-                      boxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}>
-                      {singer.information}
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Typography>
-                      {singer.followers}
-                    </Typography>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
-                      <Link to={`singers/${singer._id}`}>
-                        <Button size='small' title='View detail' sx={{ borderRadius: 0 }}>
-                          <InfoIcon />
-                        </Button>
-                      </Link>
+                    <StyledTableCell>Actions</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data && data.map(singer => {
+                    return (
+                      <StyledTableRow key={singer._id}>
+                        <StyledTableCell>
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                            <Avatar src={singer.image} />
+                            <Box sx={{ ml: 1 }}>
+                              <Typography sx={{
+                                fontWeight: 500, width: '150px', height: '50px', display: 'box',
+                                lineClamp: 2,
+                                boxOrient: 'vertical',
+                                overflow: 'hidden',
+                              }}>
+                                {singer.name}
+                              </Typography>
+                            </Box>
 
 
-                      <Button onClick={(e) => handleDeleteSinger(singer._id)} id={singer._id} size='small' title="Delete singer" sx={{ borderRadius: 0, bgcolor: '#f7532a', '&:hover': { bgcolor: '#e43e1d' } }}>
-                        <DeleteForeverIcon />
-                      </Button>
-                    </ButtonGroup>
-                  </StyledTableCell>
-                </StyledTableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      {actionDel && !errorDel ?
-        <Box>
-          <Snackbar
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            open={openToast}
-            autoHideDuration={4000}
-            onClose={handleCloseToast}
-          >
-            <MuiAlert elevation={6} severity="success" variant="filled" >
-              <AlertTitle>Success</AlertTitle>
-              You removed singer successfully.Let's check !
+                          </Box>
 
-            </MuiAlert>
-          </Snackbar>
-        </Box> :
-        <Box>
-          <Snackbar
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            open={openToast}
-            autoHideDuration={4000}
-            onClose={handleCloseToast}
-          >
-            <MuiAlert elevation={6} severity="error" variant="filled" >
-              <AlertTitle>Error</AlertTitle>
-              {errorDel}
-            </MuiAlert>
-          </Snackbar>
-        </Box>}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Typography sx={{
+                            maxWidth: '350px',
+                            height: '70px',
+                            display: 'box',
+                            lineClamp: 2,
+                            boxOrient: 'vertical',
+                            overflow: 'hidden',
+                          }}>
+                            {singer.information}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Typography>
+                            {singer.followers}
+                          </Typography>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
+                            <Link to={`singers/${singer._id}`}>
+                              <Button size='small' title='View detail' sx={{ borderRadius: 0 }}>
+                                <InfoIcon />
+                              </Button>
+                            </Link>
+
+
+                            <Button onClick={(e) => handleDeleteSinger(singer._id)} id={singer._id} size='small' title="Delete singer" sx={{ borderRadius: 0, bgcolor: '#f7532a', '&:hover': { bgcolor: '#e43e1d' } }}>
+                              <DeleteForeverIcon />
+                            </Button>
+                          </ButtonGroup>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {actionDel && !errorDel ?
+              <Box>
+                <Snackbar
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  open={openToast}
+                  autoHideDuration={4000}
+                  onClose={handleCloseToast}
+                >
+                  <MuiAlert elevation={6} severity="success" variant="filled" >
+                    <AlertTitle>Success</AlertTitle>
+                    You removed singer successfully.Let's check !
+
+                  </MuiAlert>
+                </Snackbar>
+              </Box> :
+              <Box>
+                <Snackbar
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  open={openToast}
+                  autoHideDuration={4000}
+                  onClose={handleCloseToast}
+                >
+                  <MuiAlert elevation={6} severity="error" variant="filled" >
+                    <AlertTitle>Error</AlertTitle>
+                    {errorDel}
+                  </MuiAlert>
+                </Snackbar>
+              </Box>}
+          </>
+      }
+
     </Container>
   );
 };

@@ -2,16 +2,16 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getMusician, AsyncUpdateMusician, fetchAsyncMusicianById, fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
 import { useParams } from "react-router-dom";
-import { Avatar, Box, Button, Container, Grid, AlertTitle, TextField, Typography, Paper, Input } from '@mui/material';
-import React, { useState, useEffect} from 'react';
+import { Avatar, Box, Button, Container, Grid, AlertTitle, TextField, Typography, Paper, Input, CircularProgress } from '@mui/material';
+import React, { useState, useEffect } from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { unwrapResult } from "@reduxjs/toolkit";
-const initialState={
-    name:'',
-    information:'',
-    followers:0,
-    image:''
+const initialState = {
+    name: '',
+    information: '',
+    followers: 0,
+    image: ''
 }
 const UpdateMusician = () => {
     const data = useSelector(getMusician);
@@ -22,38 +22,43 @@ const UpdateMusician = () => {
     const [openToast, setOpen] = useState(false);
     const [info, setInfo] = useState((
         data ? {
-            id:musicianId,
+            id: musicianId,
             name: data.name,
             information: data.information,
             followers: data.followers,
             image: data.image
         } : {
-            id:musicianId,
+            id: musicianId,
             name: '',
             information: '',
             followers: '',
-            image:''
+            image: ''
         }
     ))
-    console.log(info);
+    const [loading, setLoading] = useState(true);
     const [image, setImage] = useState(null);
     const [isFilePicked, setIsFilePicked] = useState(false);
     const dispatch = useDispatch();
     const history = useHistory();
     useEffect(() => {
-        dispatch(fetchAsyncMusicianById(musicianId));
-    }, []);
+        const action = async () => {
+            setLoading(true);
+            await dispatch(fetchAsyncMusicianById(musicianId));
+         }
+         action();
+         setLoading(false)
+    }, [musicianId]);
 
     useEffect(() => {
         dispatch(fetchAsyncMusicians());
-     }, [createResult])
+    }, [createResult])
 
     const handleInput = (e) => {
         setEdited(true);
         const newdata = { ...info };
         newdata[e.target.id] = e.target.value;
         setInfo(newdata);
-        
+
     }
     const handleUpload = (e) => {
         const newImage = e.target.files[0];
@@ -65,7 +70,7 @@ const UpdateMusician = () => {
     }
     const handleCloseToast = () => {
         setOpen(false);
-     }
+    }
     const handleUpdate = async (e) => {
         e.preventDefault();
         if (image) {
@@ -80,9 +85,9 @@ const UpdateMusician = () => {
                 let actionresult = await dispatch(AsyncUpdateMusician(form))
                 let result = unwrapResult(actionresult);
                 setResult(true);
-                setTimeout(()=>{
+                setTimeout(() => {
                     history.goBack()
-                },1000)
+                }, 1000)
             } catch (error) {
                 setError(error.message);
                 setResult(true);
@@ -96,9 +101,9 @@ const UpdateMusician = () => {
                 let actionresult = await dispatch(AsyncUpdateMusician(info));
                 let result = unwrapResult(actionresult);
                 setResult(true);
-                setTimeout(()=>{
+                setTimeout(() => {
                     history.goBack()
-                },1000)
+                }, 1000)
             } catch (error) {
                 setError(error.message);
                 setResult(true);
@@ -108,11 +113,14 @@ const UpdateMusician = () => {
 
     }
     return (
-        <Container component={Paper} maxWidth='xl'  sx={{height:'100%',pt:1}}>
+        <Container component={Paper} maxWidth='xl' sx={{ height: '100%', pt: 1 }}>
             <Typography variant='h6'>
                 Update Information
             </Typography>
-            {data&&Object.keys(data).length === 0 ? <div>Loading...</div>
+            {loading ?
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                </Box>
                 :
                 <>
                     <Grid container justifyContent="center" sx={{ p: 2 }}
@@ -146,7 +154,7 @@ const UpdateMusician = () => {
                                     sx={{ my: 0.5 }}
                                     onChange={handleInput}
                                 />
-                                
+
                                 <TextField
                                     id='information'
                                     label='Information'
@@ -177,7 +185,7 @@ const UpdateMusician = () => {
                     {createResult && error &&
                         <Box>
                             <Snackbar
-                                anchorOrigin={{ vertical:'bottom', horizontal:'right' }}
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                                 open={openToast}
                                 autoHideDuration={6000}
                             >

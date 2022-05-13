@@ -6,6 +6,10 @@ import GenreReducer from './Slice/GenreSlice';
 import SongReducer from './Slice/SongSlice';
 import AlbumReducer from './Slice/AlbumSlice';
 import CommentReducer from './Slice/CommentSlice';
+import ListenReducer from './Slice/ListenSlice';
+import RatingSongReducer from './Slice/RatingSongSlice';
+import LikelistReducer from './Slice/LikelistSlice';
+
 import { combineReducers } from 'redux';
 import {
     persistReducer,
@@ -23,41 +27,6 @@ const persistConfig = {
     storage,
     whitelist: ['']
 }
-const preloadedState = {
-    user: {
-        users: [{ initial: 'value' }],
-        user: { initial: 'value' },
-        recentusers: [{ initial: 'value' }]
-    },
-    musician: {
-        musicians: [{ initial: 'value' }],
-        musician: { initial: 'value' },
-        topmusicians: [{ initial: 'value' }],
-        recentmusicians: [{ initial: 'value' }],
-    },
-    singer: {
-        singers: [{ initial: 'value' }],
-        singer: { initial: 'value' },
-        topsingers: [{ initial: 'value' }],
-        recentsingers: [{ initial: 'value' }],
-    },
-    song: {
-        songs: [{ initial: 'value' }],
-        song: { initial: 'value' },
-        recentsongs: [{ initial: 'value' }],
-        top: [{ initial: 'value' }],
-        bad: [{ initial: 'value' }],
-    }
-    // genre: {
-
-    // },
-    // album: {
-
-    // },
-    // comment: {
-
-    // }
-}
 
 
 
@@ -69,6 +38,9 @@ const rootReducer = combineReducers({
     song: SongReducer,
     album: AlbumReducer,
     comment: CommentReducer,
+    listen: ListenReducer,
+    likelist: LikelistReducer,
+    rating_song: RatingSongReducer,
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
@@ -79,7 +51,6 @@ const store = configureStore({
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
         }),
-    preloadedState,
 })
 
 export default store;

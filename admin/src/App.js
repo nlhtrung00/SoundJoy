@@ -86,7 +86,7 @@ function App() {
 
           <Layout page={ListSong} />
         </Route>
-        <Route path='/song/:songId'>
+        <Route path='/songs/:songId'>
           <Layout page={SongDetail} />
         </Route>
         <Route exact path='/songs/add'>
