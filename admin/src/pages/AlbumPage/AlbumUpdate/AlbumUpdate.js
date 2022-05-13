@@ -10,9 +10,11 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import { useParams } from "react-router-dom";
 import DatePicker from "react-date-picker";
 import Select from "react-select";
-import { getListGenres } from "../../../Redux/Slice/GenreSlice";
+import { fetchAsyncGenres, getListGenres } from "../../../Redux/Slice/GenreSlice";
 import MultiSelect from 'react-multiple-select-dropdown-lite'
 import 'react-multiple-select-dropdown-lite/dist/index.css'
+import { fetchAsyncSingers } from "../../../Redux/Slice/SingerSlice";
+import { fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
 const useStyles = makeStyles({
 	datetimepicker: {
 		margin: '5px 10px',
@@ -56,16 +58,40 @@ const AlbumUpdate = () => {
 		{
 			name: '',
 			image: '',
+			reactions: 0,
 			debuted_date: new Date(),
-			genre: ''
+			genre: '',
+			musician: [],
+			singer: []
 		}
 	)
+	useEffect(() => {
+		const action = async () => {
+			setLoading(true);
+			await dispatch(fetchAsyncGenres());
+			await dispatch(fetchAsyncSingers());
+			await dispatch(fetchAsyncMusicians());
 
+		}
+		action();
+		setLoading(false);
+	}, [])
 	const GenresOptions = genres.map((genre) => {
 		return (
 			{ label: genre.name, value: genre._id }
 		)
 	})
+	const SingersOptions = singers.map((singer) => {
+		return (
+			{ label: singer.name, value: singer._id }
+		)
+	})
+	const MusiciansOptions = musicians.map((musician) => {
+		return (
+			{ label: musician.name, value: musician._id }
+		)
+	})
+
 	// fetch album by id when render UI
 	useEffect(() => {
 		dispatch(fetchAsyncAlbumById(albumId));
@@ -79,7 +105,7 @@ const AlbumUpdate = () => {
 				reactions: album.reactions,
 				debuted_date: new Date(album.debuted_date),
 				genre: album.genre,
-				rating:album.rating ? album.rating : "",
+				rating: album.rating ? album.rating : "",
 			})
 		}
 	}, [album])
@@ -101,8 +127,8 @@ const AlbumUpdate = () => {
 		const array = value.split(",");
 		newdata['genre'] = array;
 		setInfo(newdata);
-  
-	 }
+
+	}
 	const handleSelectDate = (value) => {
 		const newdata = { ...info };
 		newdata['debuted_date'] = value;
@@ -133,10 +159,10 @@ const AlbumUpdate = () => {
 		formdata.append('image', image);
 		formdata.append('reactions', reactions);
 		formdata.append('debuted_date', debuted_date);
-		info.rating && formdata.append('rating',info.rating);
+		info.rating && formdata.append('rating', info.rating);
 		Array.from(genre).map((value) => {
-            formdata.append('genre', value);
-         })
+			formdata.append('genre', value);
+		})
 		// console.log(formdata.get('id'), formdata.get('name'), formdata.get('image'), formdata.get('reactions'), formdata.get('debuted_date'), formdata.get('genre'));
 		try {
 			let action = await dispatch(AsyncUpdateAlbum({ formdata, id }))
