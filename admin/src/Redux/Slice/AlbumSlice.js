@@ -7,6 +7,9 @@ const initialState={
     album:{},
     recentalbums:[],
     topalbums:[],
+    albums_by_genre:[],
+    albums_by_singer:[],
+    albums_by_musician:[],
     createresult:{},
     updateresult:{},
     deleteresult:{},
@@ -28,6 +31,19 @@ export const fetchAsyncAlbumById = createAsyncThunk('album/fetchAsyncAlbumById',
     const response = await Axios.get(`albums/${id}`);
     return response.data;
 })
+export const fetchAsyncAlbumsByGenre = createAsyncThunk("album/fetchAsyncAlbumsByGenre",async(genreId)=>{
+    const response = await Axios.get(`albums/genre/${genreId}`);
+    return response.data;
+})
+export const fetchAsyncAlbumsBySinger = createAsyncThunk("album/fetchAsyncAlbumsBySinger",async(singerId)=>{
+    const response = await Axios.get(`albums/singer/${singerId}`);
+    return response.data;
+})
+export const fetchAsyncAlbumsByMusician = createAsyncThunk("album/fetchAsyncAlbumsByMusician",async(musicianId)=>{
+    const response = await Axios.get(`albums/musician/${musicianId}`);
+    return response.data;
+})
+
 export const AsyncUpdateAlbum = createAsyncThunk('album/AsyncUpdateAlbum', async (data) => {
     const {formdata,id} = data;
     // let formData = new FormData();
@@ -160,11 +176,37 @@ const AlbumSlice = createSlice({
                 ...state,
                 error:action.error.message
             }
+        },
+        // albums by genre
+        [fetchAsyncAlbumsByGenre.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                albums_by_genre:action.payload
+            }
+        },
+        // albums by singer
+        [fetchAsyncAlbumsBySinger.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                albums_by_singer:action.payload
+            }
+        },
+        // albums by musician
+        [fetchAsyncAlbumsByMusician.fulfilled]:(state,action)=>{
+            console.log("fetch album by musician success")
+            return{
+                ...state,
+                albums_by_musician:action.payload
+            }
         }
+
     }
 })
 export const getListAlbums = (state) =>state.album.albums;
 export const getAlbum = (state) =>state.album.album;
 export const getTopAlbums = (state) => state.album.topalbums;
 export const getRecentAlbums = (state) => state.album.recentalbums;
+export const getListAlbumsByGenre = state => state.album.albums_by_genre;
+export const getListAlbumsBySinger = state => state.album.albums_by_singer;
+export const getListAlbumsByMusician= state => state.album.albums_by_musician;
 export default AlbumSlice.reducer;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Box, Avatar, TableBody, ButtonGroup, Typography, Button, TableContainer, TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
+import { Table, Box, Avatar, TableBody,  Typography, TableContainer, TableHead, TableRow, Paper, CircularProgress } from "@mui/material";
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from "react-redux";
@@ -109,9 +109,14 @@ const Tablistsong = ({ listSongs }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            song.genre.map(item => (
-                                                                genres.find(genre => genre._id === item).name + ", "
-                                                            ))
+                                                            song.genre.length > 0 ? song.genre.map((item,index) => (
+                                                                genres.find(genre => genre._id === item) ? 
+                                                                ((index < song.genre.length - 1) ? 
+                                                                (genres.find(genre => genre._id === item).name + ", ") : genres.find(genre => genre._id === item).name)
+                                                            
+                                                                :'none'    )
+                                                            
+                                                            ) : "none"
                                                             // console.log(genres)
                                                         }
                                                     </StyledTableCell>

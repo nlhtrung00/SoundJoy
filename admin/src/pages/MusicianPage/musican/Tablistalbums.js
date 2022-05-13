@@ -4,10 +4,11 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from "react-redux";
 import * as moment from "moment"
-import { fetchAsyncSingers, getSingers } from '../../Redux/Slices/SingerSlice';
-import { fetchAsyncGenres, getGenres } from '../../Redux/Slices/GenreSlice';
-import { fetchAsyncMusicians, getMusicians } from '../../Redux/Slices/MusicianSlice';
-import { Link, useNavigate } from 'react-router-dom';
+
+import { Link, useHistory } from 'react-router-dom';
+import { fetchAsyncSingers, getListSingers } from '../../../Redux/Slice/SingerSlice';
+import { fetchAsyncGenres, getListGenres } from '../../../Redux/Slice/GenreSlice';
+import { fetchAsyncMusicians, getListMusicians } from '../../../Redux/Slice/MusicianSlice';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -28,23 +29,24 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
         border: 0,
     },
 }));
-const Tablistsong = ({ listSongs }) => {
-    const [loading, setLoading] = useState(true)
+const Tablistalbum = ({ listAlbums }) => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const singers = useSelector(getSingers);
-    const genres = useSelector(getGenres);
-    const musicians = useSelector(getMusicians)
+    const history = useHistory();
+    const singers = useSelector(getListSingers);
+    const genres = useSelector(getListGenres);
+    const musicians = useSelector(getListMusicians);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         const action = async () => {
             setLoading(true)
+            await dispatch(fetchAsyncMusicians());
             await dispatch(fetchAsyncSingers());
             await dispatch(fetchAsyncGenres());
-            await dispatch(fetchAsyncMusicians())
         }
-        action();
-        setLoading(false)
+        action()
+        setLoading(false);
     }, [])
+    console.log(listAlbums)
     return (
         <>
             {
@@ -54,33 +56,32 @@ const Tablistsong = ({ listSongs }) => {
                     </Box>
                     :
                     <>
-                        {listSongs.length > 0 ?
+                        {listAlbums.length > 0 ?
                             <TableContainer component={Paper}>
-                                <Table sx={{}} aria-label="table list user">
+                                <Table sx={{}} aria-label="table list albums">
                                     <TableHead>
                                         <TableRow>
                                             <StyledTableCell>#</StyledTableCell>
-                                            <StyledTableCell>SONG</StyledTableCell>
+                                            <StyledTableCell>NAME</StyledTableCell>
                                             <StyledTableCell>SINGER</StyledTableCell>
                                             <StyledTableCell>MUSICIAN</StyledTableCell>
-                                            <StyledTableCell>LISTENS</StyledTableCell>
                                             <StyledTableCell>GENRES</StyledTableCell>
                                             <StyledTableCell>RATING</StyledTableCell>
 
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {listSongs.map((song, index) => {
+                                        {listAlbums.map((album, index) => {
                                             return (
 
-                                                <TableRow key={song._id} onClick={() => navigate(`/song/${song._id}`)} sx={{ cursor: 'pointer' }}>
+                                                <TableRow key={album._id} onClick={() => history.push(`/albums/${album._id}`)} sx={{ cursor: 'pointer' }}>
 
                                                     <StyledTableCell>
                                                         {index + 1}
                                                     </StyledTableCell>
                                                     <StyledTableCell>
                                                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                            <Avatar src={song.image} />
+                                                            <Avatar src={album.image} />
                                                             <Box sx={{ ml: 1 }}>
                                                                 <Typography sx={{
                                                                     fontWeight: 500, width: '120px', display: 'box',
@@ -88,7 +89,7 @@ const Tablistsong = ({ listSongs }) => {
                                                                     boxOrient: 'vertical',
                                                                     overflow: 'hidden',
                                                                 }}>
-                                                                    {song.name}
+                                                                    {album.name}
                                                                 </Typography>
                                                             </Box>
 
@@ -98,9 +99,9 @@ const Tablistsong = ({ listSongs }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            song.singer ?
+                                                            album.singer ?
                                                                 <>
-                                                                    {song.singer.map((item, index) => {
+                                                                    {album.singer.map((item, index) => {
                                                                         if (index < 1)
                                                                             return (
                                                                                 <Typography key={item}>
@@ -111,49 +112,48 @@ const Tablistsong = ({ listSongs }) => {
 
                                                                     }
                                                                     )}
-                                                                    {song.singer.length > 1 && <span style={{ fontSize: 14, fontWeight: 600 }}>And more...</span>}
+                                                                    {album.singer.length > 1 && <span style={{ fontSize: 14, fontWeight: 600 }}>And more...</span>}
                                                                 </>
                                                                 : "none"
                                                         }
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            song.musician ?
+                                                            album.musician.length > 0 ?
                                                                 <>
-                                                                    {song.musician.map((item, index) => {
-                                                                        if (index < 1)
-                                                                            return (
-                                                                                <Typography key={item}>
-                                                                                    {musicians.find(musician => musician._id === item).name}
-                                                                                </Typography>
+                                                                    <Typography>
+                                                                        {
+                                                                        album.musician.map((item,index) => {
+                                                                            if(index===0)
+                                                                            return musicians.find(musician => musician._id === item) ? musicians.find(musician => musician._id === item).name :"none"
+                                                                        })
 
-                                                                            )
 
-                                                                    }
-                                                                    )}
-                                                                    {song.musician.length > 1 && <span style={{ fontSize: 14, fontWeight: 600 }}>And more...</span>}
+                                                                        }
+                                                                        {album.musician.length > 1 && <span style={{ fontSize: 14, fontWeight: 600 }}>And more...</span>}
+                                                                    </Typography>
                                                                 </>
                                                                 : "none"
                                                         }
                                                     </StyledTableCell>
-                                                    <StyledTableCell>
+                                                    {/* <StyledTableCell>
                                                         {song.listens}
-                                                    </StyledTableCell>
+                                                    </StyledTableCell> */}
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            song.genre.map((item,index) => (
+                                                            album.genre.map((item, index) => (
                                                                 genres.find(genre => genre._id === item) ?
-                                                                (
-                                                                    (index < song.singer.length - 1) ? 
-                                                                    genres.find(genre => genre._id === item).name + ", " : genres.find(genre => genre._id === item).name
-                                                                )
-                                                                : "none"
-                                                                
+                                                                    (
+                                                                        (index < album.genre.length - 1) ?
+                                                                            genres.find(genre => genre._id === item).name + ", " : genres.find(genre => genre._id === item).name
+                                                                    )
+                                                                    : "none"
+
                                                             ))
                                                         }
                                                     </StyledTableCell>
                                                     <StyledTableCell>
-                                                        {song.rating >= 0 ? song.rating + "/5" : "0/5"}
+                                                        {album.rating >= 0 ? album.rating + "/5" : "0/5"}
                                                     </StyledTableCell>
 
 
@@ -177,8 +177,7 @@ const Tablistsong = ({ listSongs }) => {
             }
 
         </>
-
     );
 };
 
-export default Tablistsong;
+export default Tablistalbum;

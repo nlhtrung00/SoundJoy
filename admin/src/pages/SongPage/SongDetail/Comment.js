@@ -23,8 +23,7 @@ const useStyle = makeStyles({
     }
 })
 const Comment = ({ song }) => {
-    const [content, setContent] = useState("");
-    const [actionComment, setActionComment] = useState(false);
+    
     const classes = useStyle();
     const dispatch = useDispatch(getListMusicians)
     const [loading, setLoading] = useState(true);

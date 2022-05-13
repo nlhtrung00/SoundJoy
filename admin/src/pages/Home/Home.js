@@ -67,10 +67,6 @@ const Home = () => {
         setLoading(false);
     }, [])
     const [statistic, setStatistic] = useState('topsong');
-
-
-
-    console.log(recentUsers);
     const handleChangeChart = (event, newValue) => {
         setStatistic(newValue);
     };

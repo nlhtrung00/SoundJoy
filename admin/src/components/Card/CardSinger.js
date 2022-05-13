@@ -20,9 +20,10 @@ const useStyle = makeStyles({
         overflow: 'hidden',
     }
 })
-const CardSinger = (singer) => {
+const CardSinger = ({singer}) => {
     const classes = useStyle();
     const [option, setOption] = useState(false)
+    console.log(singer)
     return (
         <Card elevation={0} sx={{ borderRadius: '10px' }}>
             <CardActionArea
@@ -34,7 +35,7 @@ const CardSinger = (singer) => {
 
                         component="img"
                         className='cardimg'
-                        image={singer.singer.image}
+                        image={singer.image}
                         alt="singer img"
                         sx={{
                             objectFit: 'cover',
@@ -45,12 +46,12 @@ const CardSinger = (singer) => {
 
                     />
                 </Box>
-                <Link to={`/singers/${singer.singer._id}`}>
+                <Link to={`/singers/${singer._id}`}>
                     <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
                         <Typography className={classes.nameofsinger} sx={{
                             fontWeight: 600, fontSize: 16,
                         }}>
-                            {singer.singer.name}
+                            {singer.name}
                         </Typography>
                         <Typography variant='body4' sx={{ fontSize: 15 }}>
                             Singer

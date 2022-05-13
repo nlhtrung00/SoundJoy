@@ -12,6 +12,10 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
+import { fetchAsyncSongBySinger, getSongsBySinger } from "../../../Redux/Slice/SongSlice";
+import { fetchAsyncAlbumsBySinger, getListAlbumsBySinger } from "../../../Redux/Slice/AlbumSlice";
+import Tablistsong from "./Tablistsongs";
+import Tablistalbum from "./Tablistalbums";
 const useStyle = makeStyles({
 
 })
@@ -23,13 +27,19 @@ export default function SingerDetail() {
    const [loading, setLoading] = useState(true);
    const { singerId } = useParams();
    const data = useSelector(getSinger);
+   const songsbysinger = useSelector(getSongsBySinger);
+   const albumsbysinger = useSelector(getListAlbumsBySinger);
    const dispatch = useDispatch();
    const classes = useStyle();
+   console.log(data)
    useEffect(() => {
       const action = async () => {
          setLoading(true);
          await dispatch(fetchAsyncSingerById(singerId));
+         await dispatch(fetchAsyncSongBySinger(singerId));
+         await dispatch(fetchAsyncAlbumsBySinger(singerId));
       }
+      action()
       setLoading(false)
    }, [singerId, dispatch])
 
@@ -89,12 +99,12 @@ export default function SingerDetail() {
                            <TabPanel value="1" sx={{
                               p: 0
                            }}>
-                              Songs
+                              <Tablistsong listSongs={songsbysinger} />
                            </TabPanel>
                            <TabPanel value="2" sx={{
                               p: 0
                            }}>
-                              Album
+                              <Tablistalbum listAlbums={albumsbysinger} />
                            </TabPanel>
                         </TabContext>
 

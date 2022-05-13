@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { getAlbums, postAlbum, updateAlbum,getNewestAlbum, deleteAlbum, getAlbum, getRecentAlbums, getTopAlbums, getAlbumsByGenre } from '../controllers/albums.js';
+import { getAlbums, postAlbum, updateAlbum,getNewestAlbum, deleteAlbum, getAlbum, getRecentAlbums, getTopAlbums, getAlbumsByGenre,getAlbumsByMusician,getAlbumsBySinger } from '../controllers/albums.js';
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
@@ -13,6 +13,8 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get('/', getAlbums);
+router.get('/singer/:singerId',getAlbumsBySinger);
+router.get('/musician/:musicianId', getAlbumsByMusician);
 router.get('/newest', getNewestAlbum);
 router.get('/genre/:id', getAlbumsByGenre);
 router.get('/recent/recent', getRecentAlbums);
