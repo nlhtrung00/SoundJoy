@@ -1,5 +1,9 @@
 import express from 'express';
+<<<<<<< HEAD
 import { deleteRatingSong,getRatingsBySong,getRatingsBySongOfUser, getRatingSong, getRatingSongs, postRatingSong, updateRatingSong,deleteRatingSongBySong } from '../controllers/rantingsongs.js';
+=======
+import { deleteRatingSong,getRatingsBySong,getRatingsBySongOfUser, getRatingSong, getRatingSongs, postRatingSong, updateRatingSong } from '../controllers/ratingsongs.js';
+>>>>>>> 6f09a34e00cd2837b099c41df9e2c38479552daa
 
 const router = express.Router();
 
