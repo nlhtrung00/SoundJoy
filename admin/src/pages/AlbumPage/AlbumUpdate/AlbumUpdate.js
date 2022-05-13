@@ -13,8 +13,8 @@ import Select from "react-select";
 import { fetchAsyncGenres, getListGenres } from "../../../Redux/Slice/GenreSlice";
 import MultiSelect from 'react-multiple-select-dropdown-lite'
 import 'react-multiple-select-dropdown-lite/dist/index.css'
-import { fetchAsyncSingers } from "../../../Redux/Slice/SingerSlice";
-import { fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
+import { fetchAsyncSingers, getListSingers } from "../../../Redux/Slice/SingerSlice";
+import { fetchAsyncMusicians, getListMusicians } from "../../../Redux/Slice/MusicianSlice";
 const useStyles = makeStyles({
 	datetimepicker: {
 		margin: '5px 10px',
@@ -42,6 +42,9 @@ const customStylesSelect = {
 
 const AlbumUpdate = () => {
 	const genres = useSelector(getListGenres);
+	const singers = useSelector(getListSingers);
+	const musicians = useSelector(getListMusicians);
+
 	const album = useSelector(getAlbum);
 	const { albumId } = useParams();
 	const [edited, setEdited] = useState(false);
@@ -67,14 +70,14 @@ const AlbumUpdate = () => {
 	)
 	useEffect(() => {
 		const action = async () => {
-			setLoading(true);
+			// setLoading(true);
 			await dispatch(fetchAsyncGenres());
 			await dispatch(fetchAsyncSingers());
 			await dispatch(fetchAsyncMusicians());
 
 		}
 		action();
-		setLoading(false);
+		// setLoading(false);
 	}, [])
 	const GenresOptions = genres.map((genre) => {
 		return (

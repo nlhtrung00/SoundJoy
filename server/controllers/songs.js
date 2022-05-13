@@ -4,6 +4,7 @@ import { SongModel } from "../models/SongModel.js";
 import ContentBasedRecommender from 'content-based-recommender';
 import { LikelistModel } from "../models/LikelistModel.js";
 import { CommentModel } from "../models/CommentModel.js";
+import { RatingSongModel } from "../models/RatingSongModel.js";
 export const getSongs = async (req, res) => {
     try {
         const songs = await SongModel.find();
@@ -144,7 +145,7 @@ export const deleteSong = async (req, res) => {
         await cloudinary.uploader.destroy(song.cloudinary_mp3_id);
         await ListenModel.deleteMany({ song: req.params.id });
         await CommentModel.deleteMany({ song: req.params.id });
-        
+        await RatingSongModel.deleteMany({ song: req.params.id });
         const likelists = await LikelistModel.find({ songs: req.params.id }).select('songs');
         likelists.forEach(likelist => {
             likelist.songs = likelist.songs.filter(song => song.toString() !== req.params.id);
