@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteListen, getListen,getListenBySongWithUser, getListens, postListen, updateListen,deleteListensBySong,getListensBySong } from '../controllers/listens.js';
+import { deleteListen, getListen,getListenBySongWithUser, getListens, postListen, updateListen,getListensBySong } from '../controllers/listens.js';
 
 const router = express.Router();
 
@@ -9,7 +9,6 @@ router.get('/getbysongwithuser/:songId/:userId', getListenBySongWithUser);
 router.get('/:id', getListen);
 router.post('/', postListen);
 router.put('/:id', updateListen);
-router.delete('/deletebysong/:songId', deleteListensBySong);
 router.delete('/:id', deleteListen);
 
 export default router;
