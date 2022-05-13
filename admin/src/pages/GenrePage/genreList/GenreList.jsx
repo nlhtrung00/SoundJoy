@@ -5,17 +5,18 @@ import { Link } from "react-router-dom";
 import CardGenre from "./CardGenre";
 import { fetchAsyncGenres, getGenre, getListGenres, refreshGenre } from "../../../Redux/Slice/GenreSlice";
 import { useSelector, useDispatch } from "react-redux";
+
 export default function GenreList() {
    const [loading,setLoading] = useState(true);
    const genres = useSelector(getListGenres);
    const dispatch = useDispatch();
-   console.log(genres)
-   const genre = useSelector(getGenre);
-   console.log(genre)
+
+   // const genre = useSelector(getGenre);
+   // console.log(genre)
    useEffect(() => {
       const action = async()=>{
          setLoading(true);
-         await dispatch(refreshGenre());
+         // await dispatch(refreshGenre());
          await dispatch(fetchAsyncGenres());
       }
       action();
