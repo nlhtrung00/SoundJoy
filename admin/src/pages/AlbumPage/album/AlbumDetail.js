@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Container, Box, Typography, Button, Paper, Grid } from "@mui/material";
+import { Avatar, Container, Box, Typography, Button, Paper, Grid, CircularProgress } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -29,111 +29,135 @@ const AlbumDetail = () => {
     const album = useSelector(getAlbum);
     const genres = useSelector(getListGenres)
     const songsbyalbum = useSelector(getListSongs);
-    console.log(songsbyalbum);
-    useEffect(() => {
-        dispatch(fetchAsyncSongByAlbum(albumId));
-        dispatch(fetchAsyncAlbumById(albumId))
-        dispatch(fetchAsyncGenres());
-        
 
-    }, [albumId, dispatch])
+    const [loading, setLoading] = useState(true);
+    console.log(album);
+    useEffect(() => {
+
+        const action = async () => {
+            setLoading(true);
+            dispatch(fetchAsyncGenres());
+            dispatch(fetchAsyncSongByAlbum(albumId));
+            await dispatch(fetchAsyncAlbumById(albumId))
+
+
+            console.log('fetch finish')
+        }
+        action();
+        setLoading(false)
+
+
+    }, [])
+
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
+
     return (
         <Container maxWidth='xl' component={Paper} sx={{ height: '100%', pt: 2 }}>
-            {album && Object.keys(album).length === 0 ? <div>Loading...</div>
+            {loading ?
+                <Box sx={{ display: 'flex' }}>
+                    <CircularProgress />
+                </Box>
                 :
                 <>
-                    <Box className={classes.info}>
-                        <Box>
-                            <Grid container>
-                                <Grid item md={2}>
-                                    <Box>
-                                        <img src={album.image} style={{ width: '100%', height:200,objectFit: 'cover' }} />
-                                    </Box>
-
-                                </Grid>
-                                <Grid item md={10}>
-                                    <Box sx={{ ml: 2, }}>
-                                        <Typography sx={{
-                                            fontWeight: 500,
-                                            fontSize: '30px',
-                                            letterSpacing: '8px',
-                                            my: 0
-                                        }}>
-                                            {album.name}
-                                        </Typography>
-                                        <Typography sx={{ lineHeight: 2 }}>
-                                            <span style={{ fontWeight: 500 }}>Debuted date:</span> {moment(album.debuted_date).format('DD/MM/YYYY')}
-                                        </Typography>
-                                        <Typography sx={{ lineHeight: 2 }}>
-                                            <span style={{ fontWeight: 500 }}>Genres:</span>
-                                            {
-                                                album.genre.map(item => (
-                                                    genres.find(genre => genre._id === item).name
-                                                ))
-
-                                            }
-                                        </Typography>
-                                        <Typography sx={{ lineHeight: 2 }}>
-                                            <span style={{ fontWeight: 500 }}>Total of songs:</span>
-                                            {
-                                                songsbyalbum.length
-                                            }
-                                        </Typography>
-                                        {/* <Box sx={{display:'flex'}}>
-                                            
-                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
-                                                <Typography>
-                                                    {album.rating ? album.rating : '0/10'}
-                                                </Typography>
+                    {
+                        album && Object.keys(album).length > 0 &&
+                        <>
+                            {console.log(album)}
+                            <Box className={classes.info}>
+                                <Box>
+                                    <Grid container>
+                                        <Grid item md={2}>
+                                            <Box>
+                                                <img src={album.image} style={{ width: '100%', height: 200, objectFit: 'cover' }} />
                                             </Box>
-                                        </Box> */}
+
+                                        </Grid>
+                                        <Grid item md={10}>
+                                            <Box sx={{ ml: 2, }}>
+                                                <Typography sx={{
+                                                    fontWeight: 500,
+                                                    fontSize: '30px',
+                                                    letterSpacing: '8px',
+                                                    my: 0
+                                                }}>
+                                                    {album.name}
+                                                </Typography>
+                                                <Typography sx={{ lineHeight: 2 }}>
+                                                    <span style={{ fontWeight: 500 }}>Debuted date:</span> {moment(album.debuted_date).format('DD/MM/YYYY')}
+                                                </Typography>
+                                                <Typography sx={{ lineHeight: 2 }}>
+                                                    <span style={{ fontWeight: 500 }}>Genres:</span>
+                                                    {
+                                                        genres && genres.length > 0 ? album.genre.map(item => (
+                                                            genres.find(genre => genre._id === item).name
+                                                        ))
+                                                            : "none"
+
+
+
+                                                    }
+                                                </Typography>
+                                                <Typography sx={{ lineHeight: 2 }}>
+                                                    <span style={{ fontWeight: 500 }}>Total of songs:</span>
+                                                    {
+                                                        songsbyalbum.length
+                                                    }
+                                                </Typography>
+                                                {/* <Box sx={{ display: 'flex' }}>
+
+                                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
+                                                        <Typography>
+                                                            {album.rating ? album.rating : '0/10'}
+                                                        </Typography>
+                                                    </Box>
+                                                </Box> */}
+
+                                            </Box>
+                                        </Grid>
+                                    </Grid>
+                                </Box>
+                                <Box className="achievement">
+
+                                    <Box sx={{
+                                        borderBottom: 1, borderColor: 'divider'
+                                    }}>
+                                        <TabContext value={valueTab} >
+                                            <TabList onChange={handleChangeTab} aria-label="tab for album">
+                                                <Tab label="Songs" value="1" />
+                                            </TabList>
+                                            <TabPanel value="1" sx={{
+                                                p: 1,
+                                                minHeight: 350,
+                                                bgcolor: '#eeeeee'
+                                            }}>
+                                               {songsbyalbum && <Tablistsong listSongs={songsbyalbum} />} 
+                                            </TabPanel>
+                                        </TabContext>
 
                                     </Box>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                        <Box className="achievement">
-                            {/* <Typography variant="h6">
-                                Song
-                            </Typography> */}
-                            <Box sx={{
-                                borderBottom: 1, borderColor: 'divider'
-                            }}>
-                                <TabContext value={valueTab} >
-                                    <TabList onChange={handleChangeTab} aria-label="tab for album">
-                                        <Tab label="Songs" value="1" />
-                                    </TabList>
-                                    <TabPanel value="1" sx={{
-                                        p: 1,
-                                        minHeight:350,
-                                        bgcolor:'#eeeeee'
-                                    }}>
-                                        <Tablistsong listSongs={songsbyalbum}/>
-                                    </TabPanel>
-                                </TabContext>
+                                </Box>
 
                             </Box>
-                        </Box>
-
-                    </Box>
-                    <Box className="edit_info" sx={{
-                        position: 'fixed',
-                        bottom: 30,
-                        right: 30
-                    }}>
-                        <Link to={`edit/${album._id}`}>
-                            <Button variant='contained'>
-                                Edit
-                                <EditIcon sx={{ fontSize: '16px', ml: 0.5 }} />
-                            </Button>
-                        </Link>
+                            <Box className="edit_info" sx={{
+                                position: 'fixed',
+                                bottom: 30,
+                                right: 30
+                            }}>
+                                <Link to={`edit/${album._id}`}>
+                                    <Button variant='contained'>
+                                        Edit
+                                        <EditIcon sx={{ fontSize: '16px', ml: 0.5 }} />
+                                    </Button>
+                                </Link>
 
 
-                    </Box>
+                            </Box>
+                        </>
+                    }
+
                 </>
             }
         </Container>

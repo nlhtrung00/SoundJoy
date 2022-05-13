@@ -79,6 +79,9 @@ const AlbumSlice = createSlice({
         [fetchAsyncAlbums.pending]:()=>{
             console.log("Pending Albums")
         },
+        [fetchAsyncAlbumById.pending]:()=>{
+            console.log('pending album by id')
+        },
 
         // fulfilled
         [fetchAsyncAlbums.fulfilled]:(state,action)=>{

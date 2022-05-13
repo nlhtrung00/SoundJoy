@@ -26,6 +26,14 @@ export const getListenBySongWithUser = async (req, res) => {
         res.status(500).json({ error: err});
     }
 };
+export const getListensBySong = async (req, res) => {
+    try {
+        const listens = await ListenModel.find({ song: req.params.songId});
+        res.status(200).json(listens);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
 
 export const postListen = async (req, res) => {
     try {

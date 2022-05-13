@@ -26,6 +26,14 @@ export const getLikelist = async (req, res) => {
         res.status(500).json({ error: err });
     }
 };
+export const getLikelistsBySong = async (req, res) => {
+    try {
+        const likelists = await LikelistModel.find({ songs: req.params.songId });
+        res.status(200).json(likelists);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
 
 export const postLikelist = async (req, res) => {
     try {
