@@ -2,8 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Axios from '../../Common/Axios';
 
 const initialState = {
-    ratingsbysong: [{initial:'value'}],
-    rating: {initial:'value'}
+    ratingsbysong: [],
+    rating: {}
 }
 
 export const fetchAsyncRatingsBySong = createAsyncThunk('ratingsong/fetchAsyncRatingsBySong',async(songId)=>{

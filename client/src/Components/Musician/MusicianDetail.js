@@ -14,6 +14,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { fetchAsyncMusicianById, getMusician } from "../../Redux/Slices/MusicianSlice";
 import Tablistsong from "../TabList/Tablistsong";
 import { fetchAsyncSongByMusician, fetchAsyncSongs, getListSongs, getSongsByMusician } from "../../Redux/Slices/SongSlice";
+import { fetchAsyncAlbumsByMusician, getListAlbumsByMusician } from "../../Redux/Slices/AlbumSlice";
+import Tablistalbum from "../TabList/Tablistalbums";
 const useStyle = makeStyles({
     home_container: {
         backgroundColor: 'white',
@@ -29,13 +31,14 @@ const MusicianDetail = () => {
     const { musicianId } = useParams();
     const data = useSelector(getMusician);
     const songsbymusician = useSelector(getSongsByMusician);
+    const albumsbymusician = useSelector(getListAlbumsByMusician)
     const dispatch = useDispatch();
     useEffect(() => {
         const action = async () => {
             setLoading(true);
             await dispatch(fetchAsyncMusicianById(musicianId));
             await dispatch(fetchAsyncSongByMusician(musicianId));
-
+            await dispatch(fetchAsyncAlbumsByMusician(musicianId))
         }
         action();
         setLoading(false)
@@ -44,7 +47,7 @@ const MusicianDetail = () => {
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
-    console.log(songsbymusician);
+    
     return (
 
         <Container sx={{ p: 1 }} className={classes.home_container}>
@@ -119,7 +122,7 @@ const MusicianDetail = () => {
                                         minHeight: 350,
                                         bgcolor: '#eeeeee'
                                     }}>
-                                        <Tablistsong listSongs={songsbymusician} />
+                                        <Tablistalbum listAlbums={albumsbymusician} />
                                     </TabPanel>
                                 </TabContext>
 

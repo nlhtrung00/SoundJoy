@@ -5,6 +5,10 @@ const initialState={
     songs:[],
     song:{},
     recentsongs:[],
+    songbysinger:[],
+    songbymusician:[],
+    songbygenre:[],
+    songbyalbum:[],
     top:[],
     bad:[],
     createresult:{},
@@ -30,6 +34,19 @@ export const fetchAsyncSongById =createAsyncThunk('song/fetchAsyncSongById',asyn
 })
 export const fetchAsyncSongByAlbum =createAsyncThunk('song/fetchAsyncSongByAlbum',async(albumId)=>{
     const response = await Axios.get(`songs/album/${albumId}`);
+    return response.data;
+})
+
+export const fetchAsyncSongBySinger =createAsyncThunk('song/fetchAsyncSongBySinger',async(singerId)=>{
+    const response = await Axios.get(`songs/singer/${singerId}`);
+    return response.data;
+})
+export const fetchAsyncSongByGenre =createAsyncThunk('song/fetchAsyncSongByGenre',async(genreId)=>{
+    const response = await Axios.get(`songs/genre/${genreId}`);
+    return response.data;
+})
+export const fetchAsyncSongByMusician =createAsyncThunk('song/fetchAsyncSongByMusician',async(musicianId)=>{
+    const response = await Axios.get(`songs/musician/${musicianId}`);
     return response.data;
 })
 export const fetchAsyncRecentSongs =createAsyncThunk('song/fetchAsyncRecentSongs',async()=>{
@@ -101,7 +118,29 @@ const SongSlice = createSlice({
             console.log('fetch song by album')
             return{
                 ...state,
-                songs:action.payload
+                songbyalbum:action.payload
+            }
+        },
+        
+        // song by singer
+        [fetchAsyncSongBySinger.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                songbysinger:action.payload
+            }
+        },
+        // song by musician
+        [fetchAsyncSongByMusician.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                songbymusician:action.payload
+            }
+        },
+        // song by genre
+        [fetchAsyncSongByGenre.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                songbygenre:action.payload
             }
         },
 
@@ -116,6 +155,10 @@ const SongSlice = createSlice({
 });
 export const getListSongs = (state)=>state.song.songs;
 export const getSong = (state)=>state.song.song;
+export const getSongsBySinger = (state)=>state.song.songbysinger;
+export const getSongsByMusician = (state)=>state.song.songbymusician;
+export const getSongsByGenre = (state)=>state.song.songbygenre;
+export const getSongsByAlbum = (state)=>state.song.songbyalbum;
 export const getRecentSongs = (state) => state.song.recentsongs;
 export const getTopSongs = (state) => state.song.top;
 export const getBadSongs = (state) => state.song.bad;

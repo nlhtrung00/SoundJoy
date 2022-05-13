@@ -15,9 +15,9 @@ import GradeIcon from '@mui/icons-material/Grade';
 import { fetchAsyncAlbumById, getAlbum } from "../../../Redux/Slice/AlbumSlice";
 import * as moment from 'moment'
 import { fetchAsyncGenres, getListGenres } from "../../../Redux/Slice/GenreSlice";
-import { fetchAsyncSongByAlbum, getListSongs } from "../../../Redux/Slice/SongSlice";
+import { fetchAsyncSongByAlbum, getListSongs, getSongsByAlbum } from "../../../Redux/Slice/SongSlice";
 import Tablistsong from "./Tablistsong";
-import { fetchAsyncSingers } from "../../../Redux/Slice/SingerSlice";
+import { fetchAsyncSingers,getListSingers } from "../../../Redux/Slice/SingerSlice";
 const useStyle = makeStyles({
 
 })
@@ -28,8 +28,8 @@ const AlbumDetail = () => {
     const { albumId } = useParams();
     const album = useSelector(getAlbum);
     const genres = useSelector(getListGenres)
-    const songsbyalbum = useSelector(getListSongs);
-
+    const songsbyalbum = useSelector(getSongsByAlbum);
+    const singers = useSelector(getListSingers)
     const [loading, setLoading] = useState(true);
     console.log(album);
     useEffect(() => {
@@ -39,7 +39,7 @@ const AlbumDetail = () => {
             await dispatch(fetchAsyncGenres());
             await dispatch(fetchAsyncSongByAlbum(albumId));
             await dispatch(fetchAsyncAlbumById(albumId))
-
+            await dispatch(fetchAsyncSingers());
 
             console.log('fetch finish')
         }
@@ -100,6 +100,15 @@ const AlbumDetail = () => {
                                                     }
                                                 </Typography>
                                                 <Typography sx={{ lineHeight: 2 }}>
+                                                    <span style={{ fontWeight: 500 }}>Singers:</span>
+                                                    {
+                                                        album.singer.length > 0 ? album.singer.map(item => (
+                                                            singers.find(genre => genre._id === item) ? singers.find(genre => genre._id === item).name : ' none'
+                                                        )) : " none"
+
+                                                    }
+                                                </Typography>
+                                                <Typography sx={{ lineHeight: 2 }}>
                                                     <span style={{ fontWeight: 500 }}>Total of songs:</span>
                                                     {
                                                         songsbyalbum.length
@@ -133,7 +142,7 @@ const AlbumDetail = () => {
                                                 minHeight: 350,
                                                 bgcolor: '#eeeeee'
                                             }}>
-                                               {songsbyalbum && <Tablistsong listSongs={songsbyalbum} />} 
+                                                {songsbyalbum && <Tablistsong listSongs={songsbyalbum} />}
                                             </TabPanel>
                                         </TabContext>
 

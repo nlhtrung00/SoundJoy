@@ -2,13 +2,13 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import Axios from "../../Common/Axios";
 
 const initialState={
-    songs:[{initial:'value'}],
-    song:{initial:'value'},
-    songbysinger:[{initial:'value'}],
-    songbymusician:[{initial:'value'}],
-    songbygenre:[{initial:'value'}],
-    songbyalbum:[{initial:'value'}],
-    recentsongs:[{initial:'value'}],
+    songs:[],
+    song:{},
+    songbysinger:[],
+    songbymusician:[],
+    songbygenre:[],
+    songbyalbum:[],
+    recentsongs:[],
     playlist:[]
 }
 export const fetchAsyncSongs =createAsyncThunk('song/fetchAsyncSongs',async()=>{

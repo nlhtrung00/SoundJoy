@@ -36,22 +36,22 @@ export const getAlbumsByGenre = async (req, res) => {
         res.status(500).json({ error: err });
     }
 };
-// export const getAlbumsBySinger = async (req, res) => {
-//     try {
-//         const album = await AlbumModel.findOne({ _id: req.params.id });
-//         res.status(200).json(album);
-//     } catch (err) {
-//         res.status(500).json({ error: err });
-//     }
-// };
-// export const getAlbumsByMusician = async (req, res) => {
-//     try {
-//         const album = await AlbumModel.findOne({ _id: req.params.id });
-//         res.status(200).json(album);
-//     } catch (err) {
-//         res.status(500).json({ error: err });
-//     }
-// };
+export const getAlbumsBySinger = async (req, res) => {
+    try {
+        const albums = await AlbumModel.find({ singer: req.params.singerId });
+        res.status(200).json(albums);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+export const getAlbumsByMusician = async (req, res) => {
+    try {
+        const albums = await AlbumModel.find({ musician: req.params.musicianId });
+        res.status(200).json(albums);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
 export const getRecentAlbums = async (req, res) => {
     try {
         const today = new Date();

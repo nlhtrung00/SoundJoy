@@ -110,7 +110,7 @@ const GenreDetail = () => {
                                         p: 1,
                                         minHeight: 450,
                                         bgcolor: '#eeeeee',
-
+                                        overflow: 'auto',
                                     }}>
                                         <AlbumsByGenre albums={albums} />
                                     </TabPanel>

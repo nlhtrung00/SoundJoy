@@ -16,6 +16,7 @@ import { fetchAsyncAlbumById, getAlbum } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncGenres, getGenres } from "../../Redux/Slices/GenreSlice";
 import { fetchAsyncSongByAlbum, getSongsByAlbum } from "../../Redux/Slices/SongSlice";
 import Tablistsong from "../TabList/Tablistsong";
+import { fetchAsyncSingers, getSingers } from "../../Redux/Slices/SingerSlice";
 
 const useStyle = makeStyles({
     home_container: {
@@ -31,7 +32,8 @@ const AlbumDetail = () => {
     const classes = useStyle();
     const { albumId } = useParams();
     const album = useSelector(getAlbum);
-    const genres = useSelector(getGenres)
+    const genres = useSelector(getGenres);
+    const singers = useSelector(getSingers)
     const songsbyalbum = useSelector(getSongsByAlbum);
     const [loading, setLoading] = useState(true);
     console.log(songsbyalbum);
@@ -41,6 +43,7 @@ const AlbumDetail = () => {
             await dispatch(fetchAsyncSongByAlbum(albumId));
             await dispatch(fetchAsyncAlbumById(albumId))
             await dispatch(fetchAsyncGenres());
+            await dispatch(fetchAsyncSingers())
 
         }
         action();
@@ -86,6 +89,15 @@ const AlbumDetail = () => {
                                                 album.genre.map(item => (
                                                     genres.find(genre => genre._id === item).name
                                                 ))
+
+                                            }
+                                        </Typography>
+                                        <Typography sx={{ lineHeight: 2 }}>
+                                            <span style={{ fontWeight: 500 }}>Singers:</span>
+                                            {
+                                                album.singer.length>0 ? album.singer.map(item => (
+                                                    singers.find(genre => genre._id === item) ? singers.find(genre => genre._id === item).name : ' none'
+                                                )) : " none"
 
                                             }
                                         </Typography>
