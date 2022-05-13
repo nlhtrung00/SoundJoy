@@ -12,7 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { unwrapResult } from "@reduxjs/toolkit";
 import AddIcon from '@mui/icons-material/Add';
 import { fetchAsyncMusicianById, getMusician } from "../../Redux/Slices/MusicianSlice";
-import Tablistsong from "../TabListSongs/Tablistsong";
+import Tablistsong from "../TabList/Tablistsong";
 import { fetchAsyncSongByMusician, fetchAsyncSongs, getListSongs, getSongsByMusician } from "../../Redux/Slices/SongSlice";
 const useStyle = makeStyles({
     home_container: {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteRatingMusician, getRatingMusician, getRatingMusicians, postRatingMusician, updateRatingMusician } from '../controllers/rantingmusicians.js';
+import { deleteRatingMusician, getRatingMusician, getRatingMusicians, postRatingMusician, updateRatingMusician } from '../controllers/ratingmusicians.js';
 
 const router = express.Router();
 
