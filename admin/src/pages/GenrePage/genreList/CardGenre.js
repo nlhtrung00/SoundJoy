@@ -36,7 +36,6 @@ const CardGenre = (props) => {
     const [delaction, setDelAction] = useState(false);
     const handleDelete = async (id) => {
         setActionDel(false)
-        console.log(id);
         try {
             // dispatch to redux store
             const action = await dispatch(AsyncDeleteGenre(id));
@@ -46,7 +45,7 @@ const CardGenre = (props) => {
             // fetch new list genre again after change
             dispatch(fetchAsyncGenres());
         } catch (err) {
-            console.log(err);
+            // console.log(err);
             setActionDel(true);
         }
 
@@ -91,12 +90,13 @@ const CardGenre = (props) => {
                         alt="genre image"
 
                     />
-
-                    <CardContent className={classes.cardcontent}>
-                        <Typography className={classes.namegenre}>
-                            {props.genre.name}
-                        </Typography>
-                    </CardContent>
+                    <Link to={`genres/${props.genre._id}`}>
+                        <CardContent className={classes.cardcontent}>
+                            <Typography className={classes.namegenre}>
+                                {props.genre.name}
+                            </Typography>
+                        </CardContent>
+                    </Link>
 
 
                 </CardActionArea>

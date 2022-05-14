@@ -33,7 +33,17 @@ const schema = new mongoose.Schema({
     },
     cloudinary_id: {
         type: String
-    }    
+    },
+    follow_singer: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Singer',
+        // required: true
+    }],
+    follow_musician: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Musician',
+        // required: true
+    }],    
 }, {
     versionKey: false,
     timestamps: true 

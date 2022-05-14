@@ -30,6 +30,7 @@ import { fetchAsyncSongs } from "./Redux/Slice/SongSlice";
 import { fetchAsyncAlbums } from "./Redux/Slice/AlbumSlice";
 import Layout from "./Layout";
 import AlbumDetail from "./pages/AlbumPage/album/AlbumDetail";
+import GenreDetail from "./pages/GenrePage/genre/GenreDetail";
 function App() {
   const dispatch = useDispatch();
   // useEffect(() => {
@@ -104,6 +105,9 @@ function App() {
         </Route>
         <Route exact path='/genres/edit/:genreId'>
           <Layout page={GenreUpdate} />
+        </Route>
+        <Route path='/genres/:genreId'>
+          <Layout page={GenreDetail} />
         </Route>
 
         {/* route for album */}
