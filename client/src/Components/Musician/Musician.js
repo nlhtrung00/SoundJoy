@@ -1,9 +1,9 @@
-import React from 'react';
-import { Container, Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, CircularProgress, Container, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import CardMusician from './CardMusician';
-import { getMusicians } from '../../Redux/Slices/MusicianSlice';
-import { useSelector } from 'react-redux';
+import { fetchAsyncMusicians, getMusicians } from '../../Redux/Slices/MusicianSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 const useStyle = makeStyles((theme) => ({
     home_container: {
@@ -17,26 +17,46 @@ const useStyle = makeStyles((theme) => ({
 const Musicians = () => {
     const classes = useStyle();
     const musicians = useSelector(getMusicians);
+    const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const action = async () => {
+            setLoading(true);
+            dispatch(fetchAsyncMusicians());
+        }
+        action();
+        setLoading(false)
+    },[])
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
-            <Typography variant="h6" sx={{
-                mb: 1
-            }}>
-                All Musicians
-            </Typography>
-            <Grid container spacing={2}>
-                {musicians && musicians.map((musician) => {
-                    return (
-                        <Grid item lg={2} md={3} xs={6} key={musician._id}>
-                            <Link to={`/musician/${musician._id}`}>
-                                <CardMusician musician={musician}/>
-                            </Link>
+            {
+                loading ?
+                    <Box sx={{ display: 'flex' }}>
+                        <CircularProgress />
+                    </Box>
+                    :
+                    <>
+                        <Typography variant="h6" sx={{
+                            mb: 1
+                        }}>
+                            All Musicians
+                        </Typography>
+                        <Grid container spacing={2}>
+                            {musicians && musicians.map((musician) => {
+                                return (
+                                    <Grid item lg={2} md={3} xs={6} key={musician._id}>
+                                        <Link to={`/musician/${musician._id}`}>
+                                            <CardMusician musician={musician} />
+                                        </Link>
+                                    </Grid>
+                                )
+                            })}
+
+
                         </Grid>
-                    )
-                })}
+                    </>
+            }
 
-
-            </Grid>
         </Container>
     );
 };

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useSelector } from 'react-redux';
-import { getMusicians } from '../../../Redux/Slices/MusicianSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAsyncMusicians, getMusicians } from '../../../Redux/Slices/MusicianSlice';
 import singerImg from "../../../Images/binz.jpeg";
 import singerImg2 from "../../../Images/denvau.jpg"
 import { Link } from 'react-router-dom';
@@ -34,38 +34,54 @@ const useStyle = makeStyles((theme) => ({
 
 const Musicians = () => {
     const classes = useStyle();
+    const dispatch = useDispatch();
     const musicians = useSelector(getMusicians);
+    const [loading, setLoading] = useState(true);
     const reviewMusicians = musicians.slice(0, 6);
+    useEffect(() => {
+        const action = async () => {
+            setLoading(true)
+            await dispatch(fetchAsyncMusicians());
+        }
+        action();
+        setLoading(false)
+    }, [])
     return (
         <Grid container spacing={3}>
-            {reviewMusicians && reviewMusicians.map((musician) => {
-                return (
-                    <Grid item lg={2} md={3} xs={6} key={musician._id}>
-                        <Card className={classes.card}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    className={classes.cardimg}
-                                    image={musician.image}
-                                    alt="genre image"
-                                    sx={{
-                                        mx: "auto"
-                                    }}
-                                />
-                                <Link to={`musician/${musician._id}`}>
-                                    <CardContent className={classes.cardcontent}>
-                                        <Typography className={classes.namegenre}>
-                                            {musician.name}
-                                        </Typography>
-                                    </CardContent>
-                                </Link>
+            {!loading &&
+                <>
+                    {reviewMusicians && reviewMusicians.map((musician) => {
+                        return (
+                            <Grid item lg={2} md={3} xs={6} key={musician._id}>
+                                <Card className={classes.card}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            component="img"
+                                            className={classes.cardimg}
+                                            image={musician.image}
+                                            alt="genre image"
+                                            sx={{
+                                                mx: "auto"
+                                            }}
+                                        />
+                                        <Link to={`musician/${musician._id}`}>
+                                            <CardContent className={classes.cardcontent}>
+                                                <Typography className={classes.namegenre}>
+                                                    {musician.name}
+                                                </Typography>
+                                            </CardContent>
+                                        </Link>
 
-                            </CardActionArea>
-                        </Card>
+                                    </CardActionArea>
+                                </Card>
 
-                    </Grid>
-                )
-            })}
+                            </Grid>
+                        )
+                    })}
+                </>
+
+            }
+
         </Grid>
     );
 };

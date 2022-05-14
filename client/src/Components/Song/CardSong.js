@@ -27,87 +27,96 @@ const useStyle = makeStyles({
     },
 
 })
-const CardSong = ({song}) => {
+const CardSong = ({ song }) => {
     const classes = useStyle();
     const [option, setOption] = useState(false)
     const singers = useSelector(getSingers);
-    const dispatch =useDispatch();
-    useEffect(()=>{
-        dispatch(fetchAsyncSingers());
-    },[dispatch])
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const action = async () => {
+            setLoading(true);
+            await dispatch(fetchAsyncSingers());
+        }
+        action();
+        setLoading(false)
+    }, [dispatch])
 
     return (
         <Card elevation={0} sx={{ borderRadius: '10px' }}>
-            <CardActionArea
-                className={classes.actionarea}
-            >
-                <Box onMouseOver={() => setOption(true)}
-                    onMouseLeave={() => setOption(false)} sx={{ overflow: 'hidden', position: 'relative' }}>
-                    <CardMedia
+            {loading &&
+                <CardActionArea
+                    className={classes.actionarea}
+                >
+                    <Box onMouseOver={() => setOption(true)}
+                        onMouseLeave={() => setOption(false)} sx={{ overflow: 'hidden', position: 'relative' }}>
+                        <CardMedia
 
-                        component="img"
-                        className='cardimg'
-                        image={song.image}
-                        alt="song img"
-                        sx={{
-                            objectFit: 'cover',
-                            objectPosition: 'center',
-                            height: '250px',
-                            transitionDuration: '0.6s'
-                        }}
+                            component="img"
+                            className='cardimg'
+                            image={song.image}
+                            alt="song img"
+                            sx={{
+                                objectFit: 'cover',
+                                objectPosition: 'center',
+                                height: '250px',
+                                transitionDuration: '0.6s'
+                            }}
 
-                    />
-                    {option &&
-                        <Box onMouseOver={() => setOption(true)} sx={{ position: 'absolute', top: '45%', width: '100%' }}>
-                            <Box className='option' sx={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>
+                        />
+                        {option &&
+                            <Box onMouseOver={() => setOption(true)} sx={{ position: 'absolute', top: '45%', width: '100%' }}>
+                                <Box className='option' sx={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>
 
-                                <FavoriteBorderIcon sx={{
-                                    color: 'white', fontSize: '40px',
-                                    '&:hover': {
-                                        transform: 'scale(1.05)',
-                                        transition: 'ease-in-out',
-                                        transitionDuration: '0.4s'
-                                    },
-                                    transitionDuration: '0.4s'
-                                }} />
-                                <Link to={`/song/${song._id}`}>
-                                    <PlayCircleOutlineIcon sx={{
+                                    <FavoriteBorderIcon sx={{
                                         color: 'white', fontSize: '40px',
                                         '&:hover': {
-                                            transform: 'scale(1.15)',
+                                            transform: 'scale(1.05)',
                                             transition: 'ease-in-out',
                                             transitionDuration: '0.4s'
                                         },
                                         transitionDuration: '0.4s'
                                     }} />
-                                </Link>
-                                <FileDownloadIcon sx={{
-                                    color: 'white', fontSize: '40px',
-                                    '&:hover': {
-                                        transform: 'scale(1.05)',
-                                        transition: 'ease-in-out',
+                                    <Link to={`/song/${song._id}`}>
+                                        <PlayCircleOutlineIcon sx={{
+                                            color: 'white', fontSize: '40px',
+                                            '&:hover': {
+                                                transform: 'scale(1.15)',
+                                                transition: 'ease-in-out',
+                                                transitionDuration: '0.4s'
+                                            },
+                                            transitionDuration: '0.4s'
+                                        }} />
+                                    </Link>
+                                    <FileDownloadIcon sx={{
+                                        color: 'white', fontSize: '40px',
+                                        '&:hover': {
+                                            transform: 'scale(1.05)',
+                                            transition: 'ease-in-out',
+                                            transitionDuration: '0.4s'
+                                        },
                                         transitionDuration: '0.4s'
-                                    },
-                                    transitionDuration: '0.4s'
-                                }} />
-                            </Box>
-                        </Box>}
+                                    }} />
+                                </Box>
+                            </Box>}
 
-                </Box>
-                <Link to={`/song/${song._id}`}>
-                    <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
-                        <Typography className={classes.overflow_text} sx={{
-                            fontWeight: 600, fontSize: 16,
-                        }}>
-                            {song.name}
-                        </Typography>
-                        <Typography className={classes.overflow_text} variant='body4' sx={{ fontSize: 15 }}>
-                            {song.singer.map((item) => singers.find(singer=>singer._id===item).name+" ")}
-                        </Typography>
-                    </CardContent>
-                </Link>
+                    </Box>
+                    <Link to={`/song/${song._id}`}>
+                        <CardContent className={classes.cardcontent} sx={{ bgcolor: '#dfdfdf' }}>
+                            <Typography className={classes.overflow_text} sx={{
+                                fontWeight: 600, fontSize: 16,
+                            }}>
+                                {song.name}
+                            </Typography>
+                            <Typography className={classes.overflow_text} variant='body4' sx={{ fontSize: 15 }}>
+                                {song.singer.map((item) => singers.find(singer => singer._id === item).name + " ")}
+                            </Typography>
+                        </CardContent>
+                    </Link>
 
-            </CardActionArea>
+                </CardActionArea>
+            }
+
         </Card>
     );
 };

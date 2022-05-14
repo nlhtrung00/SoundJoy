@@ -14,6 +14,18 @@ export const fetchAsyncMusicianById = createAsyncThunk('musician/fetchAsyncMusic
     const response = await Axios.get(`musicians/${musicianId}`);
     return response.data;
 })
+export const asyncUpdateMusicianById = createAsyncThunk('musician/asyncUpdateMusicianById',async(data)=>{
+    
+    const response = await Axios.put(`musicians/${data.musicianId}`,
+    data.formData,
+    {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }
+    );
+    return response.data;
+})
 const MusicianSlice = createSlice({
     name:'musician',
     initialState,

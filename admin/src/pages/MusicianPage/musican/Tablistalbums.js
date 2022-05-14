@@ -99,7 +99,7 @@ const Tablistalbum = ({ listAlbums }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            album.singer ?
+                                                            album.singer.length > 0 ?
                                                                 <>
                                                                     {album.singer.map((item, index) => {
                                                                         if (index < 1)

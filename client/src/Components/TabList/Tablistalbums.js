@@ -97,7 +97,7 @@ const Tablistalbum = ({ listAlbums }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            album.singer ?
+                                                            album.singer.length > 0 ?
                                                                 <>
                                                                     {album.singer.map((item, index) => {
                                                                         if (index < 1)
@@ -140,7 +140,7 @@ const Tablistalbum = ({ listAlbums }) => {
                                                     </StyledTableCell> */}
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            album.genre.map((item,index) => (
+                                                            album.genre.length > 0 ? album.genre.map((item,index) => (
                                                                 genres.find(genre => genre._id === item) ?
                                                                 (
                                                                     (index < album.genre.length - 1) ? 
@@ -148,7 +148,7 @@ const Tablistalbum = ({ listAlbums }) => {
                                                                 )
                                                                 : "none"
                                                                 
-                                                            ))
+                                                            )) : "none"
                                                         }
                                                     </StyledTableCell>
                                                     <StyledTableCell>

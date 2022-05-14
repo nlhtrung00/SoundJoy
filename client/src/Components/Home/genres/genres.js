@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardActionArea, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import genreImg from "../../../Images/genre.jfif";
-import { useSelector } from 'react-redux';
-import { getGenres } from '../../../Redux/Slices/GenreSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAsyncGenres, getGenres } from '../../../Redux/Slices/GenreSlice';
 import { Link } from 'react-router-dom';
 const useStyle = makeStyles((theme) => ({
     cardcontent: {
@@ -30,10 +30,20 @@ const useStyle = makeStyles((theme) => ({
 const Genres = () => {
     const classes = useStyle();
     const genres = useSelector(getGenres);
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
     const reviewGenres = genres.slice(0, 6);
+    useEffect(() => {
+        const action = async () => {
+            setLoading(true)
+            await dispatch(fetchAsyncGenres());
+        }
+        action();
+        setLoading(false)
+    }, [])
     return (
         <Grid container spacing={3}>
-            {reviewGenres && reviewGenres.map(genre => {
+            {!loading && reviewGenres.length>0 && reviewGenres.map(genre => {
                 return (
                     <Grid item lg={2} md={3} xs={6} key={genre._id}>
                         <Card>

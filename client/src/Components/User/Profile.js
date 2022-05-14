@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { makeStyles } from '@mui/styles';
-import { getUser } from "../../Redux/Slices/UserSlice";
+import { fetchAsyncUserById, getUser } from "../../Redux/Slices/UserSlice";
 import TabOption from "./Tab";
 
 const useStyle = makeStyles({
@@ -20,15 +20,20 @@ const Profile = () => {
     const { userId } = useParams();
     const user = useSelector(getUser)
     const dispatch = useDispatch();
-
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
-
+        const action = async()=>{
+            setLoading(true)
+            await dispatch(fetchAsyncUserById(userId))
+        }
+        action();
+        setLoading(false)
     }, [dispatch])
 
-    console.log(user)
+    
     return (
         <Container disableGutters className={classes.home_container}>
-            {user !== undefined && Object.keys(user).length !== 0 ?
+            {!loading && user !== undefined && Object.keys(user).length !== 0 ?
 
                 <>
                     <Box className={classes.info}>

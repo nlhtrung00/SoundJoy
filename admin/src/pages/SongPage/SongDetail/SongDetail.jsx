@@ -42,7 +42,7 @@ const SongDetail = () => {
    const likelists = useSelector(getLikelistsBySong)
    const song = useSelector(getSong);
    const [loading, setLoading] = useState(true);
-   const [time, setTime] = useState(0)
+   const [time, setTime] = useState("0")
    const [errorDel, setErrorDel] = useState('');
    const [openToast, setOpenToast] = useState(false);
    const [actionDel, setActionDel] = useState(false);
@@ -65,7 +65,7 @@ const SongDetail = () => {
    const handleDeleteSong = async () => {
       console.log('delete song' + songId)
       try {
-         
+
          // delete song after then, fetch list changed song
          let actionResult = await dispatch(AsyncDeleteSongById(songId));
          unwrapResult(actionResult);
@@ -98,12 +98,12 @@ const SongDetail = () => {
    const handleCloseDial = () => {
       setOpenDial(false);
    };
-   // const handleLoadMetadata = (meta) => {
-   //    const { duration } = meta.target;
-   //    console.log(duration);
-   //    const timee = moment.duration(duration, "seconds");
-   //    setTime(timee.minutes() + " min " + (timee.seconds() < 10 ? '0' + timee.seconds() : timee.seconds()) + " sec")
-   // }
+   const handleLoadMetadata = (meta) => {
+      const { duration } = meta.target;
+      console.log(duration);
+      const timee = moment.duration(duration, "seconds");
+      setTime(timee.minutes() + " min " + (timee.seconds() < 10 ? '0' + timee.seconds() : timee.seconds()) + " sec")
+   }
    return (
       <Container disableGutters maxWidth="xl" className={classes.home_container}>
          {
@@ -132,15 +132,22 @@ const SongDetail = () => {
                            </Typography>
                            <Typography sx={{
                               fontWeight: 400,
-                              fontSize: '30px',
-                              letterSpacing: '8px',
+                              fontSize: '20px',
+
                               lineHeight: 1.3,
                               my: 0
                            }}>
                               {
-                                 song.singer && song.singer.map(item => (
-                                    singers.find(singer => singer._id === item).name
-                                 ))
+                                 song.singer && song.singer.map((item, index) => {
+                                    if (index < song.singer.length - 1) return (
+                                       singers.find(singer => singer._id === item) ? singers.find(singer => singer._id === item).name + ", " : " none"
+                                    )
+                                    else return (
+                                       singers.find(singer => singer._id === item).name
+                                    )
+                                 }
+
+                                 )
 
                               }
                            </Typography>
@@ -154,9 +161,19 @@ const SongDetail = () => {
                            <Typography sx={{ lineHeight: 2 }}>
                               <span style={{ fontWeight: 500 }}>Genres:</span>
                               {
-                                 song.genre && song.genre.map(item => (
-                                    genres.find(genre => genre._id === item).name
-                                 ))
+                                 song.genre && genres && song.genre.map((item, index) => {
+                                    if (index < song.genre.length - 1) {
+                                       return (
+                                          genres.find(genre => genre._id === item) ? genres.find(genre => genre._id === item).name + ", " : "none"
+                                       )
+                                    }
+                                    else return (
+                                       genres.find(genre => genre._id === item).name
+                                    )
+                                 }
+
+
+                                 )
 
                               }
                            </Typography>
@@ -195,6 +212,14 @@ const SongDetail = () => {
 
                      </Grid>
                   </Grid>
+                  <Box className='media'>
+                     <audio
+                        controls
+                        onLoadedMetadata={(e) => handleLoadMetadata(e)}
+                        style={{ display: 'none' }}>
+                        <source src={song.link_mp3} type="audio/mpeg" />
+                     </audio>
+                  </Box>
                   <Box>
                      <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
                         Comment

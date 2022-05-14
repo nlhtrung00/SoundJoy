@@ -83,8 +83,9 @@ const Tablistsong = ({ listSongs }) => {
                                                             <Avatar src={song.image} />
                                                             <Box sx={{ ml: 1 }}>
                                                                 <Typography sx={{
-                                                                    fontWeight: 500, width: '120px', display: 'box',
+                                                                    fontWeight: 500, width: '180px', display: 'box',
                                                                     lineClamp: 1,
+                                                                    height:'auto',
                                                                     boxOrient: 'vertical',
                                                                     overflow: 'hidden',
                                                                 }}>
@@ -98,7 +99,7 @@ const Tablistsong = ({ listSongs }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            song.singer ?
+                                                            song.singer.length ?
                                                                 <>
                                                                     {song.singer.map((item, index) => {
                                                                         if (index < 1)
@@ -118,7 +119,7 @@ const Tablistsong = ({ listSongs }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            song.musician ?
+                                                            song.musician.length > 0 ?
                                                                 <>
                                                                     {song.musician.map((item, index) => {
                                                                         if (index < 1)
@@ -140,16 +141,14 @@ const Tablistsong = ({ listSongs }) => {
                                                         {song.listens}
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
+
                                                         {
-                                                            song.genre.map((item,index) => (
-                                                                genres.find(genre => genre._id === item) ?
-                                                                (
-                                                                    (index < song.singer.length - 1) ? 
+                                                            (genres.length > 0 && song.genre.length > 0) ? song.genre.map((item, index) => (
+
+                                                                (index < song.genre.length - 1) ?
                                                                     genres.find(genre => genre._id === item).name + ", " : genres.find(genre => genre._id === item).name
-                                                                )
-                                                                : "none"
-                                                                
-                                                            ))
+
+                                                            )) : "none"
                                                         }
                                                     </StyledTableCell>
                                                     <StyledTableCell>

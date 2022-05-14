@@ -11,7 +11,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
 import { unwrapResult } from "@reduxjs/toolkit";
 import AddIcon from '@mui/icons-material/Add';
-import { fetchAsyncMusicianById, getMusician } from "../../Redux/Slices/MusicianSlice";
+import { asyncUpdateMusicianById, fetchAsyncMusicianById, getMusician } from "../../Redux/Slices/MusicianSlice";
 import Tablistsong from "../TabList/Tablistsong";
 import { fetchAsyncSongByMusician, fetchAsyncSongs, getListSongs, getSongsByMusician } from "../../Redux/Slices/SongSlice";
 import { fetchAsyncAlbumsByMusician, getListAlbumsByMusician } from "../../Redux/Slices/AlbumSlice";
@@ -26,6 +26,7 @@ const useStyle = makeStyles({
 })
 const MusicianDetail = () => {
     const [valueTab, setValueTab] = useState('1');
+    const [followAction,setFollowAction ] = useState(false);
     const [loading, setLoading] = useState(true);
     const classes = useStyle();
     const { musicianId } = useParams();
@@ -38,7 +39,8 @@ const MusicianDetail = () => {
             setLoading(true);
             await dispatch(fetchAsyncMusicianById(musicianId));
             await dispatch(fetchAsyncSongByMusician(musicianId));
-            await dispatch(fetchAsyncAlbumsByMusician(musicianId))
+            await dispatch(fetchAsyncAlbumsByMusician(musicianId));
+            
         }
         action();
         setLoading(false)
@@ -47,7 +49,30 @@ const MusicianDetail = () => {
     const handleChangeTab = (e, value) => {
         setValueTab(value);
     }
-    
+    // follow musician
+    const handleFollow = async()=>{
+        setFollowAction(true)
+        console.log(data)
+        let currentFollowers = data.followers;
+        let nextFollowers = currentFollowers + 1;
+        console.log(nextFollowers)
+        const formData = new FormData();
+        formData.append('followers',nextFollowers);
+        const dataUpdate ={
+            musicianId: musicianId,
+            formData:formData
+        }
+        try{
+            const action = await dispatch(asyncUpdateMusicianById(dataUpdate))
+            unwrapResult(action)
+            
+        }catch(err){
+            console.log(err)
+        }
+        await dispatch(fetchAsyncMusicianById(musicianId))
+        console.log('follow')
+        setFollowAction(false);
+    }
     return (
 
         <Container sx={{ p: 1 }} className={classes.home_container}>
@@ -85,9 +110,12 @@ const MusicianDetail = () => {
                                 </Box>
 
                             </Box>
-                            <Button variant="contained" size="small" sx={{ mb: 1 }}>
+                            {followAction && <Button variant="contained" size="small" sx={{ mb: 1 }}>
                                 Follow <AddIcon sx={{ color: 'white', fontSize: '18px', fontWeight: 600 }} />
-                            </Button>
+                            </Button>}
+                            {!followAction && <Button variant="contained" size="small" sx={{ mb: 1 }} onClick={handleFollow}>
+                                Follow <AddIcon sx={{ color: 'white', fontSize: '18px', fontWeight: 600 }} />
+                            </Button>}
                         </Box>
                         <Box className="introduction" sx={{ mb: 1 }}>
                             <Typography variant="h6">

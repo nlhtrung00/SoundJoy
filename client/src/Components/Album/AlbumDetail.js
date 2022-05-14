@@ -86,18 +86,29 @@ const AlbumDetail = () => {
                                         <Typography sx={{ lineHeight: 2 }}>
                                             <span style={{ fontWeight: 500 }}>Genres:</span>
                                             {
-                                                album.genre.map(item => (
-                                                    genres.find(genre => genre._id === item).name
-                                                ))
+                                                genres.length > 0 && album.genre.map((item,index)=> {
+                                                    if(index < album.genre.length - 1){
+                                                        return(
+                                                            genres.find(genre => genre._id === item).name +", "
+                                                        )
+                                                    }else{
+                                                        return genres.find(genre => genre._id === item).name
+                                                    }
+                                                    
+                                                    
+                                                    })
 
                                             }
                                         </Typography>
                                         <Typography sx={{ lineHeight: 2 }}>
                                             <span style={{ fontWeight: 500 }}>Singers:</span>
                                             {
-                                                album.singer.length>0 ? album.singer.map(item => (
-                                                    singers.find(genre => genre._id === item) ? singers.find(genre => genre._id === item).name : ' none'
-                                                )) : " none"
+                                                album.singer.length>0 ? album.singer.map((item,index) => (
+                                                    (singers.length > 0 && singers.find(genre => genre._id === item)) ? 
+                                                    (index < album.singer.length -1 ? singers.find(genre => genre._id === item).name + ", " : singers.find(genre => genre._id === item).name)
+                                                     : ' none'
+                                                
+                                                    )) : " none"
 
                                             }
                                         </Typography>
