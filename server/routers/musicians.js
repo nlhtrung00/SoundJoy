@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { getMusicians, postMusician, updateMusician, deleteMusician, getMusician, getRecentMusicians, getTopMusicians } from '../controllers/musicians.js';
+import { getMusicians,searchMusicians, postMusician, updateMusician, deleteMusician, getMusician, getRecentMusicians, getTopMusicians } from '../controllers/musicians.js';
 
 
 const storage = multer.diskStorage({
@@ -13,6 +13,7 @@ const upload = multer({ storage: storage });
 const router = express.Router();
 
 router.get('/', getMusicians);
+router.get('/search/:searchTerm', searchMusicians);
 router.get('/top', getTopMusicians);
 router.get('/:id', getMusician);
 router.post('/', upload.single('image'), postMusician);

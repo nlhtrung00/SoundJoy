@@ -4,50 +4,50 @@ import { makeStyles } from '@mui/styles';
 import singerImg from "../../Images/binz.jpeg";
 import singerImg2 from "../../Images/denvau.jpg";
 
-const useStyle= makeStyles((theme)=>({
-    card:{
-        backgroundColor:"#522522",
+const useStyle = makeStyles((theme) => ({
+    card: {
+        backgroundColor: "#522522",
     },
-    cardimg:{
-        objectFit:'cover',
-        objectPosition:'center',
-        height:'150px',    
+    cardimg: {
+        objectFit: 'cover',
+        objectPosition: 'center',
+        height: '150px',
     },
-    cardcontent:{
+    cardcontent: {
         backgroundColor: '#522522',
-        '&:hover':{
-            backgroundColor:'#7f2f2a'
+        '&:hover': {
+            backgroundColor: '#7f2f2a'
         }
     },
-    namegenre:{
-        color:'white',
-        fontWeight:500,
-        fontSize:"16px",
-        textAlign:'center',
-        
+    namegenre: {
+        color: 'white',
+        fontWeight: 500,
+        fontSize: "16px",
+        textAlign: 'center',
+
     },
 }));
 const CardMusician = (props) => {
     const classes = useStyle();
     return (
         <Card className={classes.card}>
-                    <CardActionArea>
-                        <CardMedia
-                            component="img"
-                            className={classes.cardimg}
-                            image={props.musician.image}
-                            alt="genre image"
-                            sx={{
-                                mx:"auto"
-                            }}
-                        />
-                        <CardContent className={classes.cardcontent}>
-                            <Typography className={classes.namegenre}>
-                                {props.musician.name}
-                            </Typography>
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
+            <CardActionArea>
+                <CardMedia
+                    component="img"
+                    className={classes.cardimg}
+                    image={props.musician.image}
+                    alt="genre image"
+                    sx={{
+                        mx: "auto"
+                    }}
+                />
+                <CardContent className={classes.cardcontent}>
+                    <Typography className={classes.namegenre}>
+                        {props.musician.name}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Card>
     );
 };
 

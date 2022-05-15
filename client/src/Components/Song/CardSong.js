@@ -44,7 +44,7 @@ const CardSong = ({ song }) => {
 
     return (
         <Card elevation={0} sx={{ borderRadius: '10px' }}>
-            {loading &&
+            {!loading &&
                 <CardActionArea
                     className={classes.actionarea}
                 >

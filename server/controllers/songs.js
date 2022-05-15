@@ -14,6 +14,22 @@ export const getSongs = async (req, res) => {
     }
 };
 
+export const searchSongs = async (req, res) => {
+    try {
+        var regex = new RegExp(req.params.searchTerm, 'i');
+        const songs = await SongModel.find({ 
+            $or:[
+                {name: regex}
+            ]
+            
+        
+        });
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+
 export const getSong = async (req, res) => {
     try {
         const song = await SongModel.findOne({ _id: req.params.id });

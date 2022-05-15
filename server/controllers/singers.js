@@ -9,7 +9,21 @@ export const getSingers = async (req, res) => {
         res.status(500).json({ error: err });
     }
 };
-
+export const searchSingers = async (req, res) => {
+    try {
+        var regex = new RegExp(req.params.searchTerm, 'i');
+        const singers = await SingerModel.find({ 
+            $or:[
+                {name: regex}
+            ]
+            
+        
+        });
+        res.status(200).json(singers);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
 export const getSinger = async (req, res) => {
     try {
         const singer = await SingerModel.findOne({ _id: req.params.id });

@@ -70,6 +70,28 @@ export const updateUser = async (req, res) => {
         res.status(500).json({error: err});
     }
 };
+export const updateEmptyFollowMusician = async (req, res) => {
+    try {
+        
+        var newvalues = {$set:{'follow_musician':[]}}
+        let user = await UserModel.updateOne({ _id: req.params.id }, newvalues, { new: true }); //dieu kien , gia tri moi, user = new?gia tri moi: gia tri cu
+        user = await UserModel.findOne({_id:req.params.id})
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+};
+export const updateEmptyFollowSinger = async (req, res) => {
+    try {
+        
+        var newvalues = {$set:{'follow_singer':[]}}
+        let user = await UserModel.updateOne({ _id: req.params.id }, newvalues, { new: true }); //dieu kien , gia tri moi, user = new?gia tri moi: gia tri cu
+        user = await UserModel.findOne({_id:req.params.id})
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+};
 
 export const deletetUser = async (req, res) => {
     try {

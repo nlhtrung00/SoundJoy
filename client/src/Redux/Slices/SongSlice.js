@@ -9,7 +9,8 @@ const initialState={
     songbygenre:[],
     songbyalbum:[],
     recentsongs:[],
-    playlist:[]
+    playlist:[],
+    searching_songs:[]
 }
 export const fetchAsyncSongs =createAsyncThunk('song/fetchAsyncSongs',async()=>{
     const response = await Axios.get('songs');
@@ -40,7 +41,10 @@ export const fetchAsyncRecentSongs =createAsyncThunk('song/fetchAsyncRecentSongs
     const response = await Axios.get('songs/recent/recent');
     return response.data;
 })
-
+export const asyncSeachingSongs = createAsyncThunk('singer/asyncSeachingSongs', async (searchTerm)=>{
+    const response = await Axios.get(`songs/search/${searchTerm}`);
+    return response.data;
+})
 export const asyncUpdateSong =createAsyncThunk('song/asyncUpdateSong',async({formdata,songId})=>{
     
     const response = await Axios.put(`songs/${songId}`,
@@ -63,6 +67,9 @@ const SongSlice = createSlice({
                 ...state,
                 playlist:action.payload
             }
+        },
+        refreshSearchSong:(state)=>{
+            state.searching_songs = []
         }
     },
     extraReducers:{
@@ -96,6 +103,13 @@ const SongSlice = createSlice({
                 songbyalbum:action.payload
             }
         },
+        // search songs
+        [asyncSeachingSongs.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                searching_songs:action.payload
+            }
+        },
         // song by singer
         [fetchAsyncSongBySinger.fulfilled]:(state,action)=>{
             return{
@@ -125,7 +139,7 @@ const SongSlice = createSlice({
         },
     }
 });
-export const {setPlaylist} = SongSlice.actions;
+export const {setPlaylist,refreshSearchSong} = SongSlice.actions;
 export const getListSongs = (state)=>state.song.songs;
 export const getSongsBySinger = (state)=>state.song.songbysinger;
 export const getSongsByMusician = (state)=>state.song.songbymusician;
@@ -134,4 +148,5 @@ export const getSongsByAlbum = (state)=>state.song.songbyalbum;
 export const getSong = (state)=>state.song.song;
 export const getRecentSongs = (state) => state.song.recentsongs;
 export const getPlaylist =(state) =>state.song.playlist;
+export const getSearchingSongs = state => state.song.searching_songs;
 export default SongSlice.reducer;

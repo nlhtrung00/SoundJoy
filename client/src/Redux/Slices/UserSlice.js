@@ -17,6 +17,42 @@ export const fetchAsyncUserById= createAsyncThunk('user/fetchAsyncUserById',asyn
     const response = await Axios.get(`users/${userId}`);
     return response.data;
 });
+export const asyncUpdateUserById= createAsyncThunk('user/asyncUpdateUserById',async(data)=>{
+    
+    const response = await Axios.put(`users/${data.userId}`,
+    data.formData,
+    {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }
+    );
+    return response.data;
+});
+export const asyncEmptyfollowMusician= createAsyncThunk('user/asyncUnfollowMusician',async(data)=>{
+    
+    const response = await Axios.put(`users/emptyfollow_musician/${data.userId}`,
+    data.formData,
+    {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }
+    );
+    return response.data;
+});
+export const asyncEmptyfollowSinger= createAsyncThunk('user/asyncUnfollowSinger',async(data)=>{
+    
+    const response = await Axios.put(`users/emptyfollow_singer/${data.userId}`,
+    data.formData,
+    {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    }
+    );
+    return response.data;
+});
 const UserSlice = createSlice({
     name:"user",
     initialState,
@@ -44,7 +80,28 @@ const UserSlice = createSlice({
                 ...state,
                 users:action.payload
             }
-        }
+        },
+        [asyncUpdateUserById.fulfilled]:(state,action)=>{
+            console.log(action.payload)
+            return{
+                ...state,
+                user:action.payload
+            }
+        },
+        [asyncEmptyfollowMusician.fulfilled]:(state,action)=>{
+            console.log(action.payload)
+            return{
+                ...state,
+                user:action.payload
+            }
+        },
+        [asyncEmptyfollowSinger.fulfilled]:(state,action)=>{
+            console.log(action.payload)
+            return{
+                ...state,
+                user:action.payload
+            }
+        },
         
     },
 });
