@@ -45,6 +45,7 @@ const PlaysongBar = () => {
             }
         }
         action()
+        setLoading(false)
     }, [playlist])
     useEffect(() => {
 

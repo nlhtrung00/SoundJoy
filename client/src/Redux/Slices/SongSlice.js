@@ -10,11 +10,34 @@ const initialState={
     songbyalbum:[],
     recentsongs:[],
     playlist:[],
-    searching_songs:[]
+    searching_songs:[],
+    recommend_songs:[],
+    newest_songs:[],
+    top_songs:[],
+    relevant_songs:[],
 }
 export const fetchAsyncSongs =createAsyncThunk('song/fetchAsyncSongs',async()=>{
     const response = await Axios.get('songs');
     
+    return response.data;
+})
+export const fetchAsyncNewestSongs =createAsyncThunk('song/fetchAsyncNewestSongs',async()=>{
+    const response = await Axios.get('songs/newest');
+    
+    return response.data;
+})
+export const fetchAsyncRelevantSongs =createAsyncThunk('song/fetchAsyncRelevantSongs',async(songId)=>{
+    const response = await Axios.get(`songs/relevant/${songId}`);
+    
+    return response.data;
+})
+export const fetchAsyncTopSongs =createAsyncThunk('song/fetchAsyncTopSongs',async()=>{
+    const response = await Axios.get('songs/top');
+    
+    return response.data;
+})
+export const fetchAsyncRecommendSongs =createAsyncThunk('song/fetchAsyncRecommendSongs',async(userId)=>{
+    const response = await Axios.get(`songs/recommend/${userId}`);
     return response.data;
 })
 export const fetchAsyncSongById =createAsyncThunk('song/fetchAsyncSongById',async(id)=>{
@@ -103,6 +126,35 @@ const SongSlice = createSlice({
                 songbyalbum:action.payload
             }
         },
+        // get relevant song
+        [fetchAsyncRelevantSongs.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                relevant_songs:action.payload
+            }
+        },
+        // get top song
+        [fetchAsyncTopSongs.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                top_songs:action.payload
+            }
+        },
+        // get newest songs
+        [fetchAsyncNewestSongs.fulfilled]:(state,action)=>{
+            return{
+                ...state,
+                newest_songs:action.payload
+            }
+        },
+        // get recommend songs 
+        [fetchAsyncRecommendSongs.fulfilled]:(state,action)=>{
+            console.log("action")
+            return{
+                ...state,
+                recommend_songs:action.payload
+            }
+        },
         // search songs
         [asyncSeachingSongs.fulfilled]:(state,action)=>{
             return{
@@ -149,4 +201,8 @@ export const getSong = (state)=>state.song.song;
 export const getRecentSongs = (state) => state.song.recentsongs;
 export const getPlaylist =(state) =>state.song.playlist;
 export const getSearchingSongs = state => state.song.searching_songs;
+export const getRecommendSongs = state => state.song.recommend_songs;
+export const getNewestSongs = state => state.song.newest_songs;
+export const getTopSongs = state => state.song.top_songs;
+export const getRelevantSongs = state => state.song.relevant_songs;
 export default SongSlice.reducer;

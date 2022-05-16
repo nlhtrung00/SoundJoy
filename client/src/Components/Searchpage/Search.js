@@ -1,6 +1,7 @@
 import { Container, Grid, Typography, InputBase, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import searchImg from '../../Images/search.png'
+import searchImg from '../../Images/search.png';
+import searchNoFound from '../../Images/searchnot.JPG'
 import { makeStyles } from '@mui/styles';
 import React, { useEffect, useState } from 'react';
 import LeftBar from '../LeftBar/LeftBar';
@@ -78,21 +79,11 @@ const Search = () => {
                 searching ?
                     <>
                         <div className={classes.listresults}>
-                            {/* <Box>
-                    <Typography variant="h6">
-                        Recent Searching
-                    </Typography>
-                    <Grid container spacing={2}>
-                        <Grid item xl={2}>
-                            <Recent />
-                        </Grid>
-                    </Grid>
 
-                </Box> */}
                             {
                                 searchSongs && searchSongs.length > 0 &&
-                                <Box sx={{my:1}}>
-                                    <Typography variant="h6" sx={{mb:1}}>
+                                <Box sx={{ my: 1 }}>
+                                    <Typography variant="h6" sx={{ mb: 1 }}>
                                         Songs searching result
                                     </Typography>
                                     <Grid container spacing={2}>
@@ -111,8 +102,8 @@ const Search = () => {
 
                             {
                                 searchSingers && searchSingers.length > 0 &&
-                                <Box sx={{my:1}}>
-                                    <Typography variant="h6" sx={{mb:1}}>
+                                <Box sx={{ my: 1 }}>
+                                    <Typography variant="h6" sx={{ mb: 1 }}>
                                         Singers searching result
                                     </Typography>
                                     <Grid container spacing={2}>
@@ -129,8 +120,8 @@ const Search = () => {
                             }
                             {
                                 searchMusicians && searchMusicians.length > 0 &&
-                                <Box sx={{my:1}}>
-                                    <Typography variant="h6" sx={{mb:1}}>
+                                <Box sx={{ my: 1 }}>
+                                    <Typography variant="h6" sx={{ mb: 1 }}>
                                         Musicians searching result
                                     </Typography>
                                     <Grid container spacing={2}>
@@ -145,16 +136,38 @@ const Search = () => {
 
                                 </Box>
                             }
+                            {
+                                searchSongs.length === 0 && searchMusicians.length === 0 && searchSingers.length === 0 &&
+                                <Box>
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
+                                        <Typography sx={{ fontWeight: 500, fontSize: 25, color: '#5f5f5f' }}>
+                                            No Results Found
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                                        <Box sx={{ width: '50%' }}>
+                                            <img src={searchNoFound} style={{ width: '100%', objectFit: 'contain' }} />
+                                        </Box>
+                                    </Box>
+                                </Box>
+
+
+
+
+                            }
 
                         </div>
                     </>
                     :
-                    <Box sx={{width:'100%'}}>
-                        <img src={searchImg} style={{width:'100%',objectFit:'contain'}}/>
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                        <Box sx={{ width: '60%' }}>
+                            <img src={searchImg} style={{ width: '100%', objectFit: 'contain' }} />
+                        </Box>
                     </Box>
+
             }
 
-        </Container>
+        </Container >
     );
 };
 

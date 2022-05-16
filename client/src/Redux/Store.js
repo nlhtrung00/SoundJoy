@@ -24,26 +24,26 @@ import {
     createMigrate
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-const migrations = {
-    0: (state) => {
-        // migration clear out device state
-        return {
-            ...state,
-            device: undefined
-        }
-    },
-    1: (state) => {
-        // migration to keep only device state
-        return {
-            device: state.device
-        }
-    }
-}
+// const migrations = {
+//     0: (state) => {
+//         // migration clear out device state
+//         return {
+//             ...state,
+//             device: undefined
+//         }
+//     },
+//     1: (state) => {
+//         // migration to keep only device state
+//         return {
+//             device: state.device
+//         }
+//     }
+// }
 const persistConfig = {
     key: 'root',
     storage,
     version: 1,
-    migrate: createMigrate(migrations, { debug: false })
+    // migrate: createMigrate(migrations, { debug: false })
 }
 
 const rootReducer = combineReducers({

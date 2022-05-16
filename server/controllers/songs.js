@@ -17,12 +17,12 @@ export const getSongs = async (req, res) => {
 export const searchSongs = async (req, res) => {
     try {
         var regex = new RegExp(req.params.searchTerm, 'i');
-        const songs = await SongModel.find({ 
-            $or:[
-                {name: regex}
+        const songs = await SongModel.find({
+            $or: [
+                { name: regex }
             ]
-            
-        
+
+
         });
         res.status(200).json(songs);
     } catch (err) {
@@ -38,7 +38,52 @@ export const getSong = async (req, res) => {
         res.status(500).json({ error: err });
     }
 };
+export const getRelevantSongs = async (req, res) => {
+    try {
+        const sampleSong = await SongModel.findOne({ _id: req.params.id });
+        let listSongs = []
 
+        for (let i = 0; i < sampleSong.genre.length; i++) {
+
+            let songs = await SongModel.find({ genre: sampleSong.genre[i], _id: { $not: { $eq: req.params.id } } }).limit(3).sort('-rating -listens');
+
+            for (let j = 0; j < songs.length; j++) {
+                let exist = false;
+                listSongs.map(item => {
+
+                    if (item._id.toString() === songs[j]._id.toString()) {
+                        exist = true;
+
+                    }
+                })
+                if (listSongs.length === 0 || !exist) {
+                    listSongs.push(songs[j]);
+                }
+
+
+            }
+        }
+
+        for (let i = 0; i < sampleSong.singer.length; i++) {
+            let songs = await SongModel.find({ singer: sampleSong.singer[i], _id: { $not: { $eq: req.params.id } } }).limit(1).sort('-rating -listens');
+            let exist = false;
+            for (let j = 0; j < songs.length; j++) {
+                listSongs.map(item => {
+                    if (item._id.toString() === songs[j]._id.toString()) {
+                        exist = true;
+                    }
+                })
+                if (listSongs.length === 0 || !exist) {
+                    listSongs.push(songs[j]);
+                }
+            }
+        }
+
+        res.status(200).json(listSongs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
 export const getRecentSongs = async (req, res) => {
     try {
         const today = new Date();
@@ -53,6 +98,14 @@ export const getRecentSongs = async (req, res) => {
 export const getTopSongs = async (req, res) => {
     try {
         const songs = await SongModel.find().limit(10).sort('-rating -listens');
+        res.status(200).json(songs);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+export const getNewestSongs = async (req, res) => {
+    try {
+        const songs = await SongModel.find().sort("-createdAt -updatedAt").limit(30);
         res.status(200).json(songs);
     } catch (err) {
         res.status(500).json({ error: err });
@@ -133,19 +186,19 @@ export const updateSong = async (req, res) => {
     try {
         const song = await SongModel.findById(req.params.id);
         const updateSong = req.body;
-        
+
         if (req.file !== undefined) {
             await cloudinary.uploader.destroy(song.cloudinary_image_id);
             await cloudinary.uploader.destroy(song.cloudinary_mp3_id);
             const resultImage = await cloudinary.uploader.upload(req.files.image[0].path, { folder: 'SoundJoy/Images', resource_type: 'auto' });
 
             const resultAudio = await cloudinary.uploader.upload(req.files.mp3[0].path, { folder: 'SoundJoy/Audios', resource_type: 'auto' });
-            
+
             song.image = resultImage.secure_url;
             song.link_mp3 = resultAudio.secure_url;
             song.cloudinary_image_id = resultImage.public_id;
             song.cloudinary_mp3_id = resultAudio.public_id;
-            
+
         }
         const newsong = await SongModel.findOneAndUpdate({ _id: req.params.id }, updateSong, { new: true });
         res.status(200).json(newsong);
@@ -169,7 +222,7 @@ export const deleteSong = async (req, res) => {
 
         likelists.forEach(async (likelist) => {
             const updateLikelist = likelist;
-            delete  updateLikelist._id;
+            delete updateLikelist._id;
             await LikelistModel.findOneAndUpdate({ _id: likelist._id }, updateLikelist);
         });
 
@@ -183,9 +236,9 @@ export const getRecommendSongs = async (req, res) => {
     try {
         let songs = await SongModel.find();
         let listens = await ListenModel.find({ user: req.params.id }).select('song');
-        let notListens= songs.slice();
+        let notListens = songs.slice();
         let listened = []
-        for (let i=0; i<listens.length; i++){
+        for (let i = 0; i < listens.length; i++) {
             notListens = notListens.filter(song => song._id.toString() !== listens[i].song.toString());
             let listenSong = songs.filter(song => song._id.toString() === listens[i].song.toString());
             listened.push(...listenSong);
@@ -198,10 +251,10 @@ export const getRecommendSongs = async (req, res) => {
 
         const documents = songs.map(item => {
             return {
-                    ...item,
-                    id: item._id.toString(),
-                    content: item.name,
-                };
+                ...item,
+                id: item._id.toString(),
+                content: item.name,
+            };
         });
 
         const documentsListened = listened.map((item) => {
@@ -213,34 +266,34 @@ export const getRecommendSongs = async (req, res) => {
         });
 
         recommender.train(documents);
-        
+
         let idSimilar = [];
-        for (let i=0; i<documentsListened.length; i++){
+        for (let i = 0; i < documentsListened.length; i++) {
             let similarDocuments = recommender.getSimilarDocuments(documentsListened[i].id, 0, 5);
             idSimilar = [...idSimilar, ...similarDocuments];
         }
-        
-        
+
+
         // console.log(recommenderSong);
 
         let likelists = await LikelistModel.find({ user: req.params.id }).select('songs');
         let likelistsSong = []
-        for (let i=0; i<likelists.length; i++){
+        for (let i = 0; i < likelists.length; i++) {
             likelistsSong.push(...likelists[i].songs);
         }
         likelistsSong = likelistsSong.map((song) => {
-            return { id: song.toString()};
+            return { id: song.toString() };
         });
 
-        for (let i=0;i<listens.length;i++){
+        for (let i = 0; i < listens.length; i++) {
             likelistsSong = likelistsSong.filter(song => song.id !== listens[i].song.toString());
         }
-        for (let i=0; i<likelistsSong.length; i++){
+        for (let i = 0; i < likelistsSong.length; i++) {
             let similarDocuments = recommender.getSimilarDocuments(likelistsSong[i].id, 0, 5);
             idSimilar = [...idSimilar, ...similarDocuments];
         }
         let recommenderSong = []
-        for (let i=0; i<idSimilar.length; i++){
+        for (let i = 0; i < idSimilar.length; i++) {
             let Song = songs.filter(song => song._id.toString() === idSimilar[i].id);
             recommenderSong.push(...Song);
         }
@@ -248,29 +301,29 @@ export const getRecommendSongs = async (req, res) => {
         let topSong = await SongModel.find().sort('-rating -listens');
 
         //remove songs in listens
-        for (let i=0;i<listens.length;i++){
+        for (let i = 0; i < listens.length; i++) {
             topSong = topSong.filter(song => song._id.toString() !== listens[i].song.toString());
         }
 
         //remove songs in likelists
-        for (let i=0;i<likelistsSong.length;i++){
+        for (let i = 0; i < likelistsSong.length; i++) {
             topSong = topSong.filter(song => song.id !== likelistsSong[i].id);
         }
 
         //remove  songs recommender
-        for (let i=0; i<idSimilar.length; i++){
+        for (let i = 0; i < idSimilar.length; i++) {
             topSong = topSong.filter(song => song._id.toString() !== idSimilar[i].id);
         }
 
         let limit = 10;
-        if (recommenderSong.length<limit){
-            for (let i=0; i<topSong.length; i++){
+        if (recommenderSong.length < limit) {
+            for (let i = 0; i < topSong.length; i++) {
                 recommenderSong.push(topSong[i]);
-                if (recommenderSong.length === limit)  break;
+                if (recommenderSong.length === limit) break;
             }
         }
 
-        res.status(200).json({ recommend: recommenderSong});
+        res.status(200).json(recommenderSong);
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: err });

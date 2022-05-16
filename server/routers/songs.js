@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { getSongs,searchSongs, postSong, updateSong, deleteSong, getSong, getSongByGenre, getSongByAlbum, getSongByMusician, getSongBySinger, getRecentSongs, getTopSongs, getBadSongs, getRecommendSongs } from '../controllers/songs.js';
+import { getSongs,getRelevantSongs, getNewestSongs,searchSongs, postSong, updateSong, deleteSong, getSong, getSongByGenre, getSongByAlbum, getSongByMusician, getSongBySinger, getRecentSongs, getTopSongs, getBadSongs, getRecommendSongs } from '../controllers/songs.js';
 
 const storage = multer.diskStorage({
     filename: (req, file, cb) => {
@@ -16,6 +16,8 @@ const router = express.Router();
 
 router.get('/', getSongs);
 router.get('/search/:searchTerm', searchSongs);
+router.get('/newest', getNewestSongs);
+router.get('/relevant/:id', getRelevantSongs);
 router.get('/top', getTopSongs);
 router.get('/bad', getBadSongs);
 router.get('/:id', getSong);

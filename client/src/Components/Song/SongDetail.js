@@ -277,8 +277,12 @@ const SongDetail = () => {
                                         <Typography sx={{ lineHeight: 2 }}>
                                             <span style={{ fontWeight: 500 }}>Genres:</span>
                                             {
-                                                song.genre && song.genre.map(item => (
-                                                    genres.find(genre => genre._id === item).name
+                                                song.genre && song.genre.map((item,index) => (
+                                                    genres.find(genre => genre._id === item) ?
+                                                    (
+                                                        index < song.genre.length - 1 ?
+                                                        genres.find(genre => genre._id === item).name +", " : genres.find(genre => genre._id === item).name
+                                                    ) : "none"
                                                 ))
 
                                             }

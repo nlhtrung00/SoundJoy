@@ -82,17 +82,18 @@ const DetailList = () => {
     const albums = useSelector(getListAlbums);
     const openBarSong = useSelector(getOpenBar);
     const [time, setTime] = useState([])
-    const [openBar, setOpenBar] = useState(openBarSong);
+    
     const [selectedSong, setSelectedSong] = useState();
     const [loading, setLoading] = useState(true);
     useEffect(() => {
         const action = async () => {
             setLoading(true);
+            await dispatch(fetchAsyncLikeListById(likelistId));
             await dispatch(fetchAsyncSongs());
             await dispatch(fetchAsyncSingers());
             await dispatch(fetchAsyncMusicians());
             await dispatch(fetchAsyncAlbums());
-            await dispatch(fetchAsyncLikeListById(likelistId));
+            
         }
         action();
         setLoading(false)

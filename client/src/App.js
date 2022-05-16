@@ -24,6 +24,7 @@ import AlbumDetail from "./Components/Album/AlbumDetail";
 import Profile from "./Components/User/Profile";
 import DetailList from "./Components/Likelist/DetailList";
 import PlaysongBar from './Components/PlaysongBar/PlaysongBar';
+import Recommend from "./Components/Recommend/Recommend";
 
 function App() {
    const logged = useSelector(getIsLoggedin);
@@ -82,6 +83,9 @@ function App() {
                   {/* likelist */}
                   <Route path="/likelist" >
                      <Route path=":likelistId" element={<Layout page={DetailList} />} />
+                  </Route>
+                  <Route path="/recommend" >
+                     <Route path="" element={<Layout page={Recommend} />} />
                   </Route>
                </>
             }

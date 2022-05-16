@@ -8,6 +8,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import AlbumIcon from '@mui/icons-material/Album';
+import RecommendIcon from '@mui/icons-material/Recommend';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import avatar from "../../Images/avatardemo.jpg";
@@ -105,7 +106,23 @@ const LeftBar = () => {
                         <Typography className={classes.text} variant="p">Homepage</Typography>
                     </Box>
                 </Link>
+                <Link to="/recommend">
+                    <Box className={classes.item} sx={{
+                        borderRadius: '20px',
+                        '&:hover': {
+                            bgcolor: 'white',
+                            color: 'black',
 
+                            transition: 'ease-in-out',
+                            transitionDuration: '0.4s'
+                        },
+                        p: 1.5,
+                        transition: 'ease-in-out',
+                    }}>
+                        <RecommendIcon className={classes.icon} />
+                        <Typography className={classes.text} variant="p">Recommend</Typography>
+                    </Box>
+                </Link>
                 <Link to="/search">
                     <Box className={classes.item} sx={{
                         borderRadius: '20px',
@@ -196,30 +213,7 @@ const LeftBar = () => {
                 </Link>
 
             </div>
-            {/* <div className='library'>
 
-                <Typography className={classes.titlelist}>
-                    Library
-                </Typography>
-                <Link to="">
-                    <Box className={classes.item} sx={{
-                        borderRadius: '20px',
-                        '&:hover': {
-                            bgcolor: 'white',
-                            color: 'black',
-
-                            transition: 'ease-in-out',
-                            transitionDuration: '0.4s'
-                        },
-                        p: 1.5,
-                        transition: 'ease-in-out',
-                    }}>
-                        <FavoriteBorderIcon className={classes.icon} />
-                        <Typography className={classes.text} variant="p">Favourites</Typography>
-                    </Box>
-                </Link>
-
-            </div> */}
             <div className='redirect'>
                 <Typography className={classes.titlelist}>
                     Redirect
@@ -239,7 +233,7 @@ const LeftBar = () => {
                     <LogoutIcon className={classes.icon} />
                     <Typography className={classes.text} variant="p">Logout</Typography>
                 </Box>
-                <Link to="">
+                <Link to={`/user/${user._id}`}>
                     <Box className={classes.item} sx={{
                         borderRadius: '20px',
                         '&:hover': {
