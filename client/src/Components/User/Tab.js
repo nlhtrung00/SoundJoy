@@ -9,6 +9,7 @@ import { makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { getUser } from '../../Redux/Slices/UserSlice';
 import LikeList from './LikeList';
+
 const useStyle = makeStyles({
     active_tab:{
         backgroundColor:'#C65656',
@@ -36,18 +37,13 @@ const TabOption = () => {
                     sx={{ borderRight: 1, borderColor: '#3E44D7' }}
                     
                 >
-                    <Tab  label="Your Profile" className={valueTab==='1'? classes.active_tab :""} value="1" sx={{py:3,px:5,fontWeight:600,fontSize:16,color:'#2a2a2a',}}/>
-                    <Tab label="Update Infor" className={valueTab==='2'? classes.active_tab :""} value="2" sx={{py:3,px:5,fontWeight:600,fontSize:16,color:'#2a2a2a'}} />
-                    <Tab label="Your LikeList" className={valueTab==='3'? classes.active_tab :""} value="3"  sx={{py:3,px:5,fontWeight:600,fontSize:16,color:'#2a2a2a'}}/>
+                    
+                    <Tab label="Your LikeList" className={valueTab==='1'? classes.active_tab :""} value="1"  sx={{py:3,px:5,fontWeight:600,fontSize:16,color:'#2a2a2a'}}/>
 
                 </Tabs>
-                <TabPanel value='1' index={0}>
-                    1
-                </TabPanel>
-                <TabPanel value='2' index={1}>
-                    2
-                </TabPanel>
-                <TabPanel value='3' index={2} sx={{}}>
+                
+                
+                <TabPanel value='1' index={1} sx={{}}>
                     <LikeList user={user} />
                 </TabPanel>
             </TabContext>
