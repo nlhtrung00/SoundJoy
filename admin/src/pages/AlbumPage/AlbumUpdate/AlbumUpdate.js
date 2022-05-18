@@ -72,14 +72,14 @@ const AlbumUpdate = () => {
 	)
 	useEffect(() => {
 		const action = async () => {
-			// setLoading(true);
+			setLoading(true);
 			await dispatch(fetchAsyncGenres());
 			await dispatch(fetchAsyncSingers());
 			await dispatch(fetchAsyncMusicians());
 
 		}
 		action();
-		// setLoading(false);
+		setLoading(false);
 	}, [])
 	const GenresOptions = genres && genres.map((genre) => {
 		return (

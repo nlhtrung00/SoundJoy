@@ -380,7 +380,7 @@ const SongDetail = () => {
                                 </Box>
                             }
                             <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
-                                Rating for Song
+                                Your rating
                             </Typography>
                             <RatingSong song={song} setActionRating={setActionRating} />
 

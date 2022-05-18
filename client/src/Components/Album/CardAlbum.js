@@ -56,15 +56,7 @@ const CardAlbum = ({ album }) => {
                         <Box onMouseOver={() => setOption(true)} sx={{ position: 'absolute', top: '45%', width: '100%' }}>
                             <Box className='option' sx={{ display: 'flex', justifyContent: 'space-evenly', width: '100%' }}>
 
-                                <FavoriteBorderIcon sx={{
-                                    color: 'white', fontSize: '40px',
-                                    '&:hover': {
-                                        transform: 'scale(1.05)',
-                                        transition: 'ease-in-out',
-                                        transitionDuration: '0.4s'
-                                    },
-                                    transitionDuration: '0.4s'
-                                }} />
+                                
                                 <Link to={`/albums/${album._id}`}>
                                     <PlayCircleOutlineIcon sx={{
                                         color: 'white', fontSize: '40px',
@@ -78,15 +70,7 @@ const CardAlbum = ({ album }) => {
                                 </Link>
 
 
-                                <FileDownloadIcon sx={{
-                                    color: 'white', fontSize: '40px',
-                                    '&:hover': {
-                                        transform: 'scale(1.05)',
-                                        transition: 'ease-in-out',
-                                        transitionDuration: '0.4s'
-                                    },
-                                    transitionDuration: '0.4s'
-                                }} />
+                                
                             </Box>
                         </Box>}
 

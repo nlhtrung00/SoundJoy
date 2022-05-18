@@ -13,6 +13,9 @@ const schema = new mongoose.Schema({
         default: Date.now,
         // required: true
     },
+    reply:[{
+        type:Object
+    }],
     song: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Song'
