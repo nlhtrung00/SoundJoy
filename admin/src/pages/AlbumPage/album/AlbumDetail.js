@@ -92,9 +92,9 @@ const AlbumDetail = () => {
                                                     {
                                                         genres && genres.length > 0 ? album.genre.map((item,index) => {
                                                             if(index < album.genre.length - 1){
-                                                                return genres.find(genre => genre._id === item).name + ", "
+                                                                return genres.find(genre => genre._id === item) ? (genres.find(genre => genre._id === item).name + ", ") : "none"
                                                             }else if(index === album.genre.length - 1){
-                                                                return genres.find(genre => genre._id === item).name
+                                                                return genres.find(genre => genre._id === item) ? (genres.find(genre => genre._id === item).name) : "none"
                                                             }
                                                         }
                                                             

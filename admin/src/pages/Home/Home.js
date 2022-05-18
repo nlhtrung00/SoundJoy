@@ -49,19 +49,19 @@ const Home = () => {
             await dispatch(fetchAsyncMusicians());
             await dispatch(fetchAsyncUsers());
 
-            dispatch(fetchAsyncRecentSongs());
-            dispatch(fetchAsyncRecentAlbums());
-            dispatch(fetchAsyncRecentGenres());
-            dispatch(fetchAsyncRecentSingers());
-            dispatch(fetchAsyncRecentMusicians());
+            await dispatch(fetchAsyncRecentSongs());
+            await dispatch(fetchAsyncRecentAlbums());
+            await dispatch(fetchAsyncRecentGenres());
+            await dispatch(fetchAsyncRecentSingers());
+            await dispatch(fetchAsyncRecentMusicians());
             console.log('fetch recent user')
-            dispatch(fetchAsyncRecentUsers());
+            await dispatch(fetchAsyncRecentUsers());
             console.log('after fetch recent user')
-            dispatch(fetchAsyncTopSongs());
-            dispatch(fetchAsyncBadSongs());
-            dispatch(fetchAsyncTopAlbums());
-            dispatch(fetchAsyncTopSingers());
-            dispatch(fetchAsyncTopMusicians());
+            await dispatch(fetchAsyncTopSongs());
+            await dispatch(fetchAsyncBadSongs());
+            await dispatch(fetchAsyncTopAlbums());
+            await dispatch(fetchAsyncTopSingers());
+            await dispatch(fetchAsyncTopMusicians());
         }
         action();
         setLoading(false);
@@ -101,7 +101,7 @@ const Home = () => {
                                         {songs.length}
                                     </Typography>
                                     <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                                        Recent added: + {recentSongs.length}
+                                        Recent added: + {recentSongs && recentSongs.length}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -120,7 +120,7 @@ const Home = () => {
                                         {albums.length}
                                     </Typography>
                                     <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                                        Recent added: + {recentAlbums.length}
+                                        Recent added: + {recentAlbums && recentAlbums.length}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -139,7 +139,7 @@ const Home = () => {
                                         {genres.length}
                                     </Typography>
                                     <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                                        Recent added: + {recentGenres.length}
+                                        Recent added: + {recentGenres && recentGenres.length}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -158,7 +158,7 @@ const Home = () => {
                                         {singers.length}
                                     </Typography>
                                     <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                                        Recent added: + {recentSingers.length}
+                                        Recent added: + {recentSingers && recentSingers.length}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -177,7 +177,7 @@ const Home = () => {
                                         {musicians.length}
                                     </Typography>
                                     <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                                        Recent added: + {recentMusicians.length}
+                                        Recent added: + {recentMusicians && recentMusicians.length}
                                     </Typography>
                                 </Box>
                             </Grid>
@@ -196,7 +196,7 @@ const Home = () => {
                                         {users.length}
                                     </Typography>
                                     <Typography sx={{ fontWeight: 500, fontSize: 18, textAlign: 'center' }}>
-                                        Recent added: + {recentUsers.length}
+                                        Recent added: + {recentUsers && recentUsers.length}
                                     </Typography>
                                 </Box>
                             </Grid>

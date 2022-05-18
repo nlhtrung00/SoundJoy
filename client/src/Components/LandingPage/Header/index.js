@@ -18,19 +18,7 @@ const Header=()=>{
                     >    
                         SoundJoy
                     </Typography>
-                    {options.map((option)=>
-                        (
-                            <Button 
-                            color="inherit"
-                            key={option}
-                            size="large"
-                            value={option}
-                            
-                            >
-                                {option}
-                            </Button>
-                        )
-                    )}
+                    
                    
                 </Toolbar>
             </Container>

@@ -109,8 +109,10 @@ const Tablistsong = ({ listSongs }) => {
                                                     </StyledTableCell>
                                                     <StyledTableCell sx={{ width: '200px' }}>
                                                         {
-                                                            song.genre.map(item => (
-                                                                genres.find(genre => genre._id === item).name + ", "
+                                                            song.genre.map((item,index )=> (
+                                                                genres.find(genre => genre._id === item) ?
+                                                                ((index < song.genre.length - 1 ) ? genres.find(genre => genre._id === item).name + ", " : genres.find(genre => genre._id === item).name)
+                                                                : "none"
                                                             ))
                                                             // console.log(genres)
                                                         }
