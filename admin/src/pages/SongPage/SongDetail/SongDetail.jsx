@@ -123,8 +123,8 @@ const SongDetail = () => {
                         <Box sx={{ ml: 2, }}>
                            <Typography sx={{
                               fontWeight: 600,
-                              fontSize: '60px',
-                              letterSpacing: '6px',
+                              fontSize: '40px',
+                              
                               lineHeight: 1,
                               my: 0
                            }}>
