@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createRef } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/styles";
 import { Avatar, FormLabel, CircularProgress, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle } from '@mui/material';
@@ -67,7 +67,7 @@ export default function NewSong() {
    ))
    const [isMp3Picked, setIsMp3Picked] = useState(false);
    const dispatch = useDispatch();
-   const history = useHistory();
+   const navigate = useNavigate()
    const classes = useStyles();
 
 
@@ -397,7 +397,7 @@ export default function NewSong() {
                         Loading...
                      </Button>
                   }
-                  <Button onClick={history.goBack} variant='contained' sx={{ m: 1, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                  <Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 1, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
                      Back
                   </Button>
 
@@ -415,7 +415,7 @@ export default function NewSong() {
                   <MuiAlert elevation={6} severity="success" variant="filled" >
                      <AlertTitle>Success</AlertTitle>
                      You created successfully.
-                     <Button onClick={history.goBack} size='small' variant='text' sx={{ color: 'white' }}>
+                     <Button onClick={()=>navigate(-1)} size='small' variant='text' sx={{ color: 'white' }}>
                         Let's check !
                      </Button>
                   </MuiAlert>

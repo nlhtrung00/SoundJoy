@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getMusician, AsyncUpdateMusician, fetchAsyncMusicianById, fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
 import { useParams } from "react-router-dom";
@@ -39,7 +39,7 @@ const UpdateMusician = () => {
     const [image, setImage] = useState(null);
     const [isFilePicked, setIsFilePicked] = useState(false);
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate()
     useEffect(() => {
         const action = async () => {
             setLoading(true);
@@ -86,7 +86,7 @@ const UpdateMusician = () => {
                 let result = unwrapResult(actionresult);
                 setResult(true);
                 setTimeout(() => {
-                    history.goBack()
+                    navigate(-1)
                 }, 1000)
             } catch (error) {
                 setError(error.message);
@@ -102,7 +102,7 @@ const UpdateMusician = () => {
                 let result = unwrapResult(actionresult);
                 setResult(true);
                 setTimeout(() => {
-                    history.goBack()
+                    navigate(-1)
                 }, 1000)
             } catch (error) {
                 setError(error.message);
@@ -176,7 +176,7 @@ const UpdateMusician = () => {
                                     </Button>
 
                                 }
-                                <Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                                <Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
                                     Back
                                 </Button>
                             </form>

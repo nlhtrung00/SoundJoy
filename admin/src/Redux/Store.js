@@ -9,7 +9,7 @@ import CommentReducer from './Slice/CommentSlice';
 import ListenReducer from './Slice/ListenSlice';
 import RatingSongReducer from './Slice/RatingSongSlice';
 import LikelistReducer from './Slice/LikelistSlice';
-
+import AccountReducer from './Slice/AccountSlice';
 import { combineReducers } from 'redux';
 import {
     persistReducer,
@@ -25,7 +25,7 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['']
+    
 }
 
 
@@ -41,6 +41,7 @@ const rootReducer = combineReducers({
     listen: ListenReducer,
     likelist: LikelistReducer,
     rating_song: RatingSongReducer,
+    account:AccountReducer
 })
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({

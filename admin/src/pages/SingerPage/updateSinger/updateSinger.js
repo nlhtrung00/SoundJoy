@@ -1,7 +1,7 @@
-import { useHistory } from "react-router-dom";
+
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAsyncSingerById, fetchAsyncSingers, AsyncUpdateSinger, getSinger } from "../../../Redux/Slice/SingerSlice";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/styles";
 import { Avatar, Button, Container, Grid, AlertTitle, TextField, Typography, Paper, Input, Box, CircularProgress } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
@@ -13,6 +13,7 @@ const useStyle = makeStyles({
 })
 const UpdateSinger = () => {
     const data = useSelector(getSinger);
+    const navigate = useNavigate()
     const { singerId } = useParams();
     const [edited, setEdited] = useState(false);
     const [error, setError] = useState('');
@@ -37,7 +38,6 @@ const UpdateSinger = () => {
     const [image, setImage] = useState(null);
     const [isFilePicked, setIsFilePicked] = useState(false);
     const inputFileRef = createRef(null);
-    const history = useHistory();
     const classes = useStyle();
     const dispatch = useDispatch();
 
@@ -82,7 +82,7 @@ const UpdateSinger = () => {
                 let result = unwrapResult(actionresult);
                 setResult(true);
                 setTimeout(() => {
-                    history.goBack()
+                    navigate(-1)
                 }, 1000)
 
             } catch (error) {
@@ -98,7 +98,7 @@ const UpdateSinger = () => {
                 let result = unwrapResult(actionresult);
                 setResult(true);
                 setTimeout(() => {
-                    history.goBack()
+                    navigate(-1)
                 }, 1000)
             } catch (error) {
                 setError(error.message);

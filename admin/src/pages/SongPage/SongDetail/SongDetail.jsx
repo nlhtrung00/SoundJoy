@@ -20,7 +20,7 @@ import { deleteSongInLikelist, fetchAsyncLikelistsBySong, getLikelistsBySong } f
 import { deleteAsyncRatingSongBySong } from '../../../Redux/Slice/RatingSongSlice';
 import { deleteAsyncListensBySong } from '../../../Redux/Slice/ListenSlice';
 import { unwrapResult } from "@reduxjs/toolkit";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 const useStyle = makeStyles((theme) => ({
    home_container: {
       backgroundColor: 'white',
@@ -32,7 +32,7 @@ const useStyle = makeStyles((theme) => ({
 }));
 const SongDetail = () => {
    const classes = useStyle();
-   const history = useHistory();
+   const navigate = useNavigate()
    const { songId } = useParams();
    const dispatch = useDispatch();
    const genres = useSelector(getListGenres);
@@ -79,7 +79,7 @@ const SongDetail = () => {
          // fetch list again
          await dispatch(fetchAsyncSongs());
          // back to previous page
-         history.replace('/songs')
+         navigate('/songs')
       }
       catch (err) {
          // set state to display toast message if error

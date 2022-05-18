@@ -1,6 +1,6 @@
 import "./App.css";
 import Home from './pages/Home/Home';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import UserList from "./pages/UserPage/userList/UserList";
 import ListSong from "./pages/SongPage/ListSongs/listSongs";
 import SongDetail from "./pages/SongPage/SongDetail/SongDetail";
@@ -21,111 +21,90 @@ import NewAlbum from "./pages/AlbumPage/newAlbum/NewAlbum";
 import GenreUpdate from "./pages/GenrePage/GenreUpdate/GenreUpdate";
 import AlbumUpdate from "./pages/AlbumPage/AlbumUpdate/AlbumUpdate";
 import { useEffect } from "react";
-import { useDispatch } from 'react-redux';
-import { fetchAsyncUsers } from "./Redux/Slice/UserSlice";
-import { fetchAsyncSingers } from "./Redux/Slice/SingerSlice";
-import { fetchAsyncMusicians } from "./Redux/Slice/MusicianSlice";
-import { fetchAsyncGenres } from "./Redux/Slice/GenreSlice";
-import { fetchAsyncSongs } from "./Redux/Slice/SongSlice";
-import { fetchAsyncAlbums } from "./Redux/Slice/AlbumSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAsyncUserByAccount, fetchAsyncUsers } from "./Redux/Slice/UserSlice";
+
 import Layout from "./Layout";
 import AlbumDetail from "./pages/AlbumPage/album/AlbumDetail";
 import GenreDetail from "./pages/GenrePage/genre/GenreDetail";
+import { getIsLoggedin } from "./Redux/Slice/AccountSlice";
+import LandingPage from "./pages/LandingPage";
+
 function App() {
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(fetchAsyncUsers());
-  //   dispatch(fetchAsyncSingers());
-  //   dispatch(fetchAsyncMusicians());
-  //   dispatch(fetchAsyncGenres());
-  //   dispatch(fetchAsyncSongs());
-  //   dispatch(fetchAsyncAlbums());
-  // }, [])
+  const logged = useSelector(getIsLoggedin)
+  console.log(logged && Object.keys(logged).length === 0)
+  console.log(logged)
+  useEffect(() => {
+    if (logged && Object.keys(logged).length > 0)
+      dispatch(fetchAsyncUserByAccount(logged.accountId))
+
+  }, [logged])
+
+
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Layout page={Home} />
-        </Route>
-        <Route exact path='/users'>
-          <Layout page={UserList} />
-        </Route>
+    <BrowserRouter>
+      <Routes>
+
+        {logged && Object.keys(logged).length === 0 &&
+          <>
+
+            <Route path="/welcome" element={<LandingPage />} />
+          </>
+        }
+
+        {
+          logged && Object.keys(logged).length !== 0 &&
+          <>
+            <Route exact path="/" element={<Layout page={Home} />} />
+
+            <Route exact path='/users' element={<Layout page={UserList} />} />
+            {/* route for singer */}
+            <Route path='/singers'>
+              <Route path="" element={<Layout page={SingerList} />} />
+              <Route path="add" element={<Layout page={NewSinger} />} />
+              <Route path="edit/:singerId" element={<Layout page={UpdateSinger} />} />
+              <Route path=":singerId" element={<Layout page={SingerDetail} />} />
+            </Route>
+            {/* route for musician */}
+            <Route exact path='/musicians'>
+              <Route path="" element={<Layout page={MusicianList} />} />
+              <Route path="add" element={<Layout page={NewMusician} />} />
+              <Route path="edit/:musicianId" element={<Layout page={UpdateMusician} />} />
+              <Route path=":musicianId" element={<Layout page={MusicianDetail} />} />
+
+            </Route>
+
+            {/* route for song */}
+            <Route exact path='/songs'>
+              <Route path="" element={<Layout page={ListSong} />} />
+              <Route path="add" element={<Layout page={NewSong} />} />
+              <Route path=":songId" element={<Layout page={SongDetail} />} />
+
+            </Route>
 
 
-        {/* route for singer */}
-        <Route exact path='/singers'>
-          <Layout page={SingerList} />
-        </Route>
-        <Route exact path='/singers/add'>
-          <Layout page={NewSinger} />
-        </Route>
-        <Route path='/singers/edit/:singerId'>
-          <Layout page={UpdateSinger} />
-        </Route>
-        <Route path='/singers/:singerId'>
-          <Layout page={SingerDetail} />
-        </Route>
+            {/* route for genres */}
+            <Route exact path='/genres'>
+              <Route path="" element={<Layout page={GenreList} />} />
+              <Route path="add" element={<Layout page={NewGenre} />} />
+              <Route path="edit/:genreId" element={<Layout page={GenreUpdate} />} />
+              <Route path=":genreId" element={<Layout page={GenreDetail} />} />
 
+            </Route>
+            {/* route for album */}
+            <Route exact path='/albums'>
+              <Route path="" element={<Layout page={AlbumList} />} />
+              <Route path="add" element={<Layout page={NewAlbum} />} />
+              <Route path="edit/:albumId" element={<Layout page={AlbumUpdate} />} />
+              <Route path=":albumId" element={<Layout page={AlbumDetail} />} />
 
-        {/* route for musician */}
-        <Route exact path='/musicians'>
-
-          <Layout page={MusicianList} />
-        </Route>
-        <Route exact path='/musicians/add'>
-          <Layout page={NewMusician} />
-        </Route>
-        <Route path='/musicians/edit/:musicianId'>
-          <Layout page={UpdateMusician} />
-        </Route>
-        <Route path='/musicians/:musicianId'>
-          <Layout page={MusicianDetail} />
-        </Route>
-
-        {/* route for song */}
-        <Route exact path='/songs'>
-
-          <Layout page={ListSong} />
-        </Route>
-        <Route path='/songs/:songId'>
-          <Layout page={SongDetail} />
-        </Route>
-        <Route exact path='/songs/add'>
-          <Layout page={NewSong} />
-        </Route>
-
-
-        {/* route for genres */}
-        <Route exact path='/genres'>
-
-          <Layout page={GenreList} />
-        </Route>
-        <Route exact path='/genres/add'>
-          <Layout page={NewGenre} />
-        </Route>
-        <Route exact path='/genres/edit/:genreId'>
-          <Layout page={GenreUpdate} />
-        </Route>
-        <Route path='/genres/:genreId'>
-          <Layout page={GenreDetail} />
-        </Route>
-
-        {/* route for album */}
-        <Route exact path='/albums'>
-
-          <Layout page={AlbumList} />
-        </Route>
-        <Route exact path='/albums/add'>
-          <Layout page={NewAlbum} />
-        </Route>
-        <Route exact path='/albums/edit/:albumId'>
-          <Layout page={AlbumUpdate} />
-        </Route>
-        <Route path='/albums/:albumId'>
-          <Layout page={AlbumDetail} />
-        </Route>
-      </Switch>
-    </Router>
+            </Route>
+          </>
+        }
+        <Route path='*' element={<Navigate to={(logged && Object.keys(logged).length !== 0) ? "/" : "/welcome"} />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

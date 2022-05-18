@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle, CircularProgress } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
@@ -16,7 +16,7 @@ const GenreUpdate = () => {
 	const [openToast, setOpen] = useState(false);
 	const [previewImg, setPreviewImg] = useState();
 	const dispatch = useDispatch();
-	const history = useHistory();
+	const navigate = useNavigate()
 	const [loading, setLoading] = useState(true);
 	const [imagefile, setImageFile] = useState();
 	const [info, setInfo] = useState((
@@ -152,7 +152,7 @@ const GenreUpdate = () => {
 											}
 
 
-											<Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+											<Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
 												Back
 											</Button>
 										</form>

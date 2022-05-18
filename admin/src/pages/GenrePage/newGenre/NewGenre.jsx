@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
@@ -16,7 +16,7 @@ export default function NewGenre() {
    const [previewImg, setPreviewImg] = useState();
    const [isFilePicked, setIsFilePicked] = useState(false);
    const dispatch = useDispatch();
-   const history = useHistory();
+   const navigate = useNavigate()
    const [info, setInfo] = useState((
       {
          name: '',
@@ -96,7 +96,7 @@ export default function NewGenre() {
 
    }
    return (
-      <Container component={Paper} elevation={4} sx={{ p: 1 }}>
+      <Container  elevation={4} sx={{ p: 1,height:'100%' }}>
          <Typography variant='h6'>
             Add more Genre
          </Typography>
@@ -144,7 +144,7 @@ export default function NewGenre() {
                      </Button>
                   }
 
-                  <Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                  <Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
                      Back
                   </Button>
                </form>

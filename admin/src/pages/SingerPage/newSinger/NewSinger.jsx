@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+
 import { useSelector, useDispatch } from "react-redux";
 import { AsyncCreateSinger, fetchAsyncSingers } from "../../../Redux/Slice/SingerSlice";
 import { makeStyles } from "@material-ui/styles";
@@ -8,10 +8,12 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 import React, { useState, useEffect, createRef } from 'react';
 import { unwrapResult } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function NewSinger() {
+   const navigate = useNavigate()
    const [edited, setEdited] = useState(false);
    const [error, setError] = useState('');
    const [createResult, setResult] = useState(false);
@@ -27,7 +29,7 @@ export default function NewSinger() {
    ))
    const [isFilePicked, setIsFilePicked] = useState(false);
    const dispatch = useDispatch();
-   const history = useHistory();
+
    useEffect(() => {
       if (!info.image) {
          setPreviewImg(undefined);
@@ -156,7 +158,7 @@ export default function NewSinger() {
                      </Button>
 
                   }
-                  <Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                  <Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
                      Back
                   </Button>
                </form>

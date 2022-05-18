@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { AsyncCreateMusician, fetchAsyncMusicians } from "../../../Redux/Slice/MusicianSlice";
 import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle } from '@mui/material';
@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import { unwrapResult } from "@reduxjs/toolkit";
 
 export default function NewMusician() {
+   const navigate = useNavigate()
    const [edited, setEdited] = useState(false);
    const [error, setError] = useState('');
    const [createResult, setResult] = useState(false);
@@ -25,7 +26,7 @@ export default function NewMusician() {
    const [image, setImage] = useState(null);
    const [isFilePicked, setIsFilePicked] = useState(false);
    const dispatch = useDispatch();
-   const history = useHistory();
+
 
    useEffect(() => {
       if (!image) {
@@ -148,7 +149,7 @@ export default function NewMusician() {
                      </Button>
 
                   }
-                  <Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                  <Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
                      Back
                   </Button>
 
@@ -166,7 +167,7 @@ export default function NewMusician() {
                   <MuiAlert elevation={6} severity="success" variant="filled" >
                      <AlertTitle>Success</AlertTitle>
                      You created successfully. 
-                     <Button onClick={history.goBack} variant='text' sx={{color:'white'}}>
+                     <Button onClick={()=>navigate(-1)} variant='text' sx={{color:'white'}}>
                         Let's check !
                      </Button>
                   </MuiAlert>

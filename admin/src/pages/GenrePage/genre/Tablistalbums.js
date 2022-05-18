@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { useSelector, useDispatch } from "react-redux";
 import * as moment from "moment"
 
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate,  } from 'react-router-dom';
 import { fetchAsyncSingers, getListSingers } from '../../../Redux/Slice/SingerSlice';
 import { fetchAsyncGenres, getListGenres } from '../../../Redux/Slice/GenreSlice';
 import { fetchAsyncMusicians, getListMusicians } from '../../../Redux/Slice/MusicianSlice';
@@ -31,7 +31,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const Tablistalbum = ({ listAlbums }) => {
     const dispatch = useDispatch();
-    const history = useHistory();
+    const navigate = useNavigate()
     const singers = useSelector(getListSingers);
     const genres = useSelector(getListGenres);
     const musicians = useSelector(getListMusicians);
@@ -73,7 +73,7 @@ const Tablistalbum = ({ listAlbums }) => {
                                         {listAlbums.map((album, index) => {
                                             return (
 
-                                                <TableRow key={album._id} onClick={() => history.push(`/albums/${album._id}`)} sx={{ cursor: 'pointer' }}>
+                                                <TableRow key={album._id} onClick={() => navigate(`/albums/${album._id}`)} sx={{ cursor: 'pointer' }}>
 
                                                     <StyledTableCell>
                                                         {index + 1}

@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchAsyncSingers, getListSingers } from '../../../Redux/Slice/SingerSlice';
 // import { fetchAsyncGenres, getListGenres } from '../../../Redux/Slice/GenreSlice';
 import * as moment from "moment"
-import { Link,useHistory } from 'react-router-dom'
+import { Link, useNavigate, } from 'react-router-dom'
 import { fetchAsyncMusicians, getListMusicians } from '../../../Redux/Slice/MusicianSlice';
 
 
@@ -30,7 +30,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const Tablistsong = ({ listSongs }) => {
     const dispatch = useDispatch();
-    const history = useHistory()
+    const navigate = useNavigate()
     const singers = useSelector(getListSingers);
     const musicians = useSelector(getListMusicians);
     const [loading, setLoading] = useState(true);
@@ -71,7 +71,7 @@ const Tablistsong = ({ listSongs }) => {
                                     <TableBody>
                                         {listSongs.map((song, index) => {
                                             return (
-                                                <StyledTableRow key={song._id} onClick={() => history.push(`/songs/${song._id}`)}>
+                                                <StyledTableRow key={song._id} onClick={() => navigate(`/songs/${song._id}`)}>
                                                     <StyledTableCell>
                                                         {index + 1}
                                                     </StyledTableCell>

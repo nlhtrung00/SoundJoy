@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle, FormLabel, CircularProgress } from '@mui/material';
 import { makeStyles } from "@material-ui/styles";
@@ -45,7 +45,7 @@ const AlbumUpdate = () => {
 	const genres = useSelector(getListGenres);
 	const singers = useSelector(getListSingers);
 	const musicians = useSelector(getListMusicians);
-
+	const navigate = useNavigate()
 	const album = useSelector(getAlbum);
 	const { albumId } = useParams();
 	const [loading, setLoading] = useState(true);
@@ -55,7 +55,6 @@ const AlbumUpdate = () => {
 	const [openToast, setOpen] = useState(false);
 	const [previewImg, setPreviewImg] = useState();
 	const dispatch = useDispatch();
-	const history = useHistory();
 	const classes = useStyles();
 	const [imagefile, setImageFile] = useState();
 
@@ -319,7 +318,7 @@ const AlbumUpdate = () => {
 											
 											
 
-											<Button onClick={history.goBack} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+											<Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 0.5, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
 												Back
 											</Button>
 										</form>

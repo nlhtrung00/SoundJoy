@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Avatar, Button, Container, Grid, TextField, Typography, Paper, Input, Box, AlertTitle, FormLabel, CircularProgress } from '@mui/material';
 import { makeStyles } from "@material-ui/styles";
@@ -53,7 +53,7 @@ export default function NewAlbum() {
    const [openToast, setOpen] = useState(false);
    const [previewImg, setPreviewImg] = useState();
    const [isFilePicked, setIsFilePicked] = useState(false);
-   const history = useHistory();
+   const navigate = useNavigate()
    const [info, setInfo] = useState((
       {
          name: '',
@@ -322,7 +322,7 @@ export default function NewAlbum() {
                               </Button>
                            }
 
-                           <Button onClick={history.goBack} variant='contained' sx={{ m: 1, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
+                           <Button onClick={()=>navigate(-1)} variant='contained' sx={{ m: 1, bgcolor: '#176384', '&:hover': { bgcolor: '#1a769d' } }}>
                               Back
                            </Button>
                         </form>
@@ -339,7 +339,7 @@ export default function NewAlbum() {
                            <MuiAlert elevation={6} severity="success" variant="filled" >
                               <AlertTitle>Success</AlertTitle>
                               You created successfully.
-                              <Button onClick={history.goBack} size='small' variant='text' sx={{ color: 'white' }}>
+                              <Button onClick={()=>navigate(-1)} size='small' variant='text' sx={{ color: 'white' }}>
                                  Let's check !
                               </Button>
                            </MuiAlert>
