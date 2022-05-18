@@ -11,7 +11,7 @@ import CommentReducer from './Slices/CommentSlice';
 import SongBarReducer from './Slices/SongBarSlice';
 import RatingSongReducer from './Slices/RatingSongSlice';
 import ListenReducer from './Slices/ListenSlice';
-
+import RatingAlbumReducer from './Slices/RatingAlbumSlice';
 import { combineReducers } from 'redux';
 import {
     persistReducer,
@@ -58,7 +58,8 @@ const rootReducer = combineReducers({
     likelist: LikelistReducer,
     songbar:SongBarReducer,
     ratingsong:RatingSongReducer,
-    listen:ListenReducer
+    listen:ListenReducer,
+    ratingalbum:RatingAlbumReducer
 })
 // const persistedAccount = persistReducer(persistConfig, AccountReducer);
 // const persistedUser = persistReducer(persistConfig, UserReducer);

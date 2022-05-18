@@ -35,7 +35,6 @@ const PlaysongBar = () => {
     const [indexTrack, setIndexTrack] = useState(0);
     const [currentTrackSrc, setCurrentTrackSrc] = useState()
 
-    console.log(playlist)
     useEffect(() => {
         const action = async () => {
             if (playlist) {

@@ -105,7 +105,7 @@ const SongDetail = () => {
         if (actionRating) {
             const updateRating = async () => {
                 const formdata = new FormData();
-
+                
                 let sum = ratingsbysong.reduce((accumulator, object) => {
                     return accumulator + object.rating
                 }, 0)
@@ -117,6 +117,7 @@ const SongDetail = () => {
                 try {
                     const action = await dispatch(asyncUpdateSong({ formdata, songId }))
                     unwrapResult(action)
+                    dispatch(fetchAsyncSongById(songId))
                 } catch (err) {
                     console.log(err)
                 }
@@ -178,7 +179,7 @@ const SongDetail = () => {
                 let formdata = new FormData();
                 let listens = song.listens + 1;
                 formdata.append('listens', listens);
-                console.log('set listen begin' + listens)
+                
                 let action = await dispatch(asyncUpdateSong({ formdata, songId }))
                 unwrapResult(action);
                 setListened(true);

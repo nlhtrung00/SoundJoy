@@ -38,6 +38,18 @@ export const fetchAsyncAlbumsByMusician = createAsyncThunk("album/fetchAsyncAlbu
     const response = await Axios.get(`albums/musician/${musicianId}`);
     return response.data;
 })
+export const asyncUpdateAlbum =createAsyncThunk('album/asyncUpdateAlbum',async({formdata,albumId})=>{
+    
+    const response = await Axios.put(`albums/${albumId}`,
+        formdata,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        }
+    );
+    return response.data;
+})
 const AlbumSlice = createSlice({
     name:'album',
     initialState,

@@ -10,6 +10,22 @@ export const getRatingAlbums = async (req, res) => {
         res.status(500).json({ error: err });
     }
 };
+export const getRatingsByAlbum = async (req, res) => {
+    try {
+        const ratingAlbums = await RatingAlbumModel.find({album:req.params.id});
+        res.status(200).json(ratingAlbums);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
+export const getRatingsByAlbumOfUser = async (req, res) => {
+    try {
+        const ratingAlbums = await RatingAlbumModel.findOne({album:req.params.albumId,user:req.params.userId});
+        res.status(200).json(ratingAlbums);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+};
 
 export const getRatingAlbum = async (req, res) => {
     try {

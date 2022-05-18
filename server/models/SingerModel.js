@@ -21,11 +21,7 @@ const schema = new mongoose.Schema({
     cloudinary_id: {
         type: String
     },
-    rating : {
-        type: Number,
-        default:-1,
-        // required: true
-    }
+    
 }, {
     versionKey: false,
     timestamps: true 

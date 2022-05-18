@@ -23,7 +23,7 @@ const ListenSlice = createSlice({
     reducers:{},
     extraReducers:{
         [fetchAsyncListenBySongAndUser.fulfilled]:(state,action)=>{
-            console.log('fetchAsyncListenBySongAndUser');
+            
             return{
                 ...state,
                 listenbysonganduser:action.payload

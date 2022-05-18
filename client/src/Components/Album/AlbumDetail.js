@@ -12,11 +12,14 @@ import EditIcon from '@mui/icons-material/Edit';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import GradeIcon from '@mui/icons-material/Grade';
 import * as moment from 'moment'
-import { fetchAsyncAlbumById, getAlbum } from "../../Redux/Slices/AlbumSlice";
+import { asyncUpdateAlbum, fetchAsyncAlbumById, getAlbum } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncGenres, getGenres } from "../../Redux/Slices/GenreSlice";
 import { fetchAsyncSongByAlbum, getSongsByAlbum } from "../../Redux/Slices/SongSlice";
 import Tablistsong from "../TabList/Tablistsong";
 import { fetchAsyncSingers, getSingers } from "../../Redux/Slices/SingerSlice";
+import RatingAlbum from "./Rating";
+import { fetchAsyncRatingsByAlbum, getRatingsByAlbum } from "../../Redux/Slices/RatingAlbumSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const useStyle = makeStyles({
     home_container: {
@@ -36,15 +39,17 @@ const AlbumDetail = () => {
     const singers = useSelector(getSingers)
     const songsbyalbum = useSelector(getSongsByAlbum);
     const [loading, setLoading] = useState(true);
-    console.log(songsbyalbum);
+    const [actionRating, setActionRating] = useState(false);
+    const ratingbyalbum = useSelector(getRatingsByAlbum)
+    
     useEffect(() => {
         setLoading(true);
         const action = async () => {
+            dispatch(fetchAsyncRatingsByAlbum(albumId))
             await dispatch(fetchAsyncSongByAlbum(albumId));
             await dispatch(fetchAsyncAlbumById(albumId))
             await dispatch(fetchAsyncGenres());
-            await dispatch(fetchAsyncSingers())
-
+            await dispatch(fetchAsyncSingers());
         }
         action();
         setLoading(false);
@@ -53,6 +58,30 @@ const AlbumDetail = () => {
         setValueTab(value);
     }
 
+    // rating of album
+    useEffect(()=>{
+        if(actionRating){
+            const updateRating = async()=>{
+                const formdata = new FormData();
+                
+                let sum = ratingbyalbum.reduce((accumulator, object) => {
+                    return accumulator + object.rating
+                }, 0)
+                let avgRating = (sum / ratingbyalbum.length);
+                
+                formdata.append('rating', avgRating)
+                try {
+                    const action = await dispatch(asyncUpdateAlbum({ formdata, albumId }))
+                    unwrapResult(action)
+                    dispatch(fetchAsyncAlbumById(albumId))
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+            updateRating();
+            setActionRating(false)
+        }
+    },[actionRating])
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
             {loading ?
@@ -86,29 +115,29 @@ const AlbumDetail = () => {
                                         <Typography sx={{ lineHeight: 2 }}>
                                             <span style={{ fontWeight: 500 }}>Genres:</span>
                                             {
-                                                genres.length > 0 && album.genre.map((item,index)=> {
-                                                    if(index < album.genre.length - 1){
-                                                        return(
-                                                            genres.find(genre => genre._id === item).name +", "
+                                                genres.length > 0 && album.genre.map((item, index) => {
+                                                    if (index < album.genre.length - 1) {
+                                                        return (
+                                                            genres.find(genre => genre._id === item).name + ", "
                                                         )
-                                                    }else{
+                                                    } else {
                                                         return genres.find(genre => genre._id === item).name
                                                     }
-                                                    
-                                                    
-                                                    })
+
+
+                                                })
 
                                             }
                                         </Typography>
                                         <Typography sx={{ lineHeight: 2 }}>
                                             <span style={{ fontWeight: 500 }}>Singers:</span>
                                             {
-                                                album.singer.length>0 ? album.singer.map((item,index) => (
-                                                    (singers.length > 0 && singers.find(genre => genre._id === item)) ? 
-                                                    (index < album.singer.length -1 ? singers.find(genre => genre._id === item).name + ", " : singers.find(genre => genre._id === item).name)
-                                                     : ' none'
-                                                
-                                                    )) : " none"
+                                                album.singer.length > 0 ? album.singer.map((item, index) => (
+                                                    (singers.length > 0 && singers.find(genre => genre._id === item)) ?
+                                                        (index < album.singer.length - 1 ? singers.find(genre => genre._id === item).name + ", " : singers.find(genre => genre._id === item).name)
+                                                        : ' none'
+
+                                                )) : " none"
 
                                             }
                                         </Typography>
@@ -118,24 +147,27 @@ const AlbumDetail = () => {
                                                 songsbyalbum.length
                                             }
                                         </Typography>
+                                        
                                         <Box sx={{ display: 'flex' }}>
-                                            {/* <Box sx={{ display: 'flex', alignItems: 'center',mr:2 }}>
-                                                <ThumbUpIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
-                                                <Typography>
-                                                    {album.reactions}
-                                                </Typography>
-                                            </Box> */}
-                                            {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                           
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                 <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
                                                 <Typography>
                                                     {album.rating >=0 ? album.rating+"/5" : '0/5'}
                                                 </Typography>
-                                            </Box> */}
+                                            </Box>
                                         </Box>
 
                                     </Box>
                                 </Grid>
                             </Grid>
+                        </Box>
+                        {/* rating of user */}
+                        <Box>
+                            <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
+                                Your rating
+                            </Typography>
+                            <RatingAlbum album={album} setActionRating={setActionRating} />
                         </Box>
                         <Box className="achievement">
                             {/* <Typography variant="h6">
