@@ -127,15 +127,15 @@ const AlbumDetail = () => {
                                                         songsbyalbum.length
                                                     }
                                                 </Typography>
-                                                {/* <Box sx={{ display: 'flex' }}>
+                                                <Box sx={{ display: 'flex' }}>
 
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                         <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
                                                         <Typography>
-                                                            {album.rating ? album.rating : '0/10'}
+                                                            {album.rating > 0 ? album.rating+"/5" : '0/5'}
                                                         </Typography>
                                                     </Box>
-                                                </Box> */}
+                                                </Box>
 
                                             </Box>
                                         </Grid>

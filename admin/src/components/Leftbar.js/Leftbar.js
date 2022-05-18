@@ -135,7 +135,13 @@ const Leftbar = () => {
                 {listmenu.map((menuitem, index) => {
                     return (
                         <Link to={`${menuitem.path}`} key={index}>
-                            <Box className={classNames(classes.item,menuitem.path === location.pathname ? classes.active : '')} sx={{
+                            {console.log(location.pathname.startsWith('/'))}
+                            <Box className={classNames(classes.item,menuitem.path!== "/" ? 
+                                (location.pathname.startsWith(menuitem.path) ? classes.active : '')
+                                : (menuitem.path === location.pathname ? classes.active : '')
+                                )} 
+                                
+                                sx={{
                                 borderRadius: '20px',
                                 '&:hover': {
                                     bgcolor: 'white',
