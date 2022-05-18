@@ -19,11 +19,13 @@ const RatingSong = ({song,setActionRating}) => {
     },[song._id,user._id,dispatch])
     
     useEffect(()=>{
-        if(ratingbyuser){
-            
+        if(ratingbyuser){   
             setRatingValue(ratingbyuser.rating)
         }
-    },[ratingbyuser])
+        else{
+            setRatingValue(0)
+        }
+    },[ratingbyuser,song._id])
     // set state of rating after fetchching
     console.log(ratingbyuser)
     

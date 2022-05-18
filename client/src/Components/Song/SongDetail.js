@@ -32,6 +32,7 @@ import { getOpenBar, OpenBar } from '../../Redux/Slices/SongBarSlice';
 import RatingSong from './Rating';
 import { fetchAsyncRatingsBySong, getRatingsBySong } from '../../Redux/Slices/RatingSongSlice';
 import { asyncCreateListen, asyncUpdateListen, fetchAsyncListenBySongAndUser, getListenBySongAndUser } from '../../Redux/Slices/ListenSlice';
+import Relevants from './Relevants';
 
 const useStyle = makeStyles((theme) => ({
     home_container: {
@@ -258,8 +259,9 @@ const SongDetail = () => {
                                             {
                                                 song.singer && song.singer.map((item, index) => {
                                                     return (
+                                                        singers.find(singer => singer._id === item) ? 
                                                         ((index < song.singer.length - 1) && (song.singer.length > 1)) ? singers.find(singer => singer._id === item).name + " ," : singers.find(singer => singer._id === item).name
-
+                                                        : "none"
                                                     )
 
 
@@ -345,7 +347,7 @@ const SongDetail = () => {
                                             {
                                                 song.singer && song.singer.length < 2 ?
                                                     <Typography sx={{ fontSize: '15px', color: 'white' }}>
-                                                        {singers.find(singer => singer._id === song.singer[0]).name}
+                                                        {singers.find(singer => singer._id === song.singer[0]) ? singers.find(singer => singer._id === song.singer[0]).name : "none"}
                                                     </Typography>
                                                     :
                                                     <Typography sx={{ fontSize: '15px', color: 'white' }}>
@@ -386,7 +388,12 @@ const SongDetail = () => {
                                 Comment
                             </Typography>
                             <Comment song={song} />
-
+                            <Box className="relevant" sx={{p:1}}>
+                                <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
+                                    Relevant Songs
+                                </Typography>
+                                <Relevants song={song}/>
+                            </Box>
                         </Box>
 
                         {/* likelist add  to dialog */}

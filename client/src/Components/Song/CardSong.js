@@ -59,7 +59,7 @@ const CardSong = ({ song }) => {
                             sx={{
                                 objectFit: 'cover',
                                 objectPosition: 'center',
-                                height: '250px',
+                                height: '200px',
                                 transitionDuration: '0.6s'
                             }}
 
@@ -109,7 +109,12 @@ const CardSong = ({ song }) => {
                                 {song.name}
                             </Typography>
                             <Typography className={classes.overflow_text} variant='body4' sx={{ fontSize: 15 }}>
-                                {song.singer.map((item) => singers.find(singer => singer._id === item).name + " ")}
+                                {song.singer.map((item,index) => 
+                                singers.find(singer => singer._id === item) ? 
+                                (index < song.singer.length - 1 ? singers.find(singer => singer._id === item).name + ", " : singers.find(singer => singer._id === item).name)
+                                : "none"
+                                )
+                                }
                             </Typography>
                         </CardContent>
                     </Link>
