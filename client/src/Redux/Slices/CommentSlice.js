@@ -13,6 +13,14 @@ export const createAsyncComment = createAsyncThunk('comment/createAsyncComment',
     const response = await Axios.post(`comments`,data);
     return response.data;
 })
+export const asyncReplyComment = createAsyncThunk('comment/asyncReplyComment',async(data)=>{
+    const response = await Axios.put(`comments/${data.commentId}`,
+    {
+        reply:data.reply
+    }
+    );
+    return response.data;
+})
 const CommentSlice = createSlice({
     name:'comment',
     initialState,
