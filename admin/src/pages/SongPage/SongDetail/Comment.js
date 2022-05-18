@@ -109,7 +109,7 @@ const Comment = ({ song }) => {
                                                                             <List className={classes.list_comment}>
                                                                                 {comment.reply.length > 0 && comment.reply.map((replycomment) => {
                                                                                     return (
-                                                                                        <Box key={replycomment._id}>
+                                                                                        <Box key={replycomment.id}>
                                                                                             <ListItem alignItems="flex-start">
                                                                                                 <ListItemAvatar>
                                                                                                     <Avatar src={(listUsers.length > 0 && listUsers.find(user => user._id === replycomment.user)) ? listUsers.find(user => user._id === comment.user).image : ""} />

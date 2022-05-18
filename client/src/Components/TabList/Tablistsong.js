@@ -125,7 +125,7 @@ const Tablistsong = ({ listSongs }) => {
                                                                         if (index < 1)
                                                                             return (
                                                                                 <Typography key={item}>
-                                                                                    {musicians.find(musician => musician._id === item).name}
+                                                                                    {musicians.find(musician => musician._id === item) ? musicians.find(musician => musician._id === item).name :"none"}
                                                                                 </Typography>
 
                                                                             )
@@ -144,10 +144,10 @@ const Tablistsong = ({ listSongs }) => {
 
                                                         {
                                                             (genres.length > 0 && song.genre.length > 0) ? song.genre.map((item, index) => (
-
+                                                                genres.find(genre => genre._id === item) ?
                                                                 (index < song.genre.length - 1) ?
                                                                     genres.find(genre => genre._id === item).name + ", " : genres.find(genre => genre._id === item).name
-
+                                                                : "none"
                                                             )) : "none"
                                                         }
                                                     </StyledTableCell>
