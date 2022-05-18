@@ -7,7 +7,8 @@ import CardSong from './CardSong';
 const Relevants = ({ song }) => {
     const [loading, setLoading] = useState(true);
     const dispatch = useDispatch();
-    const relevantSongs = useSelector(getRelevantSongs).slice(0,6)
+    const Songs = useSelector(getRelevantSongs)
+    const relevantSongs = (Songs && Songs.length > 0) ? Songs.slice(0,6) : []
     useEffect(() => {
         const action = async () => {
             setLoading(true);

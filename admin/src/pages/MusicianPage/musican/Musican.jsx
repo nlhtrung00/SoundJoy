@@ -115,7 +115,7 @@ export default function MusicianDetail() {
                   bottom: 30,
                   right: 30
                }}>
-                  <Link to={`edit/${data._id}`}>
+                  <Link to={`/musicians/edit/${data._id}`}>
                      <Button variant='contained'>
                         Edit
                         <EditIcon sx={{ fontSize: '16px', ml: 0.5 }} />

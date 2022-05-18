@@ -141,7 +141,7 @@ export default function MusicianList() {
                         </StyledTableCell>
                         <StyledTableCell>
                           <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
-                            <Link to={`musicians/${musician._id}`}>
+                            <Link to={`/musicians/${musician._id}`}>
                               <Button size='small' title='View detail' sx={{ borderRadius: 0 }}>
                                 <InfoIcon />
                               </Button>

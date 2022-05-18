@@ -130,7 +130,7 @@ const Tablistalbum = ({ listAlbums }) => {
 
 
                                                                         }
-                                                                        {album.musician.length > 1 && <span style={{ fontSize: 14, fontWeight: 600 }}>And more...</span>}
+                                                                        {album.musician.length > 1 && <span style={{ fontSize: 14, fontWeight: 600 }}> And more...</span>}
                                                                     </Typography>
                                                                 </>
                                                                 : "none"

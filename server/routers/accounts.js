@@ -1,5 +1,5 @@
 import express from 'express';
-import { registerAccount, loginAccount, getAccounts, getAccount, deleteAccount, authenticateToken, refresh, logout, loginAccountAdmin } from '../controllers/accounts.js';
+import { registerAccount,updateAccount, loginAccount, getAccounts, getAccount, deleteAccount, authenticateToken, refresh, logout, loginAccountAdmin } from '../controllers/accounts.js';
 
 const router = express.Router();
 
@@ -8,6 +8,7 @@ router.get('/', authenticateToken, getAccount);
 router.post('/register', registerAccount);
 router.post('/admin/login', loginAccountAdmin);
 router.post('/login', loginAccount);
+router.put('/:id', updateAccount);
 router.delete('/logout', logout);
 router.post('/token', refresh);
 router.delete('/:id', deleteAccount);

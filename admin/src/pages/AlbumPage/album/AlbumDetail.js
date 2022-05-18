@@ -168,7 +168,7 @@ const AlbumDetail = () => {
                                 bottom: 30,
                                 right: 30
                             }}>
-                                <Link to={`edit/${album._id}`}>
+                                <Link to={`/albums/edit/${album._id}`}>
                                     <Button variant='contained'>
                                         Edit
                                         <EditIcon sx={{ fontSize: '16px', ml: 0.5 }} />

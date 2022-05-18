@@ -63,7 +63,7 @@ const CardAlbum = (props) => {
                             <Box sx={{ cursor: 'pointer' }} onClick={() => handleDelete(props.album._id)}>
                                 <DeleteForeverIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
                             </Box>
-                            <Link to={`albums/edit/${props.album._id}`}>
+                            <Link to={`/albums/edit/${props.album._id}`}>
                                 <Box sx={{ cursor: 'pointer' }}>
                                     <ModeEditIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
                                 </Box>
@@ -84,7 +84,7 @@ const CardAlbum = (props) => {
                     alt="album image"
 
                 />
-                <Link to={`albums/${props.album._id}`}>
+                <Link to={`/albums/${props.album._id}`}>
                     <CardContent className={classes.cardcontent}>
                         <Typography className={classes.namealbum}>
                             {props.album.name}

@@ -123,7 +123,8 @@ export const loginAccountAdmin = async (req, res) => {
         const validPass = await bcrypt.compare(password, account.password);    
         if (!validPass)return res.status(400).json({ message: 'Invalid password'});
         //jwt
-        if (!account.isAdmin) return res.status(400).json({ message: 'Only Admin'});
+        
+        if (!account.is_admin) return res.status(400).json({ message: 'Only Admin'});
         const data = { name: username };
         const accessToken = generateAccessToken(data);
         const refreshToken = jwt.sign(data, 'ecaps');
@@ -131,5 +132,23 @@ export const loginAccountAdmin = async (req, res) => {
         res.status(200).json({ message: 'Login success!', islogged:true, accountId:account._id, accessToken: accessToken, refreshToken: refreshToken });
     } catch (err) {
         res.status(500).json({ error: err });
+    }
+};
+export const updateAccount = async (req, res) => {
+    try {
+        let account = await AccountModel.findById(req.params.id);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password,salt);
+         console.log(hashedPassword)
+        let updateAccount = {
+            username:req.body.username,
+            password:hashedPassword,
+            is_admin:req.body.is_admin
+        };
+        
+        account = await AccountModel.findOneAndUpdate({ _id: req.params.id }, updateAccount, { new: true }); //dieu kien , gia tri moi, user = new?gia tri moi: gia tri cu
+        res.status(200).json(account);
+    } catch (err) {
+        res.status(500).json({error: err});
     }
 };

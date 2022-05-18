@@ -67,7 +67,7 @@ const CardGenre = (props) => {
                                 <Box sx={{ cursor: 'pointer' }} onClick={() => handleDelete(props.genre._id)}>
                                     <DeleteForeverIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
                                 </Box>
-                                <Link to={`genres/edit/${props.genre._id}`}>
+                                <Link to={`/genres/edit/${props.genre._id}`}>
                                     <Box sx={{ cursor: 'pointer' }}>
                                         <ModeEditIcon sx={{ alignItems: 'center', fontSize: '25px', color: 'white', transition: 'ease-in-out', bgcolor: 'black', width: '30px', height: '30px', borderRadius: '50%', p: 0.5 }} />
                                     </Box>
@@ -90,7 +90,7 @@ const CardGenre = (props) => {
                         alt="genre image"
 
                     />
-                    <Link to={`genres/${props.genre._id}`}>
+                    <Link to={`/genres/${props.genre._id}`}>
                         <CardContent className={classes.cardcontent}>
                             <Typography className={classes.namegenre}>
                                 {props.genre.name}

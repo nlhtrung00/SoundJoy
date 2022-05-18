@@ -175,7 +175,7 @@ export default function ListSong() {
                                     </StyledTableCell>
                                     <StyledTableCell>
                                        <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
-                                          <Link to={`songs/${song._id}`}>
+                                          <Link to={`/songs/${song._id}`}>
                                              <Button variant='text' size='small' title='View detail' sx={{ borderRadius: 0 }}>
                                                 View
                                              </Button>

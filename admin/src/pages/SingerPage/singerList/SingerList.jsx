@@ -142,7 +142,7 @@ const SingerList = () => {
                         </StyledTableCell>
                         <StyledTableCell>
                           <ButtonGroup disableElevation variant="contained" aria-label="outlined primary button group">
-                            <Link to={`singers/${singer._id}`}>
+                            <Link to={`/singers/${singer._id}`}>
                               <Button size='small' title='View detail' sx={{ borderRadius: 0 }}>
                                 <InfoIcon />
                               </Button>

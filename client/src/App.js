@@ -29,8 +29,7 @@ import Recommend from "./Components/Recommend/Recommend";
 function App() {
    const logged = useSelector(getIsLoggedin);
    const dispatch = useDispatch();
-   console.log(logged!==undefined)
-   console.log(logged)
+   // console.log(logged)
    useEffect(()=>{
       if(logged && Object.keys(logged).length>0)
       dispatch(fetchAsyncUserByAccount(logged.accountId))

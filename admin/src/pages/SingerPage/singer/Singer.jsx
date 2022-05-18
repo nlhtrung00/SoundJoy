@@ -117,7 +117,7 @@ export default function SingerDetail() {
                   bottom: 30,
                   right: 30
                }}>
-                  <Link to={`edit/${data._id}`}>
+                  <Link to={`/singers/edit/${data._id}`}>
                      <Button variant='contained'>
                         Edit
                         <EditIcon sx={{ fontSize: '16px', ml: 0.5 }} />
