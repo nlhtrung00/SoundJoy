@@ -80,7 +80,7 @@ const Home = () => {
                 :
                     <>
                         <Typography sx={{ fontWeight: 500, fontSize: 19, mb: 3 }}>
-                            Welcome come, Admin demo<br /><span style={{ fontWeight: 400 }}>Nice to see you again</span>
+                            Welcome<br /><span style={{ fontWeight: 400 }}>Nice to see you again</span>
                         </Typography>
                         <Typography sx={{ fontWeight: 600, fontSize: 21, mb: 1 }}>
                             Overview

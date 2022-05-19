@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAsyncUsers, getListUsers } from "../../../Redux/Slice/UserSlice";
-
+import * as moment from 'moment'
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -92,7 +92,8 @@ export default function UserList() {
                           {user.phone_number}
                         </StyledTableCell>
                         <StyledTableCell>
-                          {user.registration_date}
+
+                          {moment(user.registration_date).format("DD/MM/YYYY")}
                         </StyledTableCell>
                         {/* <StyledTableCell>
                     <Link to={`users/${user._id}`}>

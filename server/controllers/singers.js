@@ -46,7 +46,7 @@ export const getRecentSingers = async (req, res) => {
 
 export const getTopSingers = async (req, res) => {
     try {
-        const singers = await SingerModel.find().limit(10).sort('-rating createdAt');
+        const singers = await SingerModel.find().limit(10).sort('-followers createdAt');
         res.status(200).json(singers);
     } catch (err) {
         res.status(500).json({ error: err });
