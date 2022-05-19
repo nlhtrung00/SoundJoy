@@ -27,7 +27,7 @@ const NewestSong = () => {
                     :
                     <Box>
                         {
-                            newSongs.length > 0 ?
+                            newSongs && newSongs.length > 0 ?
                                 <Grid container spacing={3}>
                                     {
                                         newSongs.map(song => (

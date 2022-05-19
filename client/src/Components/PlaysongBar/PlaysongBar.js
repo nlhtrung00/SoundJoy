@@ -31,7 +31,7 @@ const PlaysongBar = () => {
     const listenedbyuser = useSelector(getListenBySongAndUser)
     const [TotalSeconds, setTotalSeconds] = useState(0);
     const [listened, setListened] = useState(false);
-    const [lengthTracks, setLengthTracks] = useState(playlist.length)
+    const [lengthTracks, setLengthTracks] = useState(playlist ? playlist.length : 0)
     const [indexTrack, setIndexTrack] = useState(0);
     const [currentTrackSrc, setCurrentTrackSrc] = useState()
 
@@ -64,6 +64,7 @@ const PlaysongBar = () => {
 
     // when change song in playlist
     useEffect(() => {
+        if(playlist)
         setCurrentTrackSrc(playlist[indexTrack]);
     }, [indexTrack])
     const handleLoadMetadata = (meta) => {

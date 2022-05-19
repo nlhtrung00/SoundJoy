@@ -72,7 +72,7 @@ const Recommend = () => {
                                     bgcolor: '#eeeeee'
                                 }}>
                                     {
-                                        recommendSongs.length > 0 ?
+                                        recommendSongs && recommendSongs.length > 0 ?
                                             <Grid container spacing={3}>
                                                 {
                                                     recommendSongs.map(song => (

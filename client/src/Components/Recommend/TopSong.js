@@ -30,7 +30,7 @@ const TopSong = () => {
                     :
                     <Box>
                         {
-                            topSongs.length > 0 ?
+                            topSongs && topSongs.length > 0 ?
                                 <Grid container spacing={3}>
                                     {
                                         topSongs.map(song => (
