@@ -34,7 +34,7 @@ const PlaysongBar = () => {
     const [lengthTracks, setLengthTracks] = useState(playlist ? playlist.length : 0)
     const [indexTrack, setIndexTrack] = useState(0);
     const [currentTrackSrc, setCurrentTrackSrc] = useState()
-
+    console.log(playlist)
     useEffect(() => {
         const action = async () => {
             if (playlist) {
@@ -134,7 +134,7 @@ const PlaysongBar = () => {
                     </Box>
                     :
                     <React.Fragment>
-                        {open ?
+                        {open && currentTrackSrc ?
                             <Container className={classes.playsongbar} maxWidth='xl' component={Paper} disableGutters>
                                 <Box sx={{ bgcolor: '#5C2F9D' }}>
                                     <Box className='audio player' sx={{ marginTop: 0, display: 'flex', alignItems: 'center', p: 1.5, justifyContent: 'space-between', bgcolor: '#3d3982' }}>

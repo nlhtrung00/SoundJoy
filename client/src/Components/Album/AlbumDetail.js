@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Box, Typography, Button, Paper, Grid, CircularProgress } from "@mui/material";
+import { Container, Box, Typography, Button, Paper, Grid, CircularProgress, IconButton } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -14,13 +14,14 @@ import GradeIcon from '@mui/icons-material/Grade';
 import * as moment from 'moment'
 import { asyncUpdateAlbum, fetchAsyncAlbumById, getAlbum } from "../../Redux/Slices/AlbumSlice";
 import { fetchAsyncGenres, getGenres } from "../../Redux/Slices/GenreSlice";
-import { fetchAsyncSongByAlbum, getSongsByAlbum } from "../../Redux/Slices/SongSlice";
+import { fetchAsyncSongByAlbum, fetchAsyncSongs, getListSongs, getSongsByAlbum, setPlaylist } from "../../Redux/Slices/SongSlice";
 import Tablistsong from "../TabList/Tablistsong";
 import { fetchAsyncSingers, getSingers } from "../../Redux/Slices/SingerSlice";
 import RatingAlbum from "./Rating";
 import { fetchAsyncRatingsByAlbum, getRatingsByAlbum } from "../../Redux/Slices/RatingAlbumSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
-
+import { CloseBar, OpenBar } from "../../Redux/Slices/SongBarSlice";
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 const useStyle = makeStyles({
     home_container: {
         backgroundColor: 'white',
@@ -41,7 +42,8 @@ const AlbumDetail = () => {
     const [loading, setLoading] = useState(true);
     const [actionRating, setActionRating] = useState(false);
     const ratingbyalbum = useSelector(getRatingsByAlbum)
-    
+    const [selectedSong, setSelectedSong] = useState();
+    const songs = useSelector(getListSongs);
     useEffect(() => {
         setLoading(true);
         const action = async () => {
@@ -50,6 +52,7 @@ const AlbumDetail = () => {
             await dispatch(fetchAsyncAlbumById(albumId))
             await dispatch(fetchAsyncGenres());
             await dispatch(fetchAsyncSingers());
+            await dispatch(fetchAsyncSongs());
         }
         action();
         setLoading(false);
@@ -58,17 +61,35 @@ const AlbumDetail = () => {
         setValueTab(value);
     }
 
+    console.log(songsbyalbum)
+
+    const PlayListSong = async () => {
+        let playlist = [];
+        setSelectedSong();
+        if (songsbyalbum) {
+            songsbyalbum.map((item) => {
+                playlist = [...playlist, songs.find(song => song._id === item._id)]
+            })
+            console.log(songsbyalbum)
+            console.log(playlist)
+            await dispatch(setPlaylist(playlist));
+            await dispatch(CloseBar())
+            await dispatch(OpenBar())
+        }
+
+    }
+
     // rating of album
-    useEffect(()=>{
-        if(actionRating){
-            const updateRating = async()=>{
+    useEffect(() => {
+        if (actionRating) {
+            const updateRating = async () => {
                 const formdata = new FormData();
-                
+
                 let sum = ratingbyalbum.reduce((accumulator, object) => {
                     return accumulator + object.rating
                 }, 0)
                 let avgRating = (sum / ratingbyalbum.length);
-                
+
                 formdata.append('rating', avgRating)
                 try {
                     const action = await dispatch(asyncUpdateAlbum({ formdata, albumId }))
@@ -81,7 +102,7 @@ const AlbumDetail = () => {
             updateRating();
             setActionRating(false)
         }
-    },[actionRating])
+    }, [actionRating])
     return (
         <Container disableGutters maxWidth="xl" className={classes.home_container}>
             {loading ?
@@ -121,7 +142,7 @@ const AlbumDetail = () => {
                                                             genres.find(genre => genre._id === item) ? genres.find(genre => genre._id === item).name + ", " : "none"
                                                         )
                                                     } else {
-                                                        return genres.find(genre => genre._id === item) ? genres.find(genre => genre._id === item).name :"none"
+                                                        return genres.find(genre => genre._id === item) ? genres.find(genre => genre._id === item).name : "none"
                                                     }
 
 
@@ -147,13 +168,13 @@ const AlbumDetail = () => {
                                                 songsbyalbum.length
                                             }
                                         </Typography>
-                                        
+
                                         <Box sx={{ display: 'flex' }}>
-                                           
+
                                             <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                 <GradeIcon sx={{ mr: 1, color: '#3e6f9f', fontSize: '22px' }} />
                                                 <Typography>
-                                                    {album.rating >=0 ? album.rating+"/5" : '0/5'}
+                                                    {album.rating >= 0 ? album.rating + "/5" : '0/5'}
                                                 </Typography>
                                             </Box>
                                         </Box>
@@ -163,12 +184,32 @@ const AlbumDetail = () => {
                             </Grid>
                         </Box>
                         {/* rating of user */}
-                        <Box>
-                            <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
-                                Your rating
-                            </Typography>
-                            <RatingAlbum album={album} setActionRating={setActionRating} />
+                        <Box sx={{display:'flex',alignItems:'flex-end'}}>
+                            <Box>
+                                <Typography sx={{ fontWeight: 500, fontSize: 19, my: 1 }}>
+                                    Your rating
+                                </Typography>
+                                <RatingAlbum album={album} setActionRating={setActionRating} />
+                            </Box>
+                            <Box sx={{ml:2}}>
+                                <Button
+                                    variant="contained"
+                                    onClick={() => PlayListSong()}
+                                    sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <PlayCircleOutlineIcon
+                                        sx={{
+                                            mx: 1, fontSize: 25, color: 'black', '&:hover': {
+                                                transform: 'scale(1.05)',
+                                                transition: 'ease-in-out',
+                                                transitionDuration: '0.4s'
+                                            }
+                                            , transitionDuration: '0.8s'
+                                        }} />
+                                    <Typography sx={{ color: 'black', fontWeight: 500, fontSize: 14 }}>Play</Typography>
+                                </Button>
+                            </Box>
                         </Box>
+
                         <Box className="achievement">
                             {/* <Typography variant="h6">
                                 Song

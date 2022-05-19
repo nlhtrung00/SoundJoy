@@ -21,6 +21,9 @@ const SongBarSlice =createSlice({
                 openBar:false
             }
         },
+        
+
+
     }
 });
 export const {OpenBar,CloseBar} = SongBarSlice.actions;

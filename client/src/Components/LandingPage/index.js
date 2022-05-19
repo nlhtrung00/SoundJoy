@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: '100vh',
+        minHeight:'100vh',
+        maxHeight: '120vh',
         alignItems: 'center',
 
 

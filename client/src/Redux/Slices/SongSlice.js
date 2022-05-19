@@ -93,6 +93,9 @@ const SongSlice = createSlice({
         },
         refreshSearchSong:(state)=>{
             state.searching_songs = []
+        },
+        clearPlaylist:(state)=>{
+            state.playlist = []
         }
     },
     extraReducers:{
@@ -191,7 +194,7 @@ const SongSlice = createSlice({
         },
     }
 });
-export const {setPlaylist,refreshSearchSong} = SongSlice.actions;
+export const {setPlaylist,refreshSearchSong,clearPlaylist} = SongSlice.actions;
 export const getListSongs = (state)=>state.song.songs;
 export const getSongsBySinger = (state)=>state.song.songbysinger;
 export const getSongsByMusician = (state)=>state.song.songbymusician;

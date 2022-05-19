@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Logout } from '../../Redux/Slices/AccountSlice';
 import { getUser } from '../../Redux/Slices/UserSlice';
 import { useNavigate } from "react-router-dom";
+import { clearPlaylist } from '../../Redux/Slices/SongSlice';
+import { CloseBar } from '../../Redux/Slices/SongBarSlice';
 const useStyle = makeStyles((theme) => ({
     container: {
         position: 'sticky',
@@ -64,6 +66,7 @@ const LeftBar = () => {
     const logoutHandle = (e) => {
         console.log('log out');
         dispatch(Logout());
+        dispatch(CloseBar())
         return navigate("/");
     }
 
